@@ -18,7 +18,7 @@
 \usepackage{fancyhdr}
 \usepackage{titlesec}
 \usepackage{siunitx}
-\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue]{hyperref}
+\usepackage[colorlinks=true,linkcolor=noteblue,citecolor=noteblue,urlcolor=noteblue,bookmarks=true,bookmarksopen=true]{hyperref}
 
 \geometry{margin=2.5cm}
 \setlength{\headheight}{14pt}
@@ -27,6 +27,8 @@
 % ---------- COLORI ----------
 \definecolor{noteblue}{RGB}{0,70,140}
 \definecolor{noteteal}{RGB}{0,128,128}
+\definecolor{notered}{RGB}{180,0,0}
+\definecolor{notedarkred}{RGB}{120,0,0}
 
 % ---------- INTESTAZIONI ----------
 \pagestyle{fancy}
@@ -35,8 +37,8 @@
 \fancyhead[R]{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 
-\titleformat{\chapter}[hang]{\Large\bfseries\color{noteblue}}{Capitolo \thechapter.}{0.5em}{}
-\titleformat{\section}{\large\bfseries\color{noteteal}}{\thesection}{0.5em}{}
+\titleformat{\chapter}[hang]{\Large\bfseries\color{notered}}{Capitolo \thechapter.}{0.5em}{}
+\titleformat{\section}{\large\bfseries\color{notedarkred}}{\thesection}{0.5em}{}
 
 % ---------- COMANDI UTILI ----------
 \newcommand{\defbox}[1]{%
@@ -58,16 +60,41 @@
   \end{center}%
 }
 
-\title{\color{noteblue}\textbf{Elettronica Digitale}\\[0.3em]\large Appunti del corso}
-\author{Riferimento: Katz, Borriello -- \emph{Contemporary Logic Design}}
+\title{\color{notered}\textbf{Elettronica Digitale}\\[0.3em]\large Appunti del corso}
+\author{}
 \date{}
 
 \begin{document}
 
-\maketitle
-\thispagestyle{empty}
+% Custom title page inspired by the provided image
+\begin{titlepage}
+  \centering
+  \vspace*{0.8cm}
+  {\Large\scshape\color{notedarkred}APPUNTI DI\par}
+  \vspace{0.6cm}
+  {\Huge\bfseries\color{notered}\MakeUppercase{Elettronica Digitale}\par}
+  \vspace{0.8cm}
+  {\color{notered}\rule{8cm}{1.2pt}\par}
+  \vspace{1.2cm}
+  {\Large\scshape Giosu\`e Aiello\par}
+  \vfill
+  \noindent
+  \begin{minipage}[b]{0.5\linewidth}
+    \textit{versione 1.0}
+  \end{minipage}%
+  \begin{minipage}[b]{0.5\linewidth}
+    \raggedleft
+    Universit\`a di Pisa\\
+    anno 2025--2026
+  \end{minipage}
+  \thispagestyle{empty}
+\end{titlepage}
+
+% Make the Table of Contents use black links (not all red)
+{\hypersetup{linkcolor=black}
+\pdfbookmark[0]{Indice}{indice}
 \tableofcontents
-\newpage
+\newpage}
 
 % ======================================================================
 \chapter{Segnali, algebra di Boole e reti logiche}
@@ -80,11 +107,11 @@
 \textbf{Segnale digitale}: assume valori discreti, tipicamente $\{0,1\}$.
 }
 
-Il passaggio da un segnale analogico a uno digitale permette di \textbf{memorizzare meglio i dati}: un valore discreto è più robusto al rumore e più facile da elaborare e conservare rispetto a un valore continuo.
+Il passaggio da un segnale analogico a uno digitale permette di \textbf{memorizzare meglio i dati}: un valore discreto è notevolmente più robusto al rumore, non subisce degrado nel tempo, ed è molto più semplice da elaborare e conservare in dispositivi di memoria rispetto a un segnale continuo. Inoltre, i sistemi digitali garantiscono una \textbf{riproducibilità esatta} dei risultati e godono di un'elevata flessibilità grazie alla possibilità di essere programmati via software.
 
 \section{Algebra di Boole}
 
-L'algebra di Boole fu pubblicata a metà del 1800. Per definirla servono i seguenti ingredienti:
+L'algebra di Boole fu pubblicata a metà dell'Ottocento (nel 1854, ad opera del matematico inglese George Boole, con il trattato \emph{An Investigation of the Laws of Thought}) come base matematica per lo studio della logica. Per definirla formalmente servono i seguenti ingredienti:
 
 \begin{itemize}[leftmargin=1.5em]
     \item un insieme $B$ che contiene \textbf{2 valori} (es. $\{0,1\}$);
@@ -95,12 +122,47 @@ L'algebra di Boole fu pubblicata a metà del 1800. Per definirla servono i segue
 
 \textit{Notazione}: la negazione di una variabile si indica con un trattino sopra la lettera, ad esempio $\overline{A}$.
 
+\subsection{Il concetto di duale}
+
+\defbox{\textbf{Duale} di un'espressione booleana: si ottiene scambiando tra loro le due operazioni principali e gli elementi neutri:
+\begin{itemize}[leftmargin=1.3em]
+    \item $+$ con $\cdot$;
+    \item $0$ con $1$;
+    \item il NOT resta invariato.
+\end{itemize}
+Quindi, se una proprietà è vera, anche la sua forma duale è vera.}
+
+\noindent Per esempio, il duale di
+\[
+A + 0 = A
+\]
+\`e
+\[
+A \cdot 1 = A.
+\]
+
+\noindent Allo stesso modo, il duale della proprietà di complementarità
+\[
+A + \overline{A} = 1
+\]
+\`e
+\[
+A \cdot \overline{A} = 0.
+\]
+
+\noindent Il \textbf{principio di dualità} è molto utile perché, una volta nota una proprietà, si ottiene immediatamente la sua versione duale senza doverla dimostrare separatamente. Ad esempio:
+\begin{itemize}[leftmargin=1.5em]
+    \item commutativa: $A+B=B+A$ ha come duale $A\cdot B=B\cdot A$;
+    \item associativa: $(A+B)+C=A+(B+C)$ ha come duale $(A\cdot B)\cdot C=A\cdot(B\cdot C)$;
+    \item distributiva: $A+(B\cdot C)=(A+B)\cdot(A+C)$ ha come duale $A\cdot(B+C)=(A\cdot B)+(A\cdot C)$.
+\end{itemize}
+
 \section{Cenni storici}
 
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Shannon} ha inventato le porte logiche.
-    \item \textbf{Huntington} ha dimostrato che ogni rete logica può essere implementata usando solo porte a 2 ingressi e 1 uscita.
-    \item Il \textbf{transistor} (\emph{transfer} + \emph{resistor}) nasce e, nel giro di circa 20 anni, viene costruito il primo circuito integrato.
+    \item Nel 1938 \textbf{Claude Shannon} introdusse l'uso dell'algebra di Boole per l'analisi e la sintesi dei circuiti a relè, inventando di fatto l'applicazione alle reti logiche.
+    \item \textbf{Huntington} (1904) formulò i famosi postulati che definiscono rigorosamente l'algebra booleana e dimostrò che ogni rete logica può essere implementata usando solo porte elementari.
+    \item Il \textbf{transistor} (\emph{transfer} + \emph{resistor}) fu inventato nel 1947 ai Bell Labs. Da lì, nel giro di circa dieci anni, nacque l'elettronica a stato solido moderna e nel 1958 fu realizzato il primo circuito integrato.
 \end{itemize}
 
 \section{Reti logiche}
@@ -165,20 +227,34 @@ Questa è la \textbf{tabella di verità} delle 4 funzioni a un ingresso: due son
 Con due ingressi $I_1, I_0$ ci sono $2^2=4$ combinazioni in ingresso e $2^{2^2}=16$ possibili funzioni di uscita. La tabella completa è:
 
 \begin{fitcenter}
-\scriptsize
-\begin{tabular}{cc|cccccccccccccccc}
+\small
+\begin{tabular}{c|cccc|l|l}
 \toprule
-$I_1$ & $I_0$ & $O_1$ & $O_2$ & $O_3$ & $O_4$ & $O_5$ & $O_6$ & $O_7$ & $O_8$ & $O_9$ & $O_{10}$ & $O_{11}$ & $O_{12}$ & $O_{13}$ & $O_{14}$ & $O_{15}$ & $O_{16}$\\
+\textbf{Funzione} & \textbf{00} & \textbf{01} & \textbf{10} & \textbf{11} & \textbf{Espressione Booleana} & \textbf{Nome comune / Significato} \\
 \midrule
-0&0 & 0&1&0&0&0&1&1&1&0&0&0&1&1&0&1&1\\
-0&1 & 0&0&1&0&0&1&0&0&1&1&0&1&1&1&0&1\\
-1&0 & 0&0&0&1&0&0&1&0&1&0&1&1&0&1&1&1\\
-1&1 & 0&0&0&0&1&0&0&1&0&1&1&0&1&1&1&1\\
-\midrule
-\multicolumn{2}{c|}{} & \footnotesize 0 & \footnotesize NOR & & & \footnotesize AND & & & & \footnotesize XOR & & & \footnotesize NAND & & \footnotesize OR & & \footnotesize 1\\
+$O_1$    & 0 & 0 & 0 & 0 & $0$ & Costante 0 (Falsa) \\
+$O_2$    & 1 & 0 & 0 & 0 & $\overline{I_1 + I_0} = \overline{I_1} \cdot \overline{I_0}$ & \textbf{NOR} \\
+$O_3$    & 0 & 1 & 0 & 0 & $\overline{I_1} \cdot I_0$ & Inibizione di $I_1$ (da $I_0$) \\
+$O_4$    & 0 & 0 & 1 & 0 & $I_1 \cdot \overline{I_0}$ & Inibizione di $I_0$ (da $I_1$) \\
+$O_5$    & 0 & 0 & 0 & 1 & $I_1 \cdot I_0$ & \textbf{AND} \\
+$O_6$    & 1 & 1 & 0 & 0 & $\overline{I_1}$ & \textbf{NOT} $I_1$ \\
+$O_7$    & 1 & 0 & 1 & 0 & $\overline{I_0}$ & \textbf{NOT} $I_0$ \\
+$O_8$    & 1 & 0 & 0 & 1 & $\overline{I_1 \oplus I_0} = I_1 \odot I_0$ & \textbf{XNOR} (Equivalenza) \\
+$O_9$    & 0 & 1 & 1 & 0 & $I_1 \oplus I_0$ & \textbf{XOR} (OR esclusivo) \\
+$O_{10}$ & 0 & 1 & 0 & 1 & $I_0$ & Identità $I_0$ (Buffer $I_0$) \\
+$O_{11}$ & 0 & 0 & 1 & 1 & $I_1$ & Identità $I_1$ (Buffer $I_1$) \\
+$O_{12}$ & 1 & 1 & 1 & 0 & $\overline{I_1 \cdot I_0}$ & \textbf{NAND} \\
+$O_{13}$ & 1 & 1 & 0 & 1 & $I_1 + \overline{I_0}$ o $I_0 \rightarrow I_1$ & Implicazione ($I_0 \implies I_1$) \\
+$O_{14}$ & 0 & 1 & 1 & 1 & $I_1 + I_0$ & \textbf{OR} \\
+$O_{15}$ & 1 & 0 & 1 & 1 & $\overline{I_1} + I_0$ o $I_1 \rightarrow I_0$ & Implicazione ($I_1 \implies I_0$) \\
+$O_{16}$ & 1 & 1 & 1 & 1 & $1$ & Costante 1 (Vera) \\
 \bottomrule
 \end{tabular}
 \end{fitcenter}
+
+\noindent\footnotesize \textit{Nota sui simboli}: 
+L'operatore $\oplus$ (più cerchiato) rappresenta lo \textbf{XOR} (OR esclusivo, $I_1 \oplus I_0$), che vale 1 se e solo se i due ingressi sono diversi. 
+L'operatore $\odot$ (punto cerchiato) rappresenta lo \textbf{XNOR} (equivalenza logica, $I_1 \odot I_0 = \overline{I_1 \oplus I_0}$), che vale 1 se e solo se i due ingressi sono uguali.
 
 \noindent Tra le 16 funzioni, le più importanti hanno un nome ed un simbolo proprio:
 
@@ -213,43 +289,77 @@ In generale, con $n$ ingressi si hanno $2^n$ possibili combinazioni in ingresso 
 \section{Bit di parità}
 
 \defbox{
-Il \textbf{bit di parità} è un parametro usato per controllare che un segnale non sia stato alterato durante una trasmissione:
+Il \textbf{bit di parità} è un bit aggiuntivo utilizzato per rilevare errori singoli che possono verificarsi quando un segnale viene trasmesso in un canale rumoroso:
 \begin{itemize}[leftmargin=1.3em]
-    \item se il numero di $1$ nel messaggio è \textbf{pari} $\Rightarrow P = 0$;
-    \item se il numero di $1$ nel messaggio è \textbf{dispari} $\Rightarrow P = 1$.
+    \item Nella \textbf{parità pari} (\emph{even parity}), il bit $P$ si sceglie affinché il numero totale di ``1'' trasmessi sia pari:
+    \begin{itemize}
+        \item se il numero di $1$ nel dato è \textbf{pari} $\Rightarrow P = 0$;
+        \item se il numero di $1$ nel dato è \textbf{dispari} $\Rightarrow P = 1$.
+    \end{itemize}
+    \item Nella \textbf{parità dispari} (\emph{odd parity}), la regola è invertita (il numero totale di ``1'' deve essere dispari).
 \end{itemize}
+Il controllo di parità è semplice ma limitato: può rilevare un numero dispari di errori (tipicamente un solo bit errato), ma fallisce se avvengono due errori simultanei, poiché la parità complessiva rimane inalterata.
 }
+
+\medskip
+\noindent\textbf{Esempio numerico.} Supponiamo di trasmettere il dato a 3 bit $D = 110$ usando \textbf{parità pari}:
+\begin{itemize}[leftmargin=1.5em]
+    \item Il dato $110$ contiene \textbf{due} $1$ $\Rightarrow$ il numero di $1$ è già pari $\Rightarrow P = 0$.
+    \item Si trasmette la sequenza $\underbrace{1\;1\;0}_{\text{dato}}\underbrace{0}_{P}$ (totale: due $1$, pari $\checkmark$).
+    \item Se durante la trasmissione un bit si corrompe, ad es.\ arriva $\mathbf{1\;0\;0\;0}$: ora c'è solo un $1$, il numero è \textbf{dispari} $\Rightarrow$ errore rilevato!
+    \item Se invece si corrompono \textbf{due} bit contemporaneamente, la parità resta pari e l'errore \textbf{non} viene rilevato (limite del metodo).
+\end{itemize}
 
 \section{Esercizio: semplice circuito per abilitare la presa dati}
 
 \textit{Disegnare un circuito che generi un segnale per abilitare la presa dati di un esperimento se ha il segnale di \textbf{sicurezza} S attivo, se c'è la richiesta di una presa dati che può essere di \textbf{calibrazione} o \textbf{standard} (non entrambe), e se l'operatore chiede di abilitare l'\textbf{acquisizione}. Inoltre la presa dati si deve arrestare se S non è più attivo.}
 
 \medskip
-\noindent La condizione ``calibrazione o standard, ma non entrambe'' è esattamente una \textbf{XOR}; il fatto che la presa dati debba restare attiva solo mentre S è alto (e fermarsi non appena S si disattiva) richiede un \textbf{AND} con il segnale di sicurezza (non un semplice impulso, ma il livello stesso di S):
+\noindent\textbf{Come si risolve (ragionamento passo per passo):}
 
-\[
-\text{Uscita} = S \cdot \text{Acquisizione} \cdot (\text{Calibrazione} \oplus \text{Standard})
-\]
+\begin{enumerate}[leftmargin=1.5em]
+    \item \textbf{Identificare le condizioni.} L'uscita deve essere $1$ (abilitata) \emph{solo} quando \textbf{tutte} le seguenti condizioni sono soddisfatte:
+    \begin{itemize}
+        \item il segnale di sicurezza $S = 1$;
+        \item il segnale di acquisizione $A = 1$;
+        \item esattamente \textbf{uno} tra calibrazione $C$ e standard $T$ è attivo (non né entrambi, né nessuno).
+    \end{itemize}
+    \item \textbf{Tradurre ogni condizione in logica:}
+    \begin{itemize}
+        \item ``Sicurezza attiva'' $\rightarrow$ basta $S$.
+        \item ``Acquisizione attiva'' $\rightarrow$ basta $A$.
+        \item ``Calibrazione \emph{o} Standard, ma \textbf{non entrambe}'' $\rightarrow$ questa è esattamente la definizione dello \textbf{XOR}: $C \oplus T$ vale $1$ quando i due ingressi sono \emph{diversi} (uno $0$ e uno $1$), e $0$ quando sono uguali (entrambi $0$ oppure entrambi $1$).
+    \end{itemize}
+    \item \textbf{Combinare le condizioni con AND:} poiché tutte e tre le condizioni devono essere vere \emph{contemporaneamente}, si mettono in AND:
+    \[
+        \text{Uscita} = S \cdot A \cdot (C \oplus T)
+    \]
+    \item \textbf{Ordine delle porte:} si mette $S$ nell'ultima porta AND così, quando il segnale di sicurezza si abbassa, l'uscita si spegne immediatamente (minimo ritardo di propagazione).
+\end{enumerate}
 
 \begin{center}
 \begin{circuitikz}[scale=0.9, every node/.style={scale=0.9}]
 \node[xor port] (x1) at (0,0) {};
-\draw (x1.in 1) -- ++(-1.2,0) node[left]{Calibrazione};
-\draw (x1.in 2) -- ++(-1.2,0) node[left]{Standard};
+\draw (x1.in 1) -- ++(-1.2,0) node[left]{Calibrazione ($C$)};
+\draw (x1.in 2) -- ++(-1.2,0) node[left]{Standard ($T$)};
 
 \node[and port] (a1) at (2.6,0.4) {};
 \draw (x1.out) -- (a1.in 1);
-\draw (a1.in 2) -- ++(-1.2,-1.6) node[left]{Acquisizione};
+\draw (a1.in 2) -- ++(-1.2,-1.6) node[left]{Acquisizione ($A$)};
 
 \node[and port] (a2) at (5.2,0.9) {};
 \draw (a1.out) -- (a2.in 2);
-\draw (a2.in 1) -- ++(-2.4,1.2) node[left]{Sicurezza (S)};
+\draw (a2.in 1) -- ++(-2.4,1.2) node[left]{Sicurezza ($S$)};
 
 \draw (a2.out) -- ++(0.8,0) node[right]{Uscita};
 \end{circuitikz}
 \end{center}
 
-\noindent \textit{Nota dell'autore degli appunti}: gli ingressi potrebbero anche essere invertiti, ma mettendo il segnale di sicurezza sull'ultima porta AND si ottiene un ritardo minore nello spegnimento della presa dati.
+\noindent\textbf{Verifica con un esempio:} supponiamo $S=1$, $A=1$, $C=1$, $T=0$.
+\[
+    C \oplus T = 1 \oplus 0 = 1, \qquad \text{Uscita} = 1 \cdot 1 \cdot 1 = 1 \quad \checkmark
+\]
+Se invece sia calibrazione che standard sono attivi ($C=1$, $T=1$): $C \oplus T = 0 \Rightarrow$ Uscita $= 0$ (corretto: le due richieste si escludono a vicenda).
 
 % ======================================================================
 \chapter{Realizzazione fisica delle porte logiche}
@@ -258,6 +368,58 @@ Il \textbf{bit di parità} è un parametro usato per controllare che un segnale 
 \section{Esercizio: bit di parità a 4 bit}
 
 \textit{Progettare un circuito che calcoli il bit di parità di un numero a 4 bit. Il bit di parità è 0 se il numero di 1 nel numero è pari, 1 se è dispari.}
+
+\medskip
+\noindent\textbf{Come si risolve (ragionamento passo per passo):}
+
+\begin{enumerate}[leftmargin=1.5em]
+    \item \textbf{Capire cosa serve (e perché può sembrare invertita).}
+    L'obiettivo della \textbf{parità pari} è che il numero \emph{totale} di $1$ trasmessi (dato $+$ bit $P$) sia sempre \textbf{pari}. Di conseguenza:
+    \begin{itemize}
+        \item se nel dato ci sono già un numero \textbf{pari} di $1$ $\Rightarrow$ non serve aggiungere nulla $\Rightarrow P = 0$;
+        \item se nel dato ci sono un numero \textbf{dispari} di $1$ $\Rightarrow$ bisogna aggiungere un $1$ per bilanciare $\Rightarrow P = 1$.
+    \end{itemize}
+    \textit{Attenzione}: $P = 1$ \textbf{non} significa ``va tutto bene'', significa ``ho dovuto correggere la parità''. Detto in modo diretto: $P$ vale $1$ quando il conteggio degli $1$ nel dato è \textbf{dispari} (e dunque serviva un $1$ extra per renderlo pari).
+
+    \item \textbf{Riconoscere la porta giusta.} Ricordiamo la tabella dello \textbf{XOR} a 2 ingressi:
+    \begin{center}
+    \begin{tabular}{cc|c|l}
+    \toprule
+    $A$ & $B$ & $A \oplus B$ & Significato \\
+    \midrule
+    0 & 0 & 0 & zero uni $\Rightarrow$ pari \\
+    0 & 1 & 1 & un uno $\Rightarrow$ dispari \\
+    1 & 0 & 1 & un uno $\Rightarrow$ dispari \\
+    1 & 1 & 0 & due uni $\Rightarrow$ pari \\
+    \bottomrule
+    \end{tabular}
+    \end{center}
+    Lo XOR vale $1$ esattamente quando il numero di $1$ in ingresso è \textbf{dispari}: è dunque il componente perfetto per calcolare la parità!
+
+    \item \textbf{Estendere a 4 bit con la proprietà associativa.} Lo XOR è \textbf{associativo}, quindi possiamo calcolare la parità su più bit applicandolo in cascata, come somma modulo 2:
+    \[
+        P = I_3 \oplus I_2 \oplus I_1 \oplus I_0
+    \]
+    Il risultato vale $1$ se e solo se il numero totale di $1$ tra i 4 bit è dispari (esattamente ciò che vogliamo).
+
+    \item \textbf{Costruire il circuito.} Uno XOR accetta solo 2 ingressi, quindi si procede \textbf{a coppie}:
+    \begin{itemize}
+        \item Primo livello: $X_A = I_1 \oplus I_0$ e $X_B = I_3 \oplus I_2$ (due porte XOR in parallelo).
+        \item Secondo livello: $P = X_A \oplus X_B$ (una porta XOR che combina i risultati parziali).
+    \end{itemize}
+    Servono quindi \textbf{3 porte XOR} in totale.
+
+    \item \textbf{Verifica numerica.} Prendiamo $N = 1011$:
+    \begin{itemize}
+        \item Conta degli uni: tre $1$ $\Rightarrow$ dispari $\Rightarrow$ ci aspettiamo $P = 1$.
+        \item Calcolo: $X_A = 1 \oplus 1 = 0$, $\quad X_B = 1 \oplus 0 = 1$, $\quad P = 0 \oplus 1 = 1$ \checkmark
+    \end{itemize}
+    Prendiamo $N = 1100$:
+    \begin{itemize}
+        \item Conta degli uni: due $1$ $\Rightarrow$ pari $\Rightarrow$ ci aspettiamo $P = 0$.
+        \item Calcolo: $X_A = 0 \oplus 0 = 0$, $\quad X_B = 1 \oplus 1 = 0$, $\quad P = 0 \oplus 0 = 0$ \checkmark
+    \end{itemize}
+\end{enumerate}
 
 \medskip
 \noindent Sia $N = I_3 I_2 I_1 I_0$. Si lavora a coppie di bit, applicando lo XOR a multipli di 2:
@@ -310,27 +472,42 @@ Il \textbf{calcolatore di parità} si ottiene combinando in cascata 3 porte XOR:
 Calcolando il bit di parità sia alla \textbf{partenza} ($O_1$) che all'\textbf{arrivo} ($O_2$) e confrontandoli con una porta \textbf{XNOR}, si fa passare il segnale solo se $O_1 = O_2$ (cioè $00$ oppure $11$): questo permette di controllare che il segnale non sia stato alterato durante la trasmissione.
 
 \begin{center}
-\begin{circuitikz}[scale=0.85, every node/.style={scale=0.85}]
-\draw (0,0) rectangle (1.6,1.6);
-\node[align=center] at (0.8,0.8) {calcolatore\\di parità};
-\foreach \y in {1.3,1.0,0.7,0.4}{
-  \draw[-latex] (-0.9,\y) -- (0,\y);
-}
-\node[above] at (0.8,1.6) {\footnotesize partenza};
-\draw[-latex] (1.6,0.8) -- (2.4,0.8) node[right]{$O_1$};
+\begin{circuitikz}[scale=0.9, every node/.style={scale=0.9}]
+% Block 1: Partenza (Calcolatore di parità)
+\draw[thick] (0,0) rectangle (2,1.6);
+\node[align=center, font=\small] at (1,0.8) {Calcolatore\\di parità};
+\node[above, font=\footnotesize\bfseries] at (1,1.6) {Partenza};
 
-\draw (4.2,0) rectangle (5.8,1.6);
-\node[align=center] at (5.0,0.8) {calcolatore\\di parità};
-\foreach \y in {1.3,1.0,0.7,0.4}{
-  \draw[-latex] (3.3,\y) -- (4.2,\y);
+% Input arrows for Block 1
+\foreach \y/\label in {1.4/$I_3$, 1.1/$I_2$, 0.8/$I_1$, 0.5/$I_0$} {
+  \draw[-latex] (-0.8,\y) -- (0,\y);
+  \node[left, font=\scriptsize] at (-0.8,\y) {\label};
 }
-\node[above] at (5.0,1.6) {\footnotesize arrivo};
-\draw[-latex] (5.8,0.8) -- (6.6,0.8) node[right]{$O_2$};
 
+% XNOR Gate positioned on the right
 \node[xnor port] (xn) at (8.6,0.8) {};
-\draw (2.4,0.8) -- (xn.in 1);
-\draw (6.6,0.8) -- (xn.in 2);
-\draw (xn.out) -- ++(1.0,0) node[right]{\footnotesize abilita se $O_1=O_2$};
+
+% Output of Block 1 (O_1) routed above Block 2 to avoid crossing
+\draw[thick] (2,0.8) -- (2.4,0.8) node[above, font=\footnotesize] {$O_1$};
+\draw[-latex, thick] (2.4,0.8) -- (2.4,2.2) -- (7.6,2.2) |- (xn.in 1);
+
+% Block 2: Arrivo (Calcolatore di parità)
+\draw[thick] (4.2,0) rectangle (6.2,1.6);
+\node[align=center, font=\small] at (5.2,0.8) {Calcolatore\\di parità};
+\node[above, font=\footnotesize\bfseries] at (5.2,1.6) {Arrivo};
+
+% Input arrows for Block 2 (received bits, possibly with prime)
+\foreach \y/\label in {1.4/$I'_3$, 1.1/$I'_2$, 0.8/$I'_1$, 0.5/$I'_0$} {
+  \draw[-latex] (3.4,\y) -- (4.2,\y);
+  \node[left, font=\scriptsize] at (3.4,\y) {\label};
+}
+
+% Output of Block 2 (O_2) routed to XNOR
+\draw[thick] (6.2,0.8) -- (6.8,0.8) node[above, font=\footnotesize] {$O_2$};
+\draw[-latex, thick] (6.8,0.8) |- (xn.in 2);
+
+% Output of XNOR
+\draw (xn.out) -- ++(0.8,0) node[right, align=left, font=\footnotesize] {Abilita se $O_1 = O_2$\\(nessun errore)};
 \end{circuitikz}
 \end{center}
 
@@ -339,9 +516,9 @@ Calcolando il bit di parità sia alla \textbf{partenza} ($O_1$) che all'\textbf{
 Le diverse \textbf{famiglie logiche} (RTL, DTL, HTL, TTL, ECL, MOS, CMOS) si confrontano in base a parametri come la porta di base, il fan-out, la potenza dissipata, l'immunità al rumore, il ritardo di propagazione e la frequenza massima di funzionamento. In generale:
 
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{TTL}: ottimo compromesso velocità/potenza, molto diffusa;
-    \item \textbf{ECL}: velocissima ma con elevato consumo;
-    \item \textbf{CMOS}: bassissima potenza dissipata, oggi la più usata nei circuiti integrati.
+    \item \textbf{TTL} (Transistor-Transistor Logic): ottimo compromesso velocità/potenza, molto diffusa;
+    \item \textbf{ECL} (Emitter-Coupled Logic): velocissima ma con elevato consumo;
+    \item \textbf{CMOS} (Complementary Metal-Oxide-Semiconductor): bassissima potenza dissipata, oggi la più usata nei circuiti integrati.
 \end{itemize}
 
 \section{Implementazione delle porte logiche}
@@ -378,54 +555,75 @@ La porta NOT più semplice si realizza con un singolo transistor NPN in configur
 
 \subsection{NOT in tecnologia TTL}
 
-Nella tecnologia TTL (\emph{Transistor-Transistor Logic}) la porta NOT è realizzata con più transistor, organizzati in tre stadi:
+Nella tecnologia TTL (\emph{Transistor-Transistor Logic}), la porta logica base non utilizza singoli diodi o resistenze in ingresso, ma sfrutta i transistor bipolari (BJT) per migliorare velocità e prestazioni. La porta NOT TTL standard si divide in tre stadi principali:
 
 \begin{enumerate}[leftmargin=1.5em]
-    \item \textbf{stadio di ingresso}: ad alta impedenza;
-    \item \textbf{driver} (o \textbf{sfasatore}): pilota i due transistor dello stadio di uscita;
-    \item \textbf{stadio di uscita a totem-pole}: a bassa impedenza, garantisce un'uscita ``forte'' sia allo stato alto che basso.
+    \item \textbf{Stadio di ingresso}: utilizza un transistor NPN ($Q_1$) in cui l'emettitore funge da ingresso. Se l'ingresso è basso ($0\,\mathrm{V}$), $Q_1$ va in conduzione portando a massa la base dello stadio successivo. Se l'ingresso è alto ($5\,\mathrm{V}$), la giunzione base-emettitore è polarizzata inversamente e la corrente fluisce verso la base del driver.
+    \item \textbf{Sfasatore (driver)}: il transistor centrale ($Q_2$) riceve il segnale da $Q_1$ e pilota in controfase i due transistor finali. Produce due segnali logici opposti: uno al collettore e uno all'emettitore.
+    \item \textbf{Stadio di uscita a totem-pole}: costituito da due transistor ($Q_3$ e $Q_4$) impilati uno sull'altro e un diodo. Garantisce un'uscita ``forte'' a bassa impedenza in entrambi gli stati logici: $Q_3$ spinge attivamente l'uscita a livello alto (pull-up attivo), mentre $Q_4$ la tira a massa (pull-down). Il diodo serve a garantire che $Q_3$ e $Q_4$ non conducano mai contemporaneamente in fase di transizione.
 \end{enumerate}
 
 \begin{center}
 \begin{circuitikz}[american voltages, scale=0.85, every node/.style={scale=0.85}]
-\draw (0,4) -- (8,4);
-\node[above] at (4,4) {$V_{CC}$};
+\draw (0,4.5) -- (7,4.5);
+\node[above] at (3.5,4.5) {$V_{CC} \ (+5\,\mathrm{V})$};
 
-\draw (0.8,4) to[R] (0.8,2.6) coordinate (r1b);
-\draw (3.2,4) to[R] (3.2,2.6) coordinate (r2b);
-\draw (5.6,4) to[R] (5.6,2.6) coordinate (r3b);
+% R1
+\draw (1,4.5) to[R=$4\,\mathrm{k}\Omega$] (1,2.5) coordinate (bQ1);
+% R2
+\draw (3.5,4.5) to[R=$1.6\,\mathrm{k}\Omega$] (3.5,2.5) coordinate (cQ2);
+% R4
+\draw (5.5,4.5) to[R=$130\,\Omega$] (5.5,3.2) coordinate (cQ3);
 
-\node[npn] (Qin) at (0.8,1.6) {};
-\draw (r1b) -- (Qin.C);
-\draw (Qin.B) -- ++(-1.4,0) node[left]{$V_{in}$};
-\draw (Qin.E) to[short] ++(0,-0.6) node[ground]{};
+% Q1
+\node[npn] (Q1) at (1.5,1.7) {};
+\node at ($(Q1.C)+(0.4,0)$) {$Q_1$};
+\draw (bQ1) -| (Q1.B);
+\draw (Q1.E) -- ++(-1.5,0) to[short,-o] ++(0,0) node[left]{$V_{in}$};
 
-\node[npn] (Qd) at (3.2,1.6) {};
-\draw (r2b) -- (Qd.C);
-\draw (Qin.C) -- (Qd.B);
-\draw (Qd.E) to[R] ++(0,-1.1) node[ground]{};
+% Q2
+\node[npn] (Q2) at (3.5,1.7) {};
+\node at ($(Q2.C)+(0.4,0.1)$) {$Q_2$};
+\draw (Q1.C) |- (Q2.B);
+\draw (cQ2) -- (Q2.C);
 
-\node[npn] (Qu) at (5.6,1.9) {};
-\draw (r3b) -- (Qu.C);
-\draw (Qd.C) -- (Qu.B);
-\draw (Qu.E) to[D] ++(0,-0.7) coordinate (dout);
+% Q2 emitter resistor
+\draw (Q2.E) to[R=$1\,\mathrm{k}\Omega$] ++(0,-1.5) node[ground]{};
 
-\node[npn] (Ql) at (5.6,0.2) {};
-\draw (Qd.E) -- ++(0,-0.55) -- (Ql.B);
-\draw (dout) -- (Ql.C);
-\draw (Ql.E) to[short] ++(0,-0.6) node[ground]{};
+% Q3
+\node[npn] (Q3) at (5.5,2.4) {};
+\node at ($(Q3.C)+(0.4,0)$) {$Q_3$};
+\draw (cQ3) -- (Q3.C);
+\draw (Q2.C) |- (Q3.B);
 
-\draw (dout) to[short,-o] ++(1.4,0) node[right]{$V_{out}$};
+% Diode
+\draw (Q3.E) to[D] ++(0,-1) coordinate (dout);
 
-\node[align=center, font=\footnotesize] at (0.8,-0.9) {stadio di\\ingresso\\(alta imp.)};
-\node[align=center, font=\footnotesize] at (3.2,-0.9) {driver /\\sfasatore};
-\node[align=center, font=\footnotesize] at (6.6,-0.9) {totem-pole\\(bassa imp.)};
+% Q4
+\node[npn] (Q4) at (5.5,0.6) {};
+\node at ($(Q4.C)+(0.4,0)$) {$Q_4$};
+\draw (dout) -- (Q4.C);
+\draw (Q2.E) |- (Q4.B);
+\draw (Q4.E) -- ++(0,-0.3) node[ground]{};
+
+% Vout
+\draw (dout) to[short,-o] ++(1.5,0) node[right]{$V_{out}$};
+
+% Labels for stages
+\node[align=center, font=\footnotesize, text=blue!80!black] at (1,-0.5) {Stadio di\\ingresso};
+\node[align=center, font=\footnotesize, text=blue!80!black] at (3.5,-0.5) {Sfasatore\\(Driver)};
+\node[align=center, font=\footnotesize, text=blue!80!black] at (6.2,-0.5) {Uscita a\\Totem-Pole};
+
+% Dashed lines separating stages
+\draw[dashed, gray] (2.5, 4.5) -- (2.5, -1);
+\draw[dashed, gray] (4.5, 4.5) -- (4.5, -1);
+
 \end{circuitikz}
 \end{center}
 
 \section{Immunità al rumore}
 
-L'immunità al rumore di un sistema digitale non è totale, ma è comunque molto più elevata di quella dei sistemi analogici, perché due porte in cascata ``ripuliscono'' il segnale ad ogni passaggio:
+L'immunità al rumore di un sistema digitale non è totale, ma è comunque molto più elevata di quella dei sistemi analogici, perché due porte in cascata ``ripuliscono'' il segnale ad ogni passaggio rigenerando i livelli di tensione:
 
 \begin{center}
 \begin{circuitikz}
@@ -438,47 +636,48 @@ L'immunità al rumore di un sistema digitale non è totale, ma è comunque molto
 \end{circuitikz}
 \end{center}
 
+Per garantire il corretto riconoscimento dei livelli logici, i costruttori definiscono le soglie di tensione per l'ingresso e l'uscita:
+
 \defbox{
 \begin{minipage}{0.48\linewidth}
-\textbf{Livello alto}
+\textbf{Livello alto (High)}
 \begin{itemize}[leftmargin=1.3em]
-    \item $V_{OH,min}$: $V_{out}$ minima per uscita alta;
-    \item $V_{OH,max}$: $V_{out}$ massima per uscita alta;
-    \item $V_{IH,min}$: $V_{in}$ minima per uscita alta;
-    \item $V_{IH,max}$: $V_{in}$ massima per uscita alta.
+    \item $V_{OH,min}$: $V_{out}$ minima garantita per l'uscita alta;
+    \item $V_{OH,max}$: $V_{out}$ massima possibile per l'uscita alta;
+    \item $V_{IH,min}$: $V_{in}$ minima richiesta in ingresso per essere letta come alta;
+    \item $V_{IH,max}$: $V_{in}$ massima ammessa per un ingresso alto.
 \end{itemize}
 \end{minipage}
 \hfill
 \begin{minipage}{0.48\linewidth}
-\textbf{Livello basso}
+\textbf{Livello basso (Low)}
 \begin{itemize}[leftmargin=1.3em]
-    \item $V_{OL,min}$: $V_{out}$ minima per uscita bassa;
-    \item $V_{OL,max}$: $V_{out}$ massima per uscita bassa;
-    \item $V_{IL,min}$: $V_{in}$ minima per uscita bassa;
-    \item $V_{IL,max}$: $V_{in}$ massima per uscita bassa.
+    \item $V_{OL,min}$: $V_{out}$ minima possibile per l'uscita bassa;
+    \item $V_{OL,max}$: $V_{out}$ massima garantita per l'uscita bassa;
+    \item $V_{IL,min}$: $V_{in}$ minima ammessa per un ingresso basso;
+    \item $V_{IL,max}$: $V_{in}$ massima tollerata in ingresso per essere letta come bassa.
 \end{itemize}
 \end{minipage}
 }
 
-Si definiscono i margini di rumore (\emph{noise margin}):
+La differenza tra le tensioni garantite in uscita e quelle minime/massime tollerate in ingresso definisce i \textbf{margini di rumore} (\emph{noise margin}):
 \[
-NM_H = V_{OH,min} - V_{IH,min} \qquad
+NM_H = V_{OH,min} - V_{IH,min} \qquad\qquad
 NM_L = V_{IL,max} - V_{OL,max}
 \]
-
-Il \emph{noise margin} rende l'elettronica digitale parzialmente insensibile al rumore: se il segnale resta entro la ``zona proibita'' tra le soglie, viene comunque interpretato correttamente come $0$ o $1$ dalla porta successiva, mentre la funzione di trasferimento reale del segnale digitale presenta una zona di transizione dove il comportamento non è garantito.
+I margini di rumore ($NM_H$ e $NM_L$) rappresentano l'ampiezza massima di un disturbo (rumore elettrico, fluttuazioni) che può sommarsi al segnale durante il tragitto lungo il filo senza far sì che la porta successiva lo interpreti in modo errato o lo collochi nella \emph{zona proibita}. In altre parole, è il ``cuscinetto di sicurezza'' contro il rumore.
 
 \begin{center}
 \begin{tikzpicture}[scale=0.85, every node/.style={scale=0.85}]
 % --- grafico 1: zona proibita nel tempo ---
 \draw[-latex] (0,0) -- (5.2,0) node[right]{$t$};
 \draw[-latex] (0,0) -- (0,3.6) node[above]{$V_{in}$};
-\draw[dashed] (0,2.6) -- (5,2.6) node[right,font=\scriptsize]{$V_{IHM}$};
-\draw[dashed] (0,1.0) -- (5,1.0) node[right,font=\scriptsize]{$V_{ILM}$};
+\draw[dashed] (0,2.6) -- (5,2.6) node[right,font=\scriptsize]{$V_{IH,min}$};
+\draw[dashed] (0,1.0) -- (5,1.0) node[right,font=\scriptsize]{$V_{IL,max}$};
 \filldraw[gray!40] (0,1.0) rectangle (5,2.6);
 \node[font=\scriptsize] at (2.5,1.8) {zona proibita};
 \draw[thick,blue] (0,0.3) -- (0.6,0.3) -- (1.0,3.0) -- (1.8,3.0) -- (2.2,0.3) -- (3.0,0.3) -- (3.4,3.0) -- (5,3.0);
-\node[font=\scriptsize, align=center] at (1.0,-0.55) {Vout non\\digitalizzato};
+\node[font=\scriptsize, align=center] at (1.0,-0.55) {Evoluzione\\nel tempo};
 \end{tikzpicture}
 \qquad
 \begin{tikzpicture}[scale=0.85, every node/.style={scale=0.85}]
@@ -488,50 +687,90 @@ Il \emph{noise margin} rende l'elettronica digitale parzialmente insensibile al 
 \filldraw[gray!40] (1.6,0) rectangle (3.2,3.2);
 \node[font=\scriptsize] at (2.4,3.4) {zona proibita};
 \draw[thick,blue,domain=0:5,smooth] plot (\x,{3.0/(1+exp(2*(\x-2.4)))+0.1});
-\node[font=\scriptsize, align=center] at (4.2,2.2) {funzione di\\trasferimento\\del segnale digitale};
+\node[font=\scriptsize, align=center] at (4.2,2.2) {Curva di\\trasferimento};
 \end{tikzpicture}
 \end{center}
 
+\noindent\textbf{Cosa rappresentano i due grafici:}
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Grafico di sinistra (Evoluzione nel tempo):} Mostra come varia nel tempo la tensione in ingresso ($V_{in}$) ad una porta. La fascia grigia è la \textbf{zona proibita}: se la tensione cade in quest'area, il componente \emph{non può} stabilire se il livello logico sia uno $0$ o un $1$. I fronti di salita e discesa del segnale devono attraversare questa zona il più rapidamente possibile.
+    \item \textbf{Grafico di destra (Curva di trasferimento):} È il grafico $V_{out}$ in funzione di $V_{in}$ (es. per un inverter NOT). Un inverter ideale commuterebbe a gradino esatto, ma nella realtà c'è una pendenza. Mostra chiaramente che finché $V_{in}$ resta \emph{fuori} dalla zona proibita grigia (a sinistra o a destra), $V_{out}$ assume un valore netto e stabile ai margini del grafico logico.
+\end{itemize}
+
 \section{Nomenclatura delle famiglie logiche e fan-out}
 
-Le sigle delle porte logiche commerciali seguono lo schema:
+\subsection{Nomenclatura dei componenti}
+Le sigle dei circuiti integrati logici (IC) commerciali seguono uno schema di identificazione ben preciso. Ad esempio, una porta \textbf{SN74LS00N} viene così codificata:
 \[
-\underbrace{XX}_{\text{ditta produttrice}}\;\underbrace{NN}_{\text{famiglia logica}}\;\underbrace{XX}_{\text{funzione}}\;\underbrace{NN}_{\text{molteplicità}}
+\underbrace{SN}_{\text{ditta produttrice}}\;\underbrace{74}_{\text{famiglia logica}}\;\underbrace{LS}_{\text{sotto-famiglia}}\;\underbrace{00}_{\text{funzione}}\;\underbrace{N}_{\text{package}}
 \]
-ad esempio la serie \textbf{54} indica componenti per uso militare.
+In dettaglio:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Ditta produttrice}: ad esempio \emph{SN} per Texas Instruments, \emph{MC} per Motorola.
+    \item \textbf{Famiglia logica / range temperature}: la famiglia \textbf{74} è per uso commerciale ($0^\circ\text{C} \div 70^\circ\text{C}$), mentre la \textbf{54} è per uso militare/aerospaziale con tolleranze molto più ampie ($-55^\circ\text{C} \div 125^\circ\text{C}$).
+    \item \textbf{Sotto-famiglia (tecnologia)}: specifica le caratteristiche di velocità e consumi. Ad esempio \emph{LS} (Low-power Schottky), \emph{HC} (High-speed CMOS), \emph{ALS} (Advanced Low-power Schottky).
+    \item \textbf{Funzione}: il codice \emph{00} indica ad esempio ``Quad 2-input NAND gate'' (4 porte NAND a due ingressi), \emph{04} indica un inverter NOT (esadimensionale), ecc.
+    \item \textbf{Package}: indica il tipo di contenitore fisico del chip. Ad esempio la lettera \emph{N} indica il classico package plastico DIP (Dual In-line Package) per fori passanti, \emph{D} indica un package SOIC per montaggio superficiale.
+\end{itemize}
 
-\defbox{\textbf{Fan-out} = numero massimo di porte che una porta può pilotare in uscita.}
+\subsection{Fan-Out (capacità di pilotaggio)}
 
-Una porta che pilota $n$ porte equivale, dal punto di vista del carico, a una singola porta che pilota un resistore equivalente verso massa:
+\defbox{\textbf{Fan-Out} = numero massimo di ingressi di porte logiche uguali che l'uscita di una determinata porta è in grado di pilotare, garantendo i corretti livelli di tensione.}
 
-\begin{center}
-\begin{circuitikz}[scale=0.85, every node/.style={scale=0.85}]
-\node[not port] (n0) at (0,0) {};
-\draw (n0.in 1) -- ++(-0.6,0);
+Perché c'è un limite? Ogni porta in ingresso assorbe (o eroga) una piccolissima quantità di corrente. Se colleghiamo troppe porte all'uscita di un'unica porta ``driver'', la somma di queste piccole correnti diventa elevata. Se il driver non è progettato per erogare tutta questa corrente, la sua tensione di uscita inizia ad abbassarsi (o alzarsi) finendo nella zona proibita e causando errori nel circuito.
 
-\node[not port] (n1) at (2.4,0.9) {};
-\node[not port] (n2) at (2.4,0) {};
-\node[not port] (n3) at (2.4,-0.9) {};
-\draw (n0.out) -| (n1.in 1);
-\draw (n0.out) -| (n2.in 1);
-\draw (n0.out) -| (n3.in 1);
-\draw (n1.out) -- ++(0.6,0);
-\draw (n2.out) -- ++(0.6,0);
-\draw (n3.out) -- ++(0.6,0);
-\node[left] at (1.55,0.45) {$\vdots$};
-
-\node at (5.2,0) {$=$};
-
-\node[not port] (m0) at (6.4,0) {};
-\draw (m0.in 1) -- ++(-0.6,0);
-\draw (m0.out) to[R] ++(0,-1.2) node[ground]{};
-\end{circuitikz}
-\end{center}
-
+Il calcolo del Fan-Out si effettua separatamente per i due stati logici Alto e Basso, prendendo poi il caso peggiore (il minimo tra i due calcoli):
 \[
 FO_H = \dfrac{I_{out,H}}{I_{in,H}} \qquad\qquad
 FO_L = \dfrac{I_{out,L}}{I_{in,L}}
 \]
+
+Nello schema seguente è illustrato il concetto: la corrente totale $I_{out}$ che fuoriesce dalla porta ``Driver'' si divide in tante piccole $I_{in}$ quanti sono i carichi. Tutta la rete di carichi può essere modellata teoricamente come un'unica resistenza equivalente verso massa o verso l'alimentazione:
+
+\begin{center}
+\begin{circuitikz}[scale=0.9, every node/.style={scale=0.9}]
+% Driving gate
+\node[not port] (drv) at (0,0) {};
+\node[above] at (drv) {Driver};
+\draw (drv.in 1) -- ++(-0.6,0) node[left]{$V_{in}$};
+
+% Split node
+\coordinate (split) at (1.5,0);
+\draw (drv.out) -- (split);
+\draw[-latex] (drv.out) -- ++(0.7,0) node[above]{$I_{out}$};
+
+% Load gates
+\node[not port] (L1) at (3.5,1.2) {};
+\node[not port] (L2) at (3.5,0) {};
+\node[not port] (Ln) at (3.5,-1.5) {};
+
+\node[right] at (L1.out) {Carico 1};
+\node[right] at (L2.out) {Carico 2};
+\node[right] at (Ln.out) {Carico $n$};
+
+\draw (split) |- (L1.in 1);
+\draw (split) -- (L2.in 1);
+\draw (split) |- (Ln.in 1);
+
+\draw[-latex] (1.5,1.2) -- ++(0.8,0) node[above]{$I_{in,1}$};
+\draw[-latex] (1.5,0) -- ++(0.8,0) node[above]{$I_{in,2}$};
+\draw[-latex] (1.5,-1.5) -- ++(0.8,0) node[above]{$I_{in,n}$};
+
+\node at (1.5,-0.7) {$\vdots$};
+\node at (3.5,-0.7) {$\vdots$};
+
+% Equivalence text
+\node at (6.2, 0) {\Large $\equiv$};
+
+% Equivalent circuit
+\node[not port] (eqdrv) at (8.5,0) {};
+\draw (eqdrv.in 1) -- ++(-0.6,0);
+\draw (eqdrv.out) -- ++(0.5,0) coordinate (eqsplit);
+\draw (eqsplit) to[R, l=$R_{eq}$] ++(0,-1.5) node[ground]{};
+\node[above] at (eqdrv) {Driver};
+
+\end{circuitikz}
+\end{center}
 
 % ======================================================================
 \chapter{Algebra di Boole: assiomi, proprietà e sintesi}
@@ -608,71 +847,70 @@ x\cdot y\cdot z\cdots = \overline{\overline{x}+\overline{y}+\overline{z}+\cdots}
 % ======================================================================
 \section{Porte universali: NAND e NOR}
 
-Le porte NAND e NOR sono dette \textbf{porte universali} perché con ciascuna di esse è possibile
-realizzare qualsiasi funzione booleana. AND e OR \emph{non} possono essere porte universali perché
-non permettono di realizzare le negazioni.
+Le porte NAND e NOR sono dette \textbf{porte universali} (o un set funzionalmente completo) perché con ciascuna di esse è possibile realizzare \emph{qualsiasi} funzione booleana, replicando il comportamento di NOT, AND e OR. 
+Al contrario, AND e OR \emph{non} formano insiemi universali da soli, poiché, non potendo invertire un segnale, non permettono di realizzare la funzione NOT.
 
 \subsection{NAND come porta universale}
 
 \begin{fitcenter}
-\begin{circuitikz}[scale=0.82, every node/.style={scale=0.82}]
+\begin{circuitikz}[scale=0.7, every node/.style={scale=0.7}]
 
-% --- NOT ---
-\node[anchor=east] at (-0.2, 3.8) {NOT};
-\node[nand port] (NN) at (1.4, 3.8) {};
-\draw (NN.in 1) -- ++(-0.35,0) coordinate (Njt);
-\draw (NN.in 2) -- ++(-0.35,0) -- (Njt);
-\draw (Njt) -- ++(-0.35,0);
-\draw (NN.out) -- ++(0.4,0);
+% ---- NOT con NAND ----
+\node[font=\small\bfseries, anchor=east] at (-1.0, 7.0) {NOT};
+\node[nand port] (NN) at (1.5, 7.0) {};
+\draw (NN.in 1) -- (NN.in 2);
+\draw ($(NN.in 1)!0.5!(NN.in 2)$) -- ++(-0.8,0) node[left]{$A$};
+\draw (NN.out) -- ++(0.5,0) node[right]{$\overline{A}$};
 
-% --- AND ---
-\node[anchor=east] at (-0.2, 2.4) {AND};
-\node[nand port] (NA1) at (1.4, 2.4) {};
-\draw (NA1.in 1) -- ++(-0.5,0) node[left]{};
-\draw (NA1.in 2) -- ++(-0.5,0);
-\node[nand port] (NA2) at (3.2, 2.4) {};
-\draw (NA1.out) -- (NA2.in 1);
-\draw (NA1.out) -- ++(0,0) coordinate (NA1out);
-% collega entrambi gli ingressi di NA2 allo stesso punto
-\draw (NA1.out) -- (NA2.in 2 -| NA1.out) -- (NA2.in 2);
-\draw (NA2.out) -- ++(0.4,0);
+% ---- AND con NAND ----
+\node[font=\small\bfseries, anchor=east] at (-1.0, 5.0) {AND};
+\node[nand port] (NA1) at (1.5, 5.0) {};
+\node[nand port] (NA2) at (3.5, 5.0) {};
+\draw (NA1.in 1) -- ++(-0.8,0) node[left]{$A$};
+\draw (NA1.in 2) -- ++(-0.8,0) node[left]{$B$};
+\draw (NA2.in 1) -- (NA2.in 2);
+\draw (NA1.out) -- ($(NA2.in 1)!0.5!(NA2.in 2)$);
+\draw (NA2.out) -- ++(0.5,0) node[right]{$A \cdot B$};
 
-% --- OR ---
-\node[anchor=east] at (-0.2, 1.0) {OR};
-\node[nand port] (NO1) at (1.2, 1.3) {};
-\draw (NO1.in 1) -- ++(-0.3,0) coordinate (NOj1); \draw (NOj1) -- ++(-0.2,0);
-\draw (NO1.in 2) -- ++(-0.3,0) coordinate (NOj2); \draw (NOj2) -- (NOj1) -- (NOj2);
+% ---- OR con NAND ----
+\node[font=\small\bfseries, anchor=east] at (-1.0, 3.0) {OR};
+\node[nand port] (NO1) at (1.5, 3.5) {};
+\node[nand port] (NO2) at (1.5, 2.5) {};
+\node[nand port] (NO3) at (3.5, 3.0) {};
+\draw (NO1.in 1) -- (NO1.in 2);
+\draw ($(NO1.in 1)!0.5!(NO1.in 2)$) -- ++(-0.8,0) node[left]{$A$};
+\draw (NO2.in 1) -- (NO2.in 2);
+\draw ($(NO2.in 1)!0.5!(NO2.in 2)$) -- ++(-0.8,0) node[left]{$B$};
+\draw (NO1.out) -- ++(0.3,0) |- (NO3.in 1);
+\draw (NO2.out) -- ++(0.3,0) |- (NO3.in 2);
+\draw (NO3.out) -- ++(0.5,0) node[right]{$A + B$};
 
-\node[nand port] (NO2) at (1.2, 0.6) {};
-\draw (NO2.in 1) -- ++(-0.3,0) coordinate (NOj3); \draw (NOj3) -- ++(-0.2,0);
-\draw (NO2.in 2) -- ++(-0.3,0) -- (NOj3);
+% ---- XOR con NAND ----
+\node[font=\small\bfseries, anchor=east] at (6.0, 7.0) {XOR};
+\node[nand port] (NX0) at (8.0, 5.0) {};
+\node[nand port] (NX1) at (9.8, 5.9) {};
+\node[nand port] (NX2) at (9.8, 4.1) {};
+\node[nand port] (NX3) at (11.6, 5.0) {};
 
-\node[nand port] (NO3) at (3.0, 0.95) {};
-\draw (NO1.out) -- (NO3.in 1);
-\draw (NO2.out) -- (NO3.in 2);
-\draw (NO3.out) -- ++(0.4,0);
+% Inputs A and B (robustly drawn to the left)
+\draw (NX1.in 1) -- ++(-2.7, 0) coordinate (Ain) node[left] {$A$};
+\draw (NX2.in 2) -- ++(-2.7, 0) coordinate (Bin) node[left] {$B$};
 
-% --- XOR ---
-\node[anchor=east] at (4.8, 2.2) {XOR};
-% primo livello: due NAND di ingresso
-\node[nand port] (NX1) at (6.4, 2.6) {};
-\node[nand port] (NX2) at (6.4, 1.4) {};
-\draw (NX1.in 1) -- ++(-0.6,0) coordinate (xa); \draw (xa) node[left]{$A$};
-\draw (NX1.in 2) -- ++(-0.4,0) coordinate (xb);
-\draw (NX2.in 1) -- ++(-0.4,0) coordinate (xc); \draw (xb) -- (xc);
-\draw (NX2.in 2) -- ++(-0.6,0) coordinate (xd); \draw (xd) node[left]{$B$};
-% secondo livello
-\node[nand port] (NX3) at (8.2, 2.6) {};
-\node[nand port] (NX4) at (8.2, 1.4) {};
-\draw (NX1.out) -- (NX3.in 1);
-\draw (NX1.out) -- ++(0.3,0) |- (NX4.in 1);
-\draw (NX2.out) -- (NX4.in 2);
-\draw (NX2.out) -- ++(0.3,0) |- (NX3.in 2);
-% terzo livello
-\node[nand port] (NX5) at (10.0, 2.0) {};
-\draw (NX3.out) -- (NX5.in 1);
-\draw (NX4.out) -- (NX5.in 2);
-\draw (NX5.out) -- ++(0.4,0);
+% Taps to NX0
+\path (Ain) -- (NX1.in 1) coordinate[pos=0.15] (tapA);
+\path (Bin) -- (NX2.in 2) coordinate[pos=0.25] (tapB);
+\draw (tapA) to[short, *-] (tapA |- NX0.in 1) -- (NX0.in 1);
+\draw (tapB) to[short, *-] (tapB |- NX0.in 2) -- (NX0.in 2);
+
+% Middle connections
+\draw (NX0.out) -- ++(0.2,0) coordinate (NX0out_split);
+\draw (NX0out_split) |- (NX1.in 2);
+\draw (NX0out_split) |- (NX2.in 1);
+
+% Final connections
+\draw (NX1.out) -- ++(0.2,0) |- (NX3.in 1);
+\draw (NX2.out) -- ++(0.2,0) |- (NX3.in 2);
+\draw (NX3.out) -- ++(0.5,0) node[right]{$A \oplus B$};
 
 \end{circuitikz}
 \end{fitcenter}
@@ -682,63 +920,78 @@ non permettono di realizzare le negazioni.
 In modo duale alla NAND, anche la NOR può realizzare NOT, AND, OR e XOR:
 
 \begin{fitcenter}
-\begin{circuitikz}[scale=0.82, every node/.style={scale=0.82}]
+\begin{circuitikz}[scale=0.7, every node/.style={scale=0.7}]
 
-% --- NOT ---
-\node[anchor=east] at (-0.2, 3.8) {NOT};
-\node[nor port] (RN) at (1.4, 3.8) {};
-\draw (RN.in 1) -- ++(-0.35,0) coordinate (Rjt);
-\draw (RN.in 2) -- ++(-0.35,0) -- (Rjt);
-\draw (Rjt) -- ++(-0.35,0);
-\draw (RN.out) -- ++(0.4,0);
+% ---- NOT con NOR ----
+\node[font=\small\bfseries, anchor=east] at (-1.0, 7.0) {NOT};
+\node[nor port] (RN) at (1.5, 7.0) {};
+\draw (RN.in 1) -- (RN.in 2);
+\draw ($(RN.in 1)!0.5!(RN.in 2)$) -- ++(-0.8,0) node[left]{$A$};
+\draw (RN.out) -- ++(0.5,0) node[right]{$\overline{A}$};
 
-% --- OR ---
-\node[anchor=east] at (-0.2, 2.4) {OR};
-\node[nor port] (RO1) at (1.4, 2.4) {};
-\draw (RO1.in 1) -- ++(-0.5,0);
-\draw (RO1.in 2) -- ++(-0.5,0);
-\node[nor port] (RO2) at (3.2, 2.4) {};
-\draw (RO1.out) -- (RO2.in 1);
-\draw (RO1.out) -- (RO2.in 2 -| RO1.out) -- (RO2.in 2);
-\draw (RO2.out) -- ++(0.4,0);
+% ---- OR con NOR ----
+\node[font=\small\bfseries, anchor=east] at (-1.0, 5.0) {OR};
+\node[nor port] (RO1) at (1.5, 5.0) {};
+\node[nor port] (RO2) at (3.5, 5.0) {};
+\draw (RO1.in 1) -- ++(-0.8,0) node[left]{$A$};
+\draw (RO1.in 2) -- ++(-0.8,0) node[left]{$B$};
+\draw (RO2.in 1) -- (RO2.in 2);
+\draw (RO1.out) -- ($(RO2.in 1)!0.5!(RO2.in 2)$);
+\draw (RO2.out) -- ++(0.5,0) node[right]{$A + B$};
 
-% --- AND ---
-\node[anchor=east] at (-0.2, 1.0) {AND};
-\node[nor port] (RA1) at (1.2, 1.3) {};
-\draw (RA1.in 1) -- ++(-0.5,0) coordinate (RAj1);
-\draw (RA1.in 2) -- ++(-0.3,0) coordinate (RAj2);
-\draw (RAj2) -- (RAj1);
+% ---- AND con NOR ----
+\node[font=\small\bfseries, anchor=east] at (-1.0, 3.0) {AND};
+\node[nor port] (RA1) at (1.5, 3.5) {};
+\node[nor port] (RA2) at (1.5, 2.5) {};
+\node[nor port] (RA3) at (3.5, 3.0) {};
+\draw (RA1.in 1) -- (RA1.in 2);
+\draw ($(RA1.in 1)!0.5!(RA1.in 2)$) -- ++(-0.8,0) node[left]{$A$};
+\draw (RA2.in 1) -- (RA2.in 2);
+\draw ($(RA2.in 1)!0.5!(RA2.in 2)$) -- ++(-0.8,0) node[left]{$B$};
+\draw (RA1.out) -- ++(0.3,0) |- (RA3.in 1);
+\draw (RA2.out) -- ++(0.3,0) |- (RA3.in 2);
+\draw (RA3.out) -- ++(0.5,0) node[right]{$A \cdot B$};
 
-\node[nor port] (RA2) at (1.2, 0.6) {};
-\draw (RA2.in 1) -- ++(-0.5,0) coordinate (RAj3);
-\draw (RA2.in 2) -- ++(-0.3,0) coordinate (RAj4);
-\draw (RAj4) -- (RAj3);
+% ---- XOR con NOR ----
+\node[font=\small\bfseries, anchor=east] at (6.5, 7.0) {XOR};
 
-\node[nor port] (RA3) at (3.0, 0.95) {};
-\draw (RA1.out) -- (RA3.in 1);
-\draw (RA2.out) -- (RA3.in 2);
-\draw (RA3.out) -- ++(0.4,0);
+% Level 0: NOT gates (top, bottom) and cross-input NOR (middle)
+\node[nor port] (RX1) at (8.5, 6.4) {};
+\node[nor port] (RX0) at (8.5, 5.0) {};
+\node[nor port] (RX2) at (8.5, 3.6) {};
 
-% --- XOR ---
-\node[anchor=east] at (4.8, 2.2) {XOR};
-\node[nor port] (RX0) at (6.4, 2.0) {};
-\draw (RX0.in 1) -- ++(-0.6,0) node[left]{$A$};
-\draw (RX0.in 2) -- ++(-0.6,0) node[left]{$B$};
+% RX1: NOT A
+\coordinate (RX1mid) at ($(RX1.in 1)!0.5!(RX1.in 2)$);
+\draw (RX1.in 1) -- (RX1.in 2);
+\draw (RX1mid) -- ++(-1.5, 0) coordinate (Ain) node[left] {$A$};
 
-\node[nor port] (RX1) at (8.2, 2.6) {};
-\node[nor port] (RX2) at (8.2, 1.4) {};
-\draw (RX0.out) -- ++(0.3,0) coordinate (RXm);
-\draw (RXm) |- (RX1.in 2);
-\draw (RXm) |- (RX2.in 1);
-\draw (RX0.in 1) -- ++(-0.6,0) coordinate (Raup);
-\draw (Raup) |- (RX1.in 1);
-\draw (RX0.in 2) -- ++(-0.6,0) coordinate (Ralo);
-\draw (Ralo) |- (RX2.in 2);
+% RX2: NOT B
+\coordinate (RX2mid) at ($(RX2.in 1)!0.5!(RX2.in 2)$);
+\draw (RX2.in 1) -- (RX2.in 2);
+\draw (RX2mid) -- ++(-1.5, 0) coordinate (Bin) node[left] {$B$};
 
-\node[nor port] (RX3) at (10.0, 2.0) {};
-\draw (RX1.out) -- (RX3.in 1);
-\draw (RX2.out) -- (RX3.in 2);
-\draw (RX3.out) -- ++(0.4,0);
+% RX0: NOR(A,B) — tap from input wires
+\path (Ain) -- (RX1mid) coordinate[pos=0.3] (tapA);
+\path (Bin) -- (RX2mid) coordinate[pos=0.5] (tapB);
+\draw (tapA) to[short, *-] (tapA |- RX0.in 1) -- (RX0.in 1);
+\draw (tapB) to[short, *-] (tapB |- RX0.in 2) -- (RX0.in 2);
+
+% Level 1: two middle NOR gates
+\node[nor port] (RX3) at (10.5, 5.8) {};
+\node[nor port] (RX4) at (10.5, 4.2) {};
+
+% Connections level 0 → level 1
+\draw (RX1.out) -- ++(0.15,0) |- (RX3.in 1);
+\draw (RX0.out) -- ++(0.25,0) coordinate (RX0mid);
+\draw (RX0mid) |- (RX3.in 2);
+\draw (RX0mid) |- (RX4.in 1);
+\draw (RX2.out) -- ++(0.15,0) |- (RX4.in 2);
+
+% Level 2: final NOR
+\node[nor port] (RX5) at (12.3, 5.0) {};
+\draw (RX3.out) -- ++(0.1,0) |- (RX5.in 1);
+\draw (RX4.out) -- ++(0.1,0) |- (RX5.in 2);
+\draw (RX5.out) -- ++(0.4,0) node[right]{$A \oplus B$};
 
 \end{circuitikz}
 \end{fitcenter}
@@ -746,13 +999,7 @@ In modo duale alla NAND, anche la NOR può realizzare NOT, AND, OR e XOR:
 % ======================================================================
 \section{Dalla tabella di verità al circuito}
 
-\defbox{
-Possibili usate di $F$: data una tabella di verità di $F(a,b,c)$, ogni riga in cui $F=1$ corrisponde a un \textbf{mintermine}; ogni riga in cui $F=0$ corrisponde a un \textbf{maxtermine}.\\[0.3em]
-\textbf{Mintermine}: per costruzione vale sempre $1$; è l'AND delle variabili (eventualmente negate) corrispondenti a quella riga.\\[0.3em]
-\textbf{Maxtermine}: per costruzione vale sempre $0$; è l'OR delle variabili (eventualmente negate) corrispondenti a quella riga.
-}
-
-\noindent Esempio: data la tabella di verità
+Data una tabella di verità, possiamo ricavare le espressioni logiche della funzione e i relativi circuiti. Consideriamo la seguente tabella per una funzione $F(a,b,c)$:
 
 \begin{center}
 \begin{tabular}{ccc|c}
@@ -761,203 +1008,320 @@ $a$ & $b$ & $c$ & $F(a,b,c)$\\
 \midrule
 0&0&0&0\\
 0&0&1&1\\
-0&1&0&0\\
-0&1&1&1\\
-1&0&0&0\\
-1&0&1&1\\
-1&1&0&0\\
+0&1&0&1\\
+0&1&1&0\\
+1&0&0&1\\
+1&0&1&0\\
+1&1&0&1\\
 1&1&1&1\\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\noindent Mettendo in OR tutti i mintermini (le righe con $F=1$) si ottiene la \textbf{1\textsuperscript{a} forma canonica} o \textbf{SOP} (\emph{sum of product}):
+Dalle \textbf{possibili uscite di $F$} possiamo ricavare le due forme canoniche attraverso due procedimenti duali. Vediamoli passo passo in modo semplice:
+
+\subsubsection*{1. Mintermini e Prima Forma Canonica (SOP)}
+La logica è ``costruire le combinazioni che ci danno 1'':
+\begin{itemize}
+    \item \textbf{Quali righe guardare:} Si prendono in considerazione \underline{solo le righe in cui $F = 1$}.
+    \item \textbf{Come scrivere il termine:} Per ogni riga, scriviamo il \textbf{prodotto (AND)} delle variabili.
+    \item \textbf{Regola della negazione:} Se nella tabella la variabile vale \textbf{0} la scriviamo \textbf{negata} (con la barretta), se vale \textbf{1} la scriviamo \textbf{normale}.
+    \item \textbf{Risultato finale:} Si sommano (OR) tra loro tutti i prodotti ottenuti. Si crea così la \textbf{SOP} (\emph{Sum Of Products} - Somma di Prodotti).
+\end{itemize}
+Guardando la tabella precedente:
 \[
-F(a,b,c) = \overline{a}\,\overline{b}\,c + \overline{a}\,b\,c + a\,\overline{b}\,c + a\,b\,c
+F(a,b,c) = \underbrace{\overline{a}\,\overline{b}c}_{\text{riga } 0,0,1} + \underbrace{\overline{a}b\overline{c}}_{\text{riga } 0,1,0} + \underbrace{a\overline{b}\,\overline{c}}_{\text{riga } 1,0,0} + \underbrace{ab\overline{c}}_{\text{riga } 1,1,0} + \underbrace{abc}_{\text{riga } 1,1,1}
 \]
 
-\noindent Mettendo in AND tutti i maxtermini (le righe con $F=0$) si ottiene la \textbf{2\textsuperscript{a} forma canonica} o \textbf{POS} (\emph{product of sum}):
+\subsubsection*{2. Maxtermini e Seconda Forma Canonica (POS)}
+La logica qui è ``escludere le combinazioni che ci danno 0'':
+\begin{itemize}
+    \item \textbf{Quali righe guardare:} Si prendono in considerazione \underline{solo le righe in cui $F = 0$}.
+    \item \textbf{Come scrivere il termine:} Per ogni riga, scriviamo la \textbf{somma (OR)} delle variabili.
+    \item \textbf{Regola della negazione (qui si inverte!):} Se nella tabella la variabile vale \textbf{1} la scriviamo \textbf{negata}, se vale \textbf{0} la scriviamo \textbf{normale}.
+    \item \textbf{Risultato finale:} Si moltiplicano (AND) tra loro tutte le somme ottenute. Si crea così la \textbf{POS} (\emph{Product Of Sums} - Prodotto di Somme).
+\end{itemize}
+Guardando la tabella precedente:
 \[
-F(a,b,c) = (a+b+\overline{c})\cdot(a+\overline{b}+\overline{c})\cdot(\overline{a}+b+\overline{c})\cdot(\overline{a}+\overline{b}+\overline{c})
+F(a,b,c) = \underbrace{(a+b+c)}_{\text{riga } 0,0,0} \cdot \underbrace{(a+\overline{b}+\overline{c})}_{\text{riga } 0,1,1} \cdot \underbrace{(\overline{a}+b+\overline{c})}_{\text{riga } 1,0,1}
 \]
 
-\noindent Una volta ottenuta una delle due forme canoniche, è possibile semplificare l'espressione (ad es.\ con le mappe di Karnaugh) e costruire il circuito corrispondente.
+\noindent \emph{Nota: Di solito si semplificano queste espressioni (es. con le mappe di Karnaugh) prima di costruire i circuiti per risparmiare componenti.}
 
 % ======================================================================
-% diagramma a blocchi SOP/POS (sezione 3.4.1)
-\subsection{Schema generale SOP e POS}
-
-\begin{fitcenter}
-\begin{tikzpicture}[scale=1, every node/.style={scale=0.9},
-  box/.style={draw, minimum width=1.1cm, minimum height=0.8cm, align=center, font=\small}]
-
-% 1a forma SOP
-\draw[rounded corners=6pt, fill=green!10] (-0.5,-0.3) rectangle (4.2,2.8);
-\node[font=\small\bfseries] at (1.85,2.5) {1\textsuperscript{a} forma (SOP)};
-\node[font=\scriptsize, align=center] at (0.1,1.8) {n\textdegree\ di\\variabili};
-\node[box] (SAND) at (1.6,1.8) {AND};
-\draw[-latex] (0.55,1.8) -- (SAND.west);
-\draw[-latex] (SAND.east) -- (3.0,1.8);
-\node[font=\scriptsize, align=center] at (3.6,1.8) {num.\\minterm.};
-\node[font=\scriptsize] at (0.9,0.9) {piano AND};
-\node[box] (SOR) at (1.6,0.7) {OR};
-\node[font=\scriptsize] at (3.0,0.9) {piano OR};
-
-% 2a forma POS
-\draw[rounded corners=6pt, fill=blue!10] (5.0,-0.3) rectangle (9.7,2.8);
-\node[font=\small\bfseries] at (7.35,2.5) {2\textsuperscript{a} forma (POS)};
-\node[font=\scriptsize, align=center] at (5.6,1.8) {n\textdegree\ di\\variabili};
-\node[box] (POR) at (7.1,1.8) {OR};
-\draw[-latex] (6.15,1.8) -- (POR.west);
-\draw[-latex] (POR.east) -- (8.5,1.8);
-\node[font=\scriptsize, align=center] at (9.1,1.8) {num.\\maxterm.};
-\node[font=\scriptsize] at (6.4,0.9) {piano OR};
-\node[box] (PAND) at (7.1,0.7) {AND};
-\node[font=\scriptsize] at (8.5,0.9) {piano AND};
-
-\end{tikzpicture}
-\end{fitcenter}
-
 \subsection{Equivalenza delle due forme canoniche}
 
-\noindent Si può dimostrare che la 1\textsuperscript{a} e la 2\textsuperscript{a} forma canonica della stessa funzione sono equivalenti, applicando le leggi di De Morgan ai mintermini negati:
-\[
-\overline{a}bc+\overline{a}b\overline{c}+a\overline{b}\,\overline{c}+abc
-=(a+b+c)\cdot(a+\overline{b}+\overline{c})\cdot(\overline{a}+b+\overline{c})
-\]
+Dimostriamo che le due forme canoniche descrivono la stessa funzione e sono equivalenti. Prendiamo i mintermini per cui $F=0$ (cioè $m_0, m_3, m_5$) e neghiamo la loro somma, ovvero calcoliamo $\overline{\overline{F}}$. Per le leggi di De Morgan otteniamo esattamente la seconda forma canonica (POS):
 
-\noindent Dimostrazione (per le leggi di De Morgan, negando due volte ogni mintermine):
 \[
-\overline{a}bc+\overline{a}b\overline{c}+a\overline{b}\,\overline{c}+abc
-= \overline{\,\overline{\overline{a}bc}\;\cdot\;\overline{\overline{a}b\overline{c}}\;\cdot\;\overline{a\overline{b}\,\overline{c}}\;\cdot\;\overline{abc}\,}
+\overline{\overline{a}\,\overline{b}\,\overline{c} + \overline{a}bc + a\overline{b}c} \quad = \quad \text{(per le leggi di De Morgan)}
 \]
 \[
-= \overline{(a+\overline{b}+\overline{c})\cdot(a+\overline{b}+c)\cdot(\overline{a}+b+c)\cdot(\overline{a}+\overline{b}+\overline{c})}
-= (a+b+c)\cdot(a+\overline{b}+\overline{c})\cdot(\overline{a}+b+\overline{c})\cdots = 1\cdot1\cdot1
+= \overline{(\overline{a}\,\overline{b}\,\overline{c})} \cdot \overline{(\overline{a}bc)} \cdot \overline{(a\overline{b}c)}
+\]
+\[
+= (a+b+c) \cdot (a+\overline{b}+\overline{c}) \cdot (\overline{a}+b+\overline{c})
 \]
 
-\noindent A queste due forme canoniche corrispondono due tipi di circuiti, entrambi a due piani di porte logiche e con un numero di ingressi/uscite legato al numero di variabili e al numero di mintermini (o maxtermini):
+Questo dimostra che le due forme canoniche portano allo stesso identico risultato logico.
 
-\begin{center}
-\begin{tikzpicture}[scale=0.8, every node/.style={scale=0.8}]
-% 1a forma: piano AND -> piano OR
-\node[font=\small\bfseries] at (1.6,2.6) {1\textsuperscript{a} forma};
-\draw[fill=green!10,rounded corners=4pt] (0,-0.3) rectangle (1.0,2.2);
-\node[font=\scriptsize,align=center] at (0.5,0.95) {piano\\AND};
-\node[font=\scriptsize,align=center] at (-0.6,2.0) {n\textdegree\ di\\variabili};
-\draw[fill=green!20,rounded corners=4pt] (1.6,0.4) rectangle (2.6,1.6);
-\node[font=\scriptsize,align=center] at (2.1,1.0) {piano\\OR};
-\draw[-latex] (1.0,1.0) -- (1.6,1.0);
-\draw[-latex] (2.6,1.0) -- (3.4,1.0);
-\node[font=\scriptsize,align=center] at (3.0,1.9) {numero di\\mintermini};
+% ======================================================================
+\subsection{I circuiti che corrispondono alle due forme}
 
-% 2a forma: piano OR -> piano AND
-\node[font=\small\bfseries] at (6.6,2.6) {2\textsuperscript{a} forma};
-\draw[fill=blue!10,rounded corners=4pt] (5.0,-0.3) rectangle (6.0,2.2);
-\node[font=\scriptsize,align=center] at (5.5,0.95) {piano\\OR};
-\node[font=\scriptsize,align=center] at (4.4,2.0) {n\textdegree\ di\\variabili};
-\draw[fill=blue!20,rounded corners=4pt] (6.6,0.4) rectangle (7.6,1.6);
-\node[font=\scriptsize,align=center] at (7.1,1.0) {piano\\AND};
-\draw[-latex] (6.0,1.0) -- (6.6,1.0);
-\draw[-latex] (7.6,1.0) -- (8.4,1.0);
-\node[font=\scriptsize,align=center] at (8.0,1.9) {numero di\\maxtermini};
-\end{tikzpicture}
-\end{center}
+A queste due forme canoniche corrispondono due tipi di circuiti, entrambi strutturati su due "piani" di porte logiche. Il numero di ingressi e uscite dei piani dipende dal numero di variabili e dal numero di mintermini (o maxtermini):
 
-\noindent I circuiti corrispondenti alle due forme canoniche, una volta semplificati, si possono ottenere comodamente tramite le \textbf{mappe di Karnaugh}.
+\begin{fitcenter}
+\begin{circuitikz}[scale=0.9, every node/.style={scale=0.9}]
+
+% --- 1a Forma (SOP) ---
+\node[font=\small\bfseries] at (2.5, 3.8) {1\textsuperscript{a} forma};
+
+% AND gates
+\node[and port, number inputs=3] (A1) at (2.0, 2.6) {};
+\node[and port, number inputs=3] (A2) at (2.0, 1.5) {};
+\node[and port, number inputs=3] (A3) at (2.0, 0.4) {};
+\node[font=\scriptsize, align=center, text=blue!80!black] at (2.0, -0.6) {piano\\degli AND};
+
+% Inputs & Brackets
+\foreach \gate in {A1, A2, A3} {
+    \draw (\gate.in 1) -- ++(-0.5,0);
+    \draw (\gate.in 2) -- ++(-0.5,0);
+    \draw (\gate.in 3) -- ++(-0.5,0);
+}
+\draw (0.9, 0.1) -- (0.8, 0.1) -- (0.8, 2.9) -- (0.9, 2.9);
+\node[font=\scriptsize, align=center, left] at (0.8, 1.5) {n\textdegree\ di\\variabili};
+
+% OR gate
+\node[or port, number inputs=3] (O1) at (6.0, 1.5) {};
+\node[font=\scriptsize, align=center, text=green!60!black] at (6.0, -0.6) {piano\\degli OR};
+
+% Connections
+\draw (A1.out) -- ++(0.5,0) |- (O1.in 1);
+\draw (A2.out) -- (O1.in 2);
+\draw (A3.out) -- ++(0.5,0) |- (O1.in 3);
+\draw (O1.out) -- ++(0.5,0) node[right, font=\small] {$F$};
+
+% Label for minterms
+\draw (3.2, 0.3) -- (3.3, 0.3) -- (3.3, 2.7) -- (3.2, 2.7);
+\node[font=\scriptsize, align=center, right] at (3.3, 1.5) {numero di\\mintermini};
+
+% --- 2a Forma (POS) ---
+\begin{scope}[xshift=9.5cm]
+\node[font=\small\bfseries] at (2.5, 3.8) {2\textsuperscript{a} forma};
+
+% OR gates
+\node[or port, number inputs=3] (O2) at (2.0, 2.6) {};
+\node[or port, number inputs=3] (O3) at (2.0, 1.5) {};
+\node[or port, number inputs=3] (O4) at (2.0, 0.4) {};
+\node[font=\scriptsize, align=center, text=green!60!black] at (2.0, -0.6) {piano\\degli OR};
+
+% Inputs & Brackets
+\foreach \gate in {O2, O3, O4} {
+    \draw (\gate.in 1) -- ++(-0.5,0);
+    \draw (\gate.in 2) -- ++(-0.5,0);
+    \draw (\gate.in 3) -- ++(-0.5,0);
+}
+\draw (0.9, 0.1) -- (0.8, 0.1) -- (0.8, 2.9) -- (0.9, 2.9);
+\node[font=\scriptsize, align=center, left] at (0.8, 1.5) {n\textdegree\ di\\variabili};
+
+% AND gate
+\node[and port, number inputs=3] (A4) at (6.0, 1.5) {};
+\node[font=\scriptsize, align=center, text=blue!80!black] at (6.0, -0.6) {piano\\degli AND};
+
+% Connections
+\draw (O2.out) -- ++(0.5,0) |- (A4.in 1);
+\draw (O3.out) -- (A4.in 2);
+\draw (O4.out) -- ++(0.5,0) |- (A4.in 3);
+\draw (A4.out) -- ++(0.5,0) node[right, font=\small] {$F$};
+
+% Label for maxterms
+\draw (3.2, 0.3) -- (3.3, 0.3) -- (3.3, 2.7) -- (3.2, 2.7);
+\node[font=\scriptsize, align=center, right] at (3.3, 1.5) {numero di\\maxtermini};
+
+\end{scope}
+\end{circuitikz}
+\end{fitcenter}
 
 % ======================================================================
 \subsection{Mappe di Karnaugh a 3 variabili}
 
-\noindent Data la tabella di verità precedente, si costruisce la mappa di Karnaugh a 3 variabili $c\backslash ab$:
+\noindent Data la tabella di verità vista in precedenza, possiamo costruire la mappa di Karnaugh a 3 variabili $c\backslash ab$.
+Le colonne sono ordinate secondo il \textbf{codice Gray} (00, 01, 11, 10). Questo ordine è fondamentale perché garantisce che le celle fisicamente adiacenti differiscano per \textbf{un solo bit}. In questo modo, raggruppando gli uni (o gli zeri) vicini, possiamo eliminare le variabili che cambiano di stato e ottenere un'espressione semplificata!
 
 \begin{center}
-\begin{tikzpicture}[scale=0.72]
-\node[align=left, font=\small] at (2.0,3.0) {Se uso i maxtermini riduco};
-\node[align=left, font=\small] at (2.0,2.6) {l'espressione ma ho cmq tanti};
-\node[align=left, font=\small] at (2.0,2.2) {termini $\Rightarrow$ meglio usare i mintermini.};
+\textbf{Semplificazione con Mintermini (uni)}\\[0.5em]
+\begin{tikzpicture}[scale=0.8]
+% Grid for cells
 \draw (0,0) grid (4,2);
-\node[font=\small] at (0.5,1.65) {00};
-\node[font=\small] at (1.5,1.65) {01};
-\node[font=\small] at (2.5,1.65) {11};
-\node[font=\small] at (3.5,1.65) {10};
-\node[font=\small, anchor=east] at (-0.1,1.5) {0};
-\node[font=\small, anchor=east] at (-0.1,0.5) {1};
-\node[font=\small] at (-0.7,1.65) {$c{\backslash}ab$};
-\node at (0.5,1.5) {0}; \node at (1.5,1.5) {0}; \node at (2.5,1.5) {1}; \node at (3.5,1.5) {0};
-\node at (0.5,0.5) {1}; \node at (1.5,0.5) {1}; \node at (2.5,0.5) {1}; \node at (3.5,0.5) {1};
-\end{tikzpicture}
-\qquad
-\begin{tikzpicture}[scale=0.72]
-\node[align=left, font=\small] at (2.0,3.0) {Se uso i mintermini trovo:};
-\node[font=\small] at (2.0,2.5) {$F(a,b,c) = b\overline{c}+a\overline{c}+ab+\overline{a}\,\overline{b}c$};
-\draw (0,0) grid (4,2);
-\node[font=\small] at (0.5,1.65) {00};
-\node[font=\small] at (1.5,1.65) {01};
-\node[font=\small] at (2.5,1.65) {11};
-\node[font=\small] at (3.5,1.65) {10};
-\node[font=\small, anchor=east] at (-0.1,1.5) {0};
-\node[font=\small, anchor=east] at (-0.1,0.5) {1};
-\node[font=\small] at (-0.7,1.65) {$c{\backslash}ab$};
-\node at (0.5,1.5) {0}; \node at (1.5,1.5) {0}; \node at (2.5,1.5) {1}; \node at (3.5,1.5) {0};
-\node at (0.5,0.5) {1}; \node at (1.5,0.5) {1}; \node at (2.5,0.5) {1}; \node at (3.5,0.5) {1};
+
+% Groupings (Uni)
+% Group 1: ab=11, c=0,1 (Vertical)
+\draw[rounded corners, fill=red!30, opacity=0.5, draw=red, thick] (2.1, 0.1) rectangle (2.9, 1.9);
+% Group 2: c=0, ab=01,11 (Horizontal)
+\draw[rounded corners, fill=blue!30, opacity=0.5, draw=blue, thick] (1.1, 1.1) rectangle (2.9, 1.9);
+% Group 3: c=0, ab=11,10 (Horizontal)
+\draw[rounded corners, fill=green!30, opacity=0.5, draw=green!70!black, thick] (2.1, 1.1) rectangle (3.9, 1.9);
+% Group 4: c=1, ab=00 (Isolated)
+\draw[rounded corners, fill=orange!30, opacity=0.5, draw=orange, thick] (0.1, 0.1) rectangle (0.9, 0.9);
+
+% Values inside the map
+\node at (0.5,1.5) {0}; \node at (1.5,1.5) {1}; \node at (2.5,1.5) {1}; \node at (3.5,1.5) {1};
+\node at (0.5,0.5) {1}; \node at (1.5,0.5) {0}; \node at (2.5,0.5) {1}; \node at (3.5,0.5) {0};
+
+% Headers
+\draw (0,2) grid (4,3);
+\node[font=\small] at (0.5,2.5) {00}; \node[font=\small] at (1.5,2.5) {01}; \node[font=\small] at (2.5,2.5) {11}; \node[font=\small] at (3.5,2.5) {10};
+\draw (-1.2,0) grid (0,2);
+\node[font=\small] at (-0.6,1.5) {0}; \node[font=\small] at (-0.6,0.5) {1};
+\draw (-1.2,2) rectangle (0,3);
+\draw (-1.2,3) -- (0,2);
+\node[font=\footnotesize] at (-0.9, 2.3) {$c$};
+\node[font=\footnotesize] at (-0.3, 2.7) {$ab$};
 \end{tikzpicture}
 \end{center}
+
+\subsubsection*{Analisi dettagliata: Mintermini (Forma SOP)}
+L'obiettivo della mappa è \textbf{semplificare una funzione logica} raggruppando gli \textbf{1}. La regola d'oro per trovare la formula di ogni blocco è: se una variabile \textbf{cambia valore} all'interno del gruppo \textbf{si elimina}. Se \textbf{rimane costante}, \textbf{si tiene} (normale se 1, negata se 0).
+
+\begin{itemize}
+    \item \textcolor{red}{\textbf{Il blocco ROSSO (verticale al centro):}} Le colonne ($ab$) sono sempre \textbf{11}, quindi $a=1$ e $b=1$ non cambiano e \textbf{le teniamo entrambe ($ab$)}. La riga ($c$) passa da 0 a 1, quindi cambia e \textbf{la eliminiamo}. Risultato: $\textcolor{red}{ab}$.
+    \item \textcolor{blue}{\textbf{Il blocco BLU (orizzontale in alto a sinistra):}} La riga ($c$) è sempre \textbf{0}, quindi \textbf{la teniamo negata ($\overline{c}$)}. Le colonne ($ab$) passano da 01 a 11: la $a$ cambia (da 0 a 1) e si elimina, la $b$ resta 1 e si tiene. Risultato: $\textcolor{blue}{b\overline{c}}$.
+    \item \textcolor{green!70!black}{\textbf{Il blocco VERDE (orizzontale in alto a destra):}} La riga ($c$) è sempre \textbf{0}, quindi \textbf{la teniamo negata ($\overline{c}$)}. Le colonne ($ab$) passano da 11 a 10: la $a$ resta 1 e si tiene, la $b$ cambia (da 1 a 0) e si elimina. Risultato: $\textcolor{green!70!black}{a\overline{c}}$.
+    \item \textcolor{orange}{\textbf{Il blocco ARANCIO (cella isolata in basso):}} Non ha vicini, nessuna variabile cambia. Le teniamo tutte e tre per il valore che hanno: riga $c=1$, colonna $ab=00$. Risultato: $\textcolor{orange}{\overline{a}\,\overline{b}c}$.
+\end{itemize}
+
+Unendo tutti i risultati parziali con un segno \textbf{$+$} (OR), otteniamo:
+\[ F = \textcolor{red}{ab} + \textcolor{blue}{b\overline{c}} + \textcolor{green!70!black}{a\overline{c}} + \textcolor{orange}{\overline{a}\,\overline{b}c} \]
+
+\vspace{1.5em}
+
+\begin{center}
+\textbf{Semplificazione con Maxtermini (zeri)}\\[0.5em]
+\begin{tikzpicture}[scale=0.8]
+% Grid for cells
+\draw (0,0) grid (4,2);
+
+% Groupings (Zeri)
+\draw[rounded corners, fill=purple!30, opacity=0.5, draw=purple, thick] (1.1, 0.1) rectangle (1.9, 0.9);
+\draw[rounded corners, fill=cyan!30, opacity=0.5, draw=cyan, thick] (3.1, 0.1) rectangle (3.9, 0.9);
+\draw[rounded corners, fill=brown!30, opacity=0.5, draw=brown, thick] (0.1, 1.1) rectangle (0.9, 1.9);
+
+% Values inside the map
+\node at (0.5,1.5) {0}; \node at (1.5,1.5) {1}; \node at (2.5,1.5) {1}; \node at (3.5,1.5) {1};
+\node at (0.5,0.5) {1}; \node at (1.5,0.5) {0}; \node at (2.5,0.5) {1}; \node at (3.5,0.5) {0};
+
+% Headers
+\draw (0,2) grid (4,3);
+\node[font=\small] at (0.5,2.5) {00}; \node[font=\small] at (1.5,2.5) {01}; \node[font=\small] at (2.5,2.5) {11}; \node[font=\small] at (3.5,2.5) {10};
+\draw (-1.2,0) grid (0,2);
+\node[font=\small] at (-0.6,1.5) {0}; \node[font=\small] at (-0.6,0.5) {1};
+\draw (-1.2,2) rectangle (0,3);
+\draw (-1.2,3) -- (0,2);
+\node[font=\footnotesize] at (-0.9, 2.3) {$c$};
+\node[font=\footnotesize] at (-0.3, 2.7) {$ab$};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection*{Analisi dettagliata: Maxtermini (Forma POS)}
+Se con i mintermini cercavamo gli 1, qui ci concentriamo \textbf{solo sugli 0}. La logica si \textbf{ribalta completamente}: i valori si invertono (se vale 0 si scrive normale $a$, se vale 1 si scrive negata $\overline{a}$) e le operazioni si invertono (somme dentro le parentesi, moltiplicazioni fuori).
+
+In questa mappa specifica, gli zeri si trovano in diagonale. Poiché non sono vicini in orizzontale o verticale, \textbf{sono isolati} e non possiamo raggrupparli. Li prendiamo uno per uno:
+
+\begin{itemize}
+    \item \textcolor{brown}{\textbf{Lo zero MARRONE (in alto a sinistra):}} Riga $c=0$, colonna $ab=00$ (quindi $a=0, b=0$). Applicando il ``mondo al contrario'', diventano tutti normali e li uniamo con il $+$. Risultato: $\textcolor{brown}{(a + b + c)}$.
+    \item \textcolor{purple}{\textbf{Lo zero VIOLA (in basso al centro):}} Riga $c=1$, colonna $ab=01$ (quindi $a=0, b=1$). I valori a 1 si negano. Risultato: $\textcolor{purple}{(a + \overline{b} + \overline{c})}$.
+    \item \textcolor{cyan}{\textbf{Lo zero AZZURRO (in basso a destra):}} Riga $c=1$, colonna $ab=10$ (quindi $a=1, b=0$). I valori a 1 si negano. Risultato: $\textcolor{cyan}{(\overline{a} + b + \overline{c})}$.
+\end{itemize}
+
+Moltiplichiamo (AND) tra loro i tre blocchi ottenuti per la soluzione finale:
+\[ F = \textcolor{brown}{(a+b+c)} \cdot \textcolor{purple}{(a+\overline{b}+\overline{c})} \cdot \textcolor{cyan}{(\overline{a}+b+\overline{c})} \]
 
 % ======================================================================
 % mappe K a 4 variabili (sezione 4.2.2)
 \subsection{Esempi di mappe di Karnaugh a 4 variabili}
 
+\noindent Anche per 4 variabili si usa la codifica di Gray per disporre le combinazioni di due variabili ($ab$ e $cd$) sui lati della tabella. I raggruppamenti (implicanti) devono essere composti da un numero di ``1'' (o ``0'') pari a una potenza di due ($1, 2, 4, 8\ldots$) e formare rettangoli. Essi possono anche ``sconfinare'' da un bordo all'altro della mappa, poiché i bordi opposti sono adiacenti. 
+
+L'obiettivo è coprire tutti gli 1 (o gli 0) col minor numero di raggruppamenti, il più larghi possibile. Analizziamo due funzioni diverse usando le mappe dei tuoi appunti originali.
+
 \begin{center}
-\begin{tikzpicture}[scale=0.72]
-% Testo sopra, ben separato
-\node[align=left, font=\small] at (2.0, 5.3) {Se uso i maxtermini riduco l'espressione};
-\node[align=left, font=\small] at (2.0, 4.85) {ma ho cmq tanti termini $\Rightarrow$ meglio usare i minterm.};
-% Griglia
+\textbf{Mappa 1: Quando usare i Maxtermini NON conviene}\\[0.5em]
+\begin{tikzpicture}[scale=0.8]
 \draw (0,0) grid (4,4);
-% Header colonne (Gray: 00 01 11 10)
-\node[font=\small] at (0.5,4.35) {00};
-\node[font=\small] at (1.5,4.35) {01};
-\node[font=\small] at (2.5,4.35) {11};
-\node[font=\small] at (3.5,4.35) {10};
-% Header riga
-\node[font=\small, anchor=east] at (-0.1,3.5) {00};
-\node[font=\small, anchor=east] at (-0.1,2.5) {01};
-\node[font=\small, anchor=east] at (-0.1,1.5) {11};
-\node[font=\small, anchor=east] at (-0.1,0.5) {10};
-% Label assi
-\node[font=\small] at (-0.7,4.35) {$cd{\backslash}ab$};
-% Valori
+% Headers
+\draw (0,4) grid (4,5);
+\node[font=\small] at (0.5,4.5) {00}; \node[font=\small] at (1.5,4.5) {01}; \node[font=\small] at (2.5,4.5) {11}; \node[font=\small] at (3.5,4.5) {10};
+\draw (-1.2,0) grid (0,4);
+\node[font=\small] at (-0.6,3.5) {00}; \node[font=\small] at (-0.6,2.5) {01}; \node[font=\small] at (-0.6,1.5) {11}; \node[font=\small] at (-0.6,0.5) {10};
+\draw (-1.2,4) rectangle (0,5); \draw (-1.2,5) -- (0,4);
+\node[font=\footnotesize] at (-0.8, 4.3) {$cd$}; \node[font=\footnotesize] at (-0.3, 4.7) {$ab$};
+
+% Values
 \node at (0.5,3.5) {0}; \node at (1.5,3.5) {0}; \node at (2.5,3.5) {0}; \node at (3.5,3.5) {0};
 \node at (0.5,2.5) {0}; \node at (1.5,2.5) {1}; \node at (2.5,2.5) {0}; \node at (3.5,2.5) {0};
 \node at (0.5,1.5) {0}; \node at (1.5,1.5) {0}; \node at (2.5,1.5) {1}; \node at (3.5,1.5) {0};
 \node at (0.5,0.5) {0}; \node at (1.5,0.5) {0}; \node at (2.5,0.5) {0}; \node at (3.5,0.5) {0};
+
+% Groupings Maxterms
+% (d) -> d=0 -> rows 00,10 -> (0,3)-(4,4) and (0,0)-(4,1)
+\draw[rounded corners, fill=purple!30, opacity=0.5, draw=purple, thick] (0.1, 3.1) rectangle (3.9, 3.9);
+\draw[rounded corners, fill=purple!30, opacity=0.5, draw=purple, thick] (0.1, 0.1) rectangle (3.9, 0.9);
+% (b) -> b=0 -> cols 00,10 -> (0,0)-(1,4) and (3,0)-(4,4)
+\draw[rounded corners, fill=brown!30, opacity=0.5, draw=brown, thick] (0.1, 0.1) rectangle (0.9, 3.9);
+\draw[rounded corners, fill=brown!30, opacity=0.5, draw=brown, thick] (3.1, 0.1) rectangle (3.9, 3.9);
+% (a'+c) -> a=1, c=0 -> cols 11,10 rows 00,01 -> (2,2)-(4,4)
+\draw[rounded corners, fill=cyan!30, opacity=0.5, draw=cyan, thick] (2.1, 2.1) rectangle (3.9, 3.9);
+% (a+c') -> a=0, c=1 -> cols 00,01 rows 11,10 -> (0,0)-(2,2)
+\draw[rounded corners, fill=magenta!30, opacity=0.5, draw=magenta, thick] (0.1, 0.1) rectangle (1.9, 1.9);
 \end{tikzpicture}
-\qquad\qquad
-\begin{tikzpicture}[scale=0.72]
-\node[align=left, font=\small] at (2.0, 5.3) {Se uso i mintermini trovo:};
-\node[font=\small] at (2.0, 4.85) {$F(a,b,c,d) = b\overline{d} + \overline{c}\,d = (b+\overline{c})\cdot d$};
-% Griglia
+\end{center}
+
+\subsubsection*{Analisi della Mappa 1: Perché i Maxtermini falliscono}
+In questa prima funzione, abbiamo ben quattordici zeri e solo due uni. Se proviamo a usare i \textbf{Maxtermini} (raggruppando gli 0, logica inversa), l'alto numero di zeri ci costringe a fare ben \textbf{4 raggruppamenti} che si accavallano caoticamente sfruttando anche i bordi!
+\begin{itemize}
+    \item \textcolor{purple}{\textbf{Bordi orizzontali VIOLA (8 celle):}} Comprende le righe $cd=00,10$. Resta solo $d=0 \to d$. Risultato: $\textcolor{purple}{(d)}$.
+    \item \textcolor{brown}{\textbf{Bordi verticali MARRONI (8 celle):}} Comprende le colonne $ab=00,10$. Resta solo $b=0 \to b$. Risultato: $\textcolor{brown}{(b)}$.
+    \item \textcolor{cyan}{\textbf{Quadrato AZZURRO (4 celle, alto a dx):}} Colonne $11,10$ ($a=1 \to \overline{a}$) e righe $00,01$ ($c=0 \to c$). Risultato: $\textcolor{cyan}{(\overline{a}+c)}$.
+    \item \textcolor{magenta}{\textbf{Quadrato MAGENTA (4 celle, basso a sx):}} Colonne $00,01$ ($a=0 \to a$) e righe $11,10$ ($c=1 \to \overline{c}$). Risultato: $\textcolor{magenta}{(a+\overline{c})}$.
+\end{itemize}
+Espressione trovata: $F = \textcolor{purple}{(d)} \cdot \textcolor{brown}{(b)} \cdot \textcolor{cyan}{(\overline{a}+c)} \cdot \textcolor{magenta}{(a+\overline{c})}$
+
+Se invece usassimo i \textbf{Mintermini} per la stessa mappa, ci basterebbe raggruppare i due singoli \textbf{1} isolati (2 gruppi da una cella). Si otterrebbe $F = \overline{a}b\overline{c}d + abcd$ (solo \textbf{due} termini). \textbf{Conclusione:} quando gli zeri sono troppi, usare i Maxtermini porta a un'espressione enorme.
+
+\vspace{1.5em}
+
+\begin{center}
+\textbf{Mappa 2: Un buon uso dei Mintermini}\\[0.5em]
+\begin{tikzpicture}[scale=0.8]
 \draw (0,0) grid (4,4);
-\node[font=\small] at (0.5,4.35) {00};
-\node[font=\small] at (1.5,4.35) {01};
-\node[font=\small] at (2.5,4.35) {11};
-\node[font=\small] at (3.5,4.35) {10};
-\node[font=\small, anchor=east] at (-0.1,3.5) {00};
-\node[font=\small, anchor=east] at (-0.1,2.5) {01};
-\node[font=\small, anchor=east] at (-0.1,1.5) {11};
-\node[font=\small, anchor=east] at (-0.1,0.5) {10};
-\node[font=\small] at (-0.7,4.35) {$cd{\backslash}ab$};
-% Valori
+% Headers
+\draw (0,4) grid (4,5);
+\node[font=\small] at (0.5,4.5) {00}; \node[font=\small] at (1.5,4.5) {01}; \node[font=\small] at (2.5,4.5) {11}; \node[font=\small] at (3.5,4.5) {10};
+\draw (-1.2,0) grid (0,4);
+\node[font=\small] at (-0.6,3.5) {00}; \node[font=\small] at (-0.6,2.5) {01}; \node[font=\small] at (-0.6,1.5) {11}; \node[font=\small] at (-0.6,0.5) {10};
+\draw (-1.2,4) rectangle (0,5); \draw (-1.2,5) -- (0,4);
+\node[font=\footnotesize] at (-0.8, 4.3) {$cd$}; \node[font=\footnotesize] at (-0.3, 4.7) {$ab$};
+
+% Values
 \node at (0.5,3.5) {0}; \node at (1.5,3.5) {0}; \node at (2.5,3.5) {0}; \node at (3.5,3.5) {0};
 \node at (0.5,2.5) {1}; \node at (1.5,2.5) {1}; \node at (2.5,2.5) {1}; \node at (3.5,2.5) {1};
 \node at (0.5,1.5) {0}; \node at (1.5,1.5) {1}; \node at (2.5,1.5) {1}; \node at (3.5,1.5) {0};
 \node at (0.5,0.5) {0}; \node at (1.5,0.5) {0}; \node at (2.5,0.5) {0}; \node at (3.5,0.5) {0};
-% Rettangoli raggruppamento
-\draw[blue, thick, rounded corners=3pt] (0.06,2.06) rectangle (3.94,2.94);
-\draw[red,  thick, rounded corners=3pt] (1.06,1.06) rectangle (2.94,2.94);
+
+% Groupings Minterms
+\draw[rounded corners, fill=blue!30, opacity=0.5, draw=blue, thick] (0.1, 2.1) rectangle (3.9, 2.9);
+\draw[rounded corners, fill=red!30, opacity=0.5, draw=red, thick] (1.1, 1.1) rectangle (2.9, 2.9);
 \end{tikzpicture}
 \end{center}
+
+\subsubsection*{Analisi della Mappa 2 con i Mintermini}
+In questa seconda funzione abbiamo meno uni (sei) che zeri (dieci). Ci conviene usare i \textbf{Mintermini} e raggruppare gli \textbf{1}:
+\begin{itemize}
+    \item \textcolor{blue}{\textbf{Rettangolo BLU (4 celle, riga intera):}} Copre tutta la riga $cd=01$. Quindi $c=0 \to \overline{c}$ e $d=1 \to d$. Le colonne variano tutte, quindi si eliminano $a$ e $b$. Risultato: $\textcolor{blue}{\overline{c}d}$.
+    \item \textcolor{red}{\textbf{Quadrato ROSSO (4 celle, centrale):}} Copre le colonne $ab=01,11$ ($a$ cambia, resta $b=1 \to b$) e le righe $cd=01,11$ ($c$ cambia, resta $d=1 \to d$). Risultato: $\textcolor{red}{bd}$.
+\end{itemize}
+L'espressione ottimizzata risultante è semplicemente la somma dei due gruppi:
+\[ F = \textcolor{blue}{\overline{c}d} + \textcolor{red}{bd} = (\overline{c}+b)d \]
 
 % ======================================================================
 \section{Codifica binaria}
@@ -990,6 +1354,11 @@ Con $n$ bit posso descrivere $2^n$ valori in decimale.
 }
 
 \subsection{Esempio: display a 7 segmenti}
+
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.4\linewidth]{7seg.png}
+\end{figure}
 
 \textit{Si vuole pilotare un singolo segmento di un display a 7 segmenti a partire dalla cifra BCD in ingresso $a,b,c,d$.}
 
@@ -1056,32 +1425,36 @@ molto più corta e immediata da realizzare rispetto alla forma canonica di parte
 
 \subsection{Semi-sommatore (half adder)}
 
+\noindent Un \textbf{semi-sommatore} (half adder) è un circuito combinatorio in grado di eseguire la somma di due singoli bit ($a_i$ e $b_i$). Esso produce due uscite: il bit di somma $\Sigma_i$ e il bit di riporto generato $C_{i+1}$ (carry out). L'equazione logica che descrive la somma è un'operazione XOR ($\Sigma_i = a_i \oplus b_i$), mentre il riporto è dato da un'operazione AND ($C_{i+1} = a_i \cdot b_i$). 
+Il limite del semi-sommatore è che non prevede un ingresso per il riporto proveniente da uno stadio precedente, limitandone l'utilizzo al solo bit meno significativo di un'addizione su più bit.
+
 \begin{center}
-\begin{circuitikz}[scale=0.9, every node/.style={scale=0.9}]
-% Nodi di ingresso
-\coordinate (Ain) at (-2.0, 0.5);
-\coordinate (Bin) at (-2.0,-0.5);
+\begin{circuitikz}[scale=1.0, every node/.style={scale=1.0}]
+% Porte
+\node[xor port] (XH) at (0, 1.5) {};
+\node[and port] (AH) at (0, 0) {};
+
+% Nodi di ingresso (allineati dinamicamente alle porte per evitare linee storte)
+\coordinate (Ain) at (-2.5, 0 |- XH.in 1);
+\coordinate (Bin) at (-2.5, 0 |- XH.in 2);
 \node[left] at (Ain) {$a_i$};
 \node[left] at (Bin) {$b_i$};
 
-% Porte
-\node[xor port] (XH) at (0, 0.5) {};
-\node[and port] (AH) at (0,-0.5) {};
+% Connessioni principali
+\draw (Ain) -- (XH.in 1);
+\draw (Bin) -- (XH.in 2);
 
-% Biforcazione ingressi
-\draw (Ain) -- (-1.2,0.5) coordinate (Asplit);
-\draw (Asplit) -- (XH.in 1);
-\draw (Asplit) -- (-1.2,-0.2) -- (AH.in 1);
+% Derivazioni (i pallini sono centrati dinamicamente sulla linea)
+\coordinate (Atap) at (-1.8, 0 |- XH.in 1);
+\coordinate (Btap) at (-1.1, 0 |- XH.in 2);
 
-\draw (Bin) -- (-1.2,-0.5) coordinate (Bsplit);
-\draw (Bsplit) -- (XH.in 2);
-\draw (Bsplit) -- (-1.2,-0.8) -- (AH.in 2);
+\draw (Atap) to[short, *-] (Atap |- AH.in 1) -- (AH.in 1);
+\draw (Btap) to[short, *-] (Btap |- AH.in 2) -- (AH.in 2);
 
 % Uscite
 \draw (XH.out) -- ++(0.7,0) node[right]{$\Sigma_i$};
 \draw (AH.out) -- ++(0.7,0) node[right]{$C_{i+1}$};
 
-\node[below=0.6cm] at (0,-1.1) {circuito di semi-sommatore (half adder)};
 \end{circuitikz}
 \end{center}
 
@@ -1102,28 +1475,48 @@ $a_i$ & $b_i$ & $\Sigma_i$ & $C_{i+1}$\\
 
 \subsection{Sommatore completo (full adder)}
 
-\noindent Il sommatore completo si ottiene combinando due semi-sommatori, in modo da tenere conto anche del riporto $C_i$ proveniente dal semi-sommatore precedente:
+\noindent Il \textbf{sommatore completo} (full adder) risolve il limite del semi-sommatore aggiungendo un terzo ingresso $C_i$ per il riporto proveniente da uno stadio precedente. L'uscita somma $\Sigma_i$ vale 1 se il numero di ingressi a 1 è dispari, mentre il riporto $C_{i+1}$ vale 1 se almeno due ingressi sono a 1.
+\medskip
+
+\noindent Il circuito può essere ottenuto combinando due semi-sommatori e una porta OR finale per i riporti, in modo da tenere conto di tutti gli addendi:
 
 \begin{center}
-\begin{circuitikz}[scale=0.9, every node/.style={scale=0.9}]
+\begin{circuitikz}[scale=1.0, every node/.style={scale=1.0}]
 % Primo HA
-\draw (0,0) rectangle (2.0,1.6);
-\node at (1.0,0.8) {HA};
-\draw[-latex] (-1.0,1.3) -- (0,1.3) node[midway,above,font=\small]{$a_i$};
-\draw[-latex] (-1.0,0.3) -- (0,0.3) node[midway,above,font=\small]{$b_i$};
-\draw[-latex] (2.0,1.3) -- (3.0,1.3) node[midway,above,font=\small]{$C'_{i+1}$};
-\draw[-latex] (2.0,0.3) -- (3.0,0.3) node[midway,above,font=\small]{$\Sigma'_i$};
+\draw (0, 0.3) rectangle (2.5, 2.3);
+\node at (1.25, 1.3) {HA 1};
+\node[right] at (0, 1.8) {$a_i$};
+\node[right] at (0, 0.8) {$b_i$};
+\node[left] at (2.5, 1.8) {$\Sigma'_i$};
+\node[left] at (2.5, 0.8) {$C'_i$};
 
 % Secondo HA
-\draw (3.0,0) rectangle (5.0,1.6);
-\node at (4.0,0.8) {HA};
-% C_i entra dal basso a sinistra del secondo HA
-\draw[-latex] (3.5,-0.8) -- (3.5,0) node[midway,right,font=\small]{$C_i$};
-% Uscite
-\draw[-latex] (5.0,1.3) -- (6.0,1.3) node[right,font=\small]{$C_{i+1}$};
-\draw[-latex] (5.0,0.3) -- (6.0,0.3) node[right,font=\small]{$\Sigma_i$};
+\draw (4.5, 1.3) rectangle (7.0, 3.3);
+\node at (5.75, 2.3) {HA 2};
+\node[right] at (4.5, 2.8) {$C_i$};
+\node[right] at (4.5, 1.8) {$\Sigma'_i$};
+\node[left] at (7.0, 2.8) {$\Sigma_i$};
+\node[left] at (7.0, 1.8) {$C''_i$};
 
-\node[below=0.3cm] at (2.5,-1.0) {FA (sommatore a 2 bit)};
+% OR gate
+\node[or port] (OR) at (9.5, 1.3) {};
+
+% Connessioni primo HA
+\draw (-1.5, 1.8) node[left] {$a_i$} -- (0, 1.8);
+\draw (-1.5, 0.8) node[left] {$b_i$} -- (0, 0.8);
+
+% Connessioni intermedie e Cin
+\draw (2.5, 1.8) -- (4.5, 1.8); % Linea dritta, nessun gradino!
+\draw (-1.5, 2.8) node[left] {$C_i$} -- (4.5, 2.8); % Linea dritta, nessun gradino!
+
+% Connessioni Carry
+\draw (2.5, 0.8) -- (8.2, 0.8) |- (OR.in 2);
+\draw (7.0, 1.8) -- (8.2, 1.8) |- (OR.in 1);
+
+% Uscite finali
+\draw (7.0, 2.8) -- (10.5, 2.8) node[right] {$\Sigma_i$};
+\draw (OR.out) -- (10.5, 1.3) node[right] {$C_{i+1}$};
+
 \end{circuitikz}
 \end{center}
 
@@ -1146,16 +1539,38 @@ $a_i$ & $b_i$ & $C_i$ & $\Sigma_i'$ & $\Sigma_i$ & $C_{i+1}$\\
 \end{tabular}
 \end{center}
 
+\subsubsection*{Logica dietro la tabella di verità}
+
+Le due uscite del full adder obbediscono a regole semplici che si ricavano direttamente dal significato fisico della somma binaria.
+
+\begin{itemize}
+    \item \textbf{Bit di somma $\Sigma_i$ — ``parità'' degli ingressi:}
+    $\Sigma_i = 1$ ogni volta che il numero totale di ingressi a \textbf{1} è \emph{dispari} (uno solo oppure tutti e tre). Questo coincide esattamente con l'\textbf{XOR a tre vie}:
+    \[
+        \Sigma_i = a_i \oplus b_i \oplus C_i
+    \]
+    Si può verificare intuitivamente: $1+1+0 = 2_{10} = 10_2$, la cifra delle unità è \textbf{0}; $1+1+1 = 3_{10} = 11_2$, la cifra delle unità è \textbf{1}. In entrambi i casi conta solo la parità degli addendi.
+
+    \item \textbf{Bit di riporto $C_{i+1}$ — ``maggioranza'' degli ingressi:}
+    $C_{i+1} = 1$ ogni volta che \emph{almeno due} ingressi su tre sono a \textbf{1} (funzione di maggioranza). Algebricamente:
+    \[
+        C_{i+1} = a_i b_i + b_i C_i + a_i C_i
+    \]
+    Ogni termine rappresenta una coppia che, sommata, produce riporto ($1+1 \ge 2$).
+\end{itemize}
+
+Queste due formule — e quindi l'intera tabella — si ricavano senza dover enumerare tutti gli 8 casi: basta ricordare che $\Sigma_i$ conta la \emph{parità} e $C_{i+1}$ la \emph{maggioranza} dei tre bit in ingresso.
+
 % ======================================================================
 \chapter{Sommatori, complemento a 2 e codici}
 
 \section{Esempio: sommatore a 4 bit}
 \textit{(27 marzo 2026)}
 
-Collegando in cascata 4 full adder si ottiene un sommatore a 4 bit:
+Collegando in cascata 4 sommatori completi (Full Adder, FA) si ottiene un circuito per l'addizione a 4 bit, noto come \textbf{Ripple-Carry Adder} (sommatore a propagazione di riporto). Ogni stadio $i$ somma i bit $a_i$ e $b_i$ più il riporto dello stadio precedente ($C_i$), generando il bit di somma ($\Sigma_i$) e il nuovo riporto ($C_{i+1}$) per lo stadio successivo.
 
 \begin{center}
-\begin{circuitikz}[scale=0.82, every node/.style={scale=0.82}]
+\begin{circuitikz}[scale=0.72, every node/.style={scale=0.72}]
 % 4 FA in cascata
 \foreach \i/\xi in {0/0, 1/2.6, 2/5.2, 3/7.8}{
   \draw (\xi,0) rectangle (\xi+2.0, 1.8);
@@ -1184,110 +1599,169 @@ Collegando in cascata 4 full adder si ottiene un sommatore a 4 bit:
 \end{circuitikz}
 \end{center}
 
+\medskip
+\textbf{Esempio rapido di calcolo:}\\
+Proviamo a sommare $A = 0101_2$ ($5_{10}$) e $B = 0011_2$ ($3_{10}$), ponendo il riporto iniziale $C_0 = 0$:
+\begin{itemize}
+    \item \textbf{Stadio 0:} $a_0(1) + b_0(1) + C_0(0) = 2 \implies \Sigma_0 = 0$, riporto $C_1 = 1$.
+    \item \textbf{Stadio 1:} $a_1(0) + b_1(1) + C_1(1) = 2 \implies \Sigma_1 = 0$, riporto $C_2 = 1$.
+    \item \textbf{Stadio 2:} $a_2(1) + b_2(0) + C_2(1) = 2 \implies \Sigma_2 = 0$, riporto $C_3 = 1$.
+    \item \textbf{Stadio 3:} $a_3(0) + b_3(0) + C_3(1) = 1 \implies \Sigma_3 = 1$, riporto $C_4 = 0$.
+\end{itemize}
+Risultato corretto: $\Sigma = 1000_2$ ($8_{10}$).
+
 \defbox{
-\textbf{Bit di overflow (}$C_4$\textbf{)}: se è 1, $\Sigma_3$ non è descrivibile da 4 bit $\Rightarrow$ errore. \\
-$C_4$ è il \emph{bit in posizione maggiore}: il bit più significativo.
+\textbf{Bit di overflow (}$C_4$\textbf{)}: È il bit di riporto finale in uscita dal blocco più significativo. Se stiamo eseguendo addizioni su numeri binari puri (senza segno) a 4 bit e otteniamo $C_4 = 1$, il risultato supera il valore massimo rappresentabile ($15_{10}$). In questo caso si è verificato un errore di overflow.
 }
 
-Il ritardo con cui si forma il carry è $3\Delta T$, con $\Delta T$ ritardo di una singola porta di un singolo sommatore; quindi il ritardo di $C_4$ è:
-\[
-\Delta t = n \cdot 3\Delta T
-\]
-$\Delta t$ si risolve con il \textbf{carry look-ahead}.
+\textbf{Il problema del ritardo (Delay):}\\
+Il principale limite prestazionale di questo circuito è che ogni blocco FA deve "aspettare" che il blocco precedente calcoli il suo riporto. Il segnale $C$ deve letteralmente "propagarsi" a cascata (ripple) da $C_0$ fino a $C_4$. 
+\begin{itemize}
+    \item Se una singola porta logica ha un tempo di ritardo $\Delta T$, ogni blocco Full Adder impiega circa $3\Delta T$ per generare il riporto.
+    \item In un sommatore a $n$ bit, il tempo totale $\Delta t$ cresce in modo lineare:
+    \[ \Delta t = n \cdot 3\Delta T \]
+\end{itemize}
 
-\section{Modularità}
+\textbf{Soluzione: i sommatori Carry Look-Ahead (CLA)}\\
+Per eliminare questa latenza si utilizzano circuiti più avanzati (ad anticipo di riporto). Attraverso un'apposita rete logica parallela, questi circuiti capiscono "in anticipo" se i vari stadi andranno a \emph{generare} o \emph{propagare} un riporto. In questo modo si possono calcolare tutte le uscite simultaneamente, con un ritardo bassissimo e logaritmico (o indipendente) rispetto alla lunghezza $n$ della parola.
 
-\defbox{\textbf{Modulare} = composto da unità aggiungibili o eliminabili senza ripercussioni sul resto del sistema.}
+\section{Modularità e Design Gerarchico}
+
+Nella progettazione digitale moderna, si sfrutta ampiamente il concetto di \textbf{modularità}.
+
+\defbox{\textbf{Design Modulare}: un approccio in cui il sistema complesso viene suddiviso in sottomoduli standard e interscambiabili (es. usare i Full Adder base per costruire un sommatore a $n$ bit). Questi moduli possono essere aggiunti, rimossi o sostituiti senza dover alterare o riprogettare il resto del sistema.}
+
+\noindent I vantaggi principali includono:
+\begin{itemize}
+    \item \textbf{Astrazione}: chi progetta un processore non deve preoccuparsi della logica a porte interne al singolo FA, ma ne considera solo gli ingressi e le uscite.
+    \item \textbf{Riutilizzo e Semplificazione}: un modulo testato e verificato può essere riutilizzato in più punti, rendendo il collaudo molto più affidabile.
+\end{itemize}
 
 \section{Sottrattori e numeri negativi}
 \textit{(27 marzo 2026 -- cont.)}
 
-Per i numeri negativi c'è un bit in più per il segno: $1000$ e $0000$ sono entrambi 0.
+Nei circuiti digitali, per rappresentare anche i numeri negativi, si deve "sacrificare" un bit (di solito il più significativo) per indicare il segno. Esistono diverse tecniche per farlo:
 
-Se abbiamo un numero in base $r$ con $n$ digit posso rappresentare al massimo $r^n-1$ numeri. Il complemento in base $r$ del numero $N$ è definito come:
-\[
-C_r(N) = r^n - N
-\]
-quello in base $r{-}1$ è $C_{r-1}(N) = (r^n-1)-N = N_{\max}-N$.
+\textbf{1. Modulo e Segno}\\
+Il bit più a sinistra indica il segno ($0$ = positivo, $1$ = negativo), mentre i restanti bit indicano il valore assoluto. Questa tecnica presenta un problema pratico: lo zero ha due rappresentazioni diverse. Ad esempio su 4 bit, $0000$ ($+0$) e $1000$ ($-0$) indicano entrambi il numero zero. Questo complica inutilmente i circuiti di calcolo.
 
-In base 2:
-\begin{align*}
-C_1(N) &= 2^n - 1 - N \\
-2^n - 1 &= C_1(N) + N \\
-C_1(N) &= \overline{N}_{n-1}\cdots\overline{N}_1\overline{N}_0
-\end{align*}
+\textbf{2. La teoria dei Complementi}\\
+Per risolvere questo problema si utilizza un metodo matematico chiamato \emph{complemento}. Dato un numero $N$ espresso in una certa base $r$ e lungo $n$ cifre, si definiscono due tipi di complemento:
+\begin{itemize}
+    \item \textbf{Complemento alla base diminuita (base $r-1$):} \\
+    Si definisce come $C_{r-1}(N) = (r^n - 1) - N$. Poiché $r^n - 1$ è il numero massimo rappresentabile ($N_{\max}$), si ottiene sottraendo il numero $N$ dal valore massimo.
+    \item \textbf{Complemento alla base (base $r$):} \\
+    Si definisce come $C_r(N) = r^n - N$. Essendo $r^n = (r^n - 1) + 1$, equivale matematicamente ad aggiungere $1$ al complemento alla base diminuita.
+\end{itemize}
 
-\begin{align*}
-C_2(N) &= 2^n - N \\
-C_2(N) + N &= C_1(N) + 1 \\
-C_2(N) &= \overline{N}_{n-1}\cdots\overline{N}_1\overline{N}_0 + 1
-\end{align*}
-\noindent\textit{(se ho $n=4$)} \quad $C_2(C_2(N)) = N$
+\textbf{Applicazione al Sistema Binario (Base 2):}\\
+Nei sistemi binari (base $r=2$), queste due definizioni prendono il nome di \textbf{Complemento a 1} e \textbf{Complemento a 2}.
+
+\textbf{Complemento a 1 ($C_1$):}
+\[ C_1(N) = (2^n - 1) - N \]
+Poiché $2^n-1$ è un numero composto da tutti "1" (es. $1111_2$), sottrarre $N$ significa banalmente \emph{invertire tutti i singoli bit} di $N$ (ogni bit $N_i$ diventa $\overline{N}_i$):
+\[ C_1(N) = \overline{N}_{n-1}\cdots\overline{N}_1\overline{N}_0 \]
+
+\textbf{Complemento a 2 ($C_2$):}
+\[ C_2(N) = 2^n - N \]
+Come visto prima, possiamo riscriverlo come $(2^n - 1 - N) + 1$. Questo significa che per calcolare il complemento a 2 basta prendere il complemento a 1 e sommare 1:
+\[ C_2(N) = C_1(N) + 1 = \overline{N}_{n-1}\cdots\overline{N}_1\overline{N}_0 + 1 \]
+
+\noindent\textit{Proprietà fondamentale:} Applicare due volte il complemento a 2 restituisce il numero originale, ovvero $C_2(C_2(N)) = N$.
 
 \defbox{
-Il \textbf{complemento a 2} si usa per rappresentare i numeri negativi, considerando lo 0 e il valore $1111\ldots$:
-\[
-+3 = 0011 \qquad -3 = 1101 \qquad (\text{poi } 0\;1111)
-\]
-$1111+1 = 1\,0000$: la rappresentazione è a 4 bit (l'1 in posizione 4 si perde perché abbiamo solo 4 digit).
+Il \textbf{complemento a 2} è la notazione standard per rappresentare numeri interi con segno nei calcolatori. A differenza della codifica a modulo e segno, garantisce un'unica rappresentazione per lo zero (es. $0000$) e permette di eseguire somme e sottrazioni con la stessa rete logica hardware.
 }
+
+\noindent\textbf{Regola pratica per calcolare il complemento a 2 di un numero}:
+\begin{enumerate}
+    \item Si parte dal numero binario positivo (es. $+3_{10} = 0011_2$).
+    \item Si invertono tutti i bit (complemento a 1): $0011 \to 1100$.
+    \item Si somma $1$ al risultato: $1100 + 1 = 1101$. 
+\end{enumerate}
+Quindi $-3_{10} = 1101_2$ in complemento a 2 su 4 bit.
+
+\medskip
+Se verifichiamo calcolando l'addizione $-3 + 3$, avremo: $1101 + 0011 = 1\,0000$. Poiché lavoriamo a 4 bit, l'uno più a sinistra (il \emph{carry out} uscente) cade fuori dalla dimensione dei registri e viene ignorato. Il risultato memorizzato è esattamente $0000$, ovvero 0.
 
 \subsection{Circuito sommatore/sottrattore a 4 bit}
 
-Con $a = a_3a_2a_1a_0 = 0100$ e $b = b_3b_2b_1b_0 = 0001$:
+Un grande vantaggio della codifica in complemento a 2 è la possibilità di eseguire sia addizioni che sottrazioni utilizzando il \textbf{medesimo circuito hardware}. Per farlo, si estende il classico sommatore (ripple-carry adder) introducendo delle porte logiche XOR sugli ingressi del secondo operando e sfruttando il riporto iniziale $C_0$ come segnale di controllo (selettore d'operazione).
 
 \begin{center}
-\begin{tikzpicture}[scale=0.82, every node/.style={scale=0.82}]
-% Schema sommatore/sottrattore: b_i XOR C_0 prima dei FA
-% 4 FA
-\foreach \xi/\ii in {0/0, 2.5/1, 5.0/2, 7.5/3}{
-  \draw (\xi,0) rectangle (\xi+1.8,1.6);
-  \node at (\xi+0.9,0.8) {FA};
+\begin{circuitikz}[scale=0.9, every node/.style={scale=0.9}]
+\tikzset{FA/.style={draw, minimum width=1.6cm, minimum height=1.6cm, align=center}}
+
+% Disegno dei 4 blocchi Full Adder
+\foreach \i/\x in {0/0, 1/3.5, 2/7.0, 3/10.5} {
+    \node[FA] (FA\i) at (\x,0) {FA$_\i$};
 }
-% a_i ingressi
-\foreach \xi/\lab in {0/$a_0$, 2.5/$a_1$, 5.0/$a_2$, 7.5/$a_3$}{
-  \draw[-latex] (\xi+0.45,2.5) -- (\xi+0.45,1.6) node[midway,right,font=\scriptsize]{\lab};
+
+% Linea comune per C0 (selezione operazione)
+\coordinate (C0line) at (-1.5, 4.0);
+\draw (-1.5, 4.0) node[left] {$C_0$ (\textsf{0}=Add, \textsf{1}=Sub)} -- (11.0, 4.0);
+
+% Connessione C0 come riporto in ingresso del primo FA
+\draw[-latex] (-1.5, 4.0) -- (-1.5, 0) -- (FA0.west) node[midway, above] {$C_0$};
+
+\foreach \i in {0,1,2,3} {
+    % a_i input
+    \draw[-latex] (FA\i.120 |- 0, 4.8) node[above] {$a_\i$} -- (FA\i.120);
+    
+    % b_i input e XOR
+    \node[xor port, rotate=-90, scale=0.7] (XOR\i) at (FA\i.60 |- 0, 2.5) {};
+    \draw[-latex] (XOR\i.out) -- (FA\i.60);
+    
+    % Connessione di b_i all'ingresso 1 dello XOR
+    \draw (XOR\i.in 1) -- (XOR\i.in 1 |- 0, 4.8) node[above] {$b_\i$};
+    
+    % Connessione di C0 all'ingresso 2 dello XOR
+    \draw (XOR\i.in 2) -- (XOR\i.in 2 |- C0line) node[circle, fill, inner sep=1.2pt] {};
 }
-% XOR gates per b_i (con C_0)
-\foreach \xi/\lab in {0/$b_0$, 2.5/$b_1$, 5.0/$b_2$, 7.5/$b_3$}{
-  \node[xor port, scale=0.6] (xg) at (\xi+1.2, 2.1) {};
-  \draw[-latex] (xg.out) -- (\xi+1.2,1.6);
-  \draw[-latex] (\xi+1.5,2.8) -- (xg.in 1) node[above,font=\scriptsize]{\lab};
-  % C_0 entra dall'alto a tutti gli XOR (linea comune)
-  \draw (\xi+0.9,3.1) -- (xg.in 2);
+
+% Carry chain tra i FA
+\draw[-latex] (FA0.east) -- (FA1.west) node[midway, above] {$C_1$};
+\draw[-latex] (FA1.east) -- (FA2.west) node[midway, above] {$C_2$};
+\draw[-latex] (FA2.east) -- (FA3.west) node[midway, above] {$C_3$};
+
+% Uscita C4
+\draw[-latex] (FA3.east) -- ++(1.5,0) coordinate (C4out) node[above] {$C_4$};
+
+% Uscite Somma (Sigma)
+\foreach \i in {0,1,2,3} {
+    \draw[-latex] (FA\i.south) -- ++(0,-1.0) node[below] {$\Sigma_\i$};
 }
-\draw (0.9,3.5) -- (7.9+0.9,3.5) node[right,font=\scriptsize]{$C_0$};
-\foreach \xi in {0,2.5,5.0,7.5}{ \draw (\xi+0.9,3.5) -- (\xi+0.9,3.1); }
-% Carry chain
-\draw[-latex] (-0.9,0.8) -- (0,0.8) node[midway,above,font=\scriptsize]{$C_0$};
-\foreach \xi/\nextxi in {1.8/2.5, 4.3/5.0, 6.8/7.5}{
-  \draw[-latex] (\xi,0.8) -- (\nextxi,0.8);
-}
-\draw[-latex] (9.3,0.8) -- (10.0,0.8) node[right,font=\scriptsize]{$C_4$};
-% Sigma
-\foreach \xi/\lab in {0/$\Sigma_0$, 2.5/$\Sigma_1$, 5.0/$\Sigma_2$, 7.5/$\Sigma_3$}{
-  \draw[-latex] (\xi+0.9,0) -- (\xi+0.9,-0.6) node[below,font=\scriptsize]{\lab};
-}
-% Porta XOR per errore overflow (C3 xor C4)
-\node[xor port, scale=0.7] (eover) at (10.0,-0.5) {};
-\draw (9.0,0.8) -- (9.0,-0.2) -- (eover.in 1);
-\draw (10.0,0.8) -- (10.0,0.3) -- (eover.in 2);
-\draw[-latex] (eover.out) -- ++(0.6,0) node[right,font=\scriptsize]{$E$ (errore)};
-\end{tikzpicture}
+
+% XOR finale per l'overflow (E)
+\node[xor port, scale=0.8] (E_XOR) at (13.5, -2.0) {};
+
+% Preleviamo C3
+\coordinate (tapC3) at (8.75, 0);
+\draw (tapC3) node[circle, fill, inner sep=1.2pt] {} |- (E_XOR.in 2);
+
+% Preleviamo C4
+\coordinate (tapC4) at (12.0, 0);
+\draw (tapC4) node[circle, fill, inner sep=1.2pt] {} |- (E_XOR.in 1);
+
+\draw[-latex] (E_XOR.out) -- ++(0.8,0) node[right] {$E_{Overf}$};
+
+\end{circuitikz}
 \end{center}
 
+Il funzionamento del circuito dipende dal valore del segnale di controllo $C_0$:
+
 \begin{itemize}[leftmargin=1.5em]
-    \item Se $C_0=0$: il circuito opera da \underline{sommatore} $\in[0,15]$. \hfill\textit{es. $b{+}a \to 1{+}4=5$}
-    \item Se $C_0=1$: il circuito opera da \underline{sottrattore} $\in[-8,7]$. \hfill\textit{es. $b{-}a \to 1{-}(4{+}1)=-4$}
-    \item \textbf{Errore} se $E=1$ ($C_3 \neq C_4$) come controllo di overflow.
+    \item \textbf{Se $C_0=0$ (Addizione)}: la porta XOR riceve uno 0 e si comporta come un buffer trasparente ($b_i \oplus 0 = b_i$). Inoltre, il riporto in ingresso al primo FA è anch'esso 0. Il circuito esegue quindi una normale addizione: $S = a + b$.
+    
+    \item \textbf{Se $C_0=1$ (Sottrazione)}: la porta XOR riceve un 1 e si comporta come un invertitore logico ($b_i \oplus 1 = \overline{b}_i$), calcolando il complemento a 1 di $b$. Il riporto in ingresso al primo FA fornisce un ulteriore $+1$. In questo modo, il circuito calcola internamente l'espressione $a + \overline{b} + 1$. Poiché $\overline{b} + 1$ equivale a $-b$ (in complemento a 2), l'operazione totale svolta è esattamente la sottrazione: $S = a - b$.
+    
+    \item \textbf{Errore di Overflow ($E$)}: lavorando con un numero fisso di bit (in questo caso 4 bit, intervallo rappresentabile da $-8$ a $+7$), può accadere che il risultato reale dell'operazione sia al di fuori di questo intervallo. Questo errore prende il nome di \emph{overflow} e viene segnalato tramite una porta XOR applicata agli ultimi due riporti generati ($E = C_3 \oplus C_4$). Se $E=1$, si ha un \emph{overflow} e il risultato non è valido.
 \end{itemize}
 
-In generale:
+In generale, lavorando in complemento a 2 con 4 bit, si rappresenta l'intervallo da $-8$ a $+7$:
 \begin{itemize}[leftmargin=1.5em]
-    \item[\small$\blacksquare$] Se $C_0=0 \;\Leftrightarrow\; a+b$.
-    \item[\small$\blacksquare$] Se $C_0=1 \;\Leftrightarrow\; \overline{a}+b$, con un $+1$ sommato ad $\overline{a}$ dal suo stesso segno.
-    \item[\small$\blacksquare$] Se $\Sigma\geq0 \;\Leftrightarrow\; \Sigma_3=0$.
-    \item[\small$\blacksquare$] Se $\Sigma<0 \;\Leftrightarrow\; \Sigma_3=1$.
+    \item[\small$\blacksquare$] Se $\Sigma_3 = 0 \;\Leftrightarrow\;$ il risultato $\Sigma$ è positivo o nullo.
+    \item[\small$\blacksquare$] Se $\Sigma_3 = 1 \;\Leftrightarrow\;$ il risultato $\Sigma$ è negativo.
 \end{itemize}
 
 \begin{center}
@@ -1303,7 +1777,7 @@ In generale:
   \node[font=\tiny] at ({2.4*cos(\angle)},{2.4*sin(\angle)}) {\val};
   \node[font=\tiny] at ({1.6*cos(\angle)},{1.6*sin(\angle)}) {\bin};
 }
-\node[font=\small\bfseries, align=center] at (0,0) {4-bit\\two's complement\\representation};
+\node[font=\small\bfseries, align=center] at (0,0) {4-bit};
 % assi cardinali
 \foreach \a in {0,90,180,270}{
   \draw[gray,thin] ({1.9*cos(\a)},{1.9*sin(\a)}) -- ({2.1*cos(\a)},{2.1*sin(\a)});
@@ -1318,92 +1792,285 @@ In generale:
 \section{Codice Gray}
 
 \defbox{
-\textbf{Codice Gray} = rappresentazione di numeri consecutivi che differiscono per un solo digit.\\[0.3em]
-La potenza dissipata da un contatore in codice Gray è sempre costante, perché ad ogni passo cambia sempre una sola cifra.
+Il \textbf{Codice Gray} è una codifica binaria non pesata in cui due valori consecutivi differiscono sempre e solo per \emph{un singolo bit}.
 }
 
-\begin{minipage}[t]{0.23\linewidth}
-\begin{tabular}{r l}
-$0$ & $= 0000$ \\
-$1$ & $= 0001$ \\
-$2$ & $= 0011$ \\
-$3$ & $= 0010$ \\
-$4$ & $= 0110$ \\
-$5$ & $= 0111$ \\
-$6$ & $= 0101$ \\
-$7$ & $= 0100$ \\
+\noindent I vantaggi principali del codice Gray rispetto al normale codice binario puro sono:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Prevenzione dei glitch (stati spuri)}: in un contatore binario normale, il passaggio ad esempio da $3$ ($011_2$) a $4$ ($100_2$) comporta la commutazione simultanea di 3 bit. Fisicamente, i bit non commuteranno mai nel medesimo istante esatto, causando passaggi in stati intermedi transitori errati (es. $011 \to 111 \to 100$). Con il codice Gray, cambiando un solo bit per ogni incremento, le transizioni sono sempre sicure e prive di glitch.
+    \item \textbf{Riduzione della dissipazione di potenza}: in tecnologie CMOS, la potenza dinamica è dissipata principalmente durante le commutazioni di stato logico. Poiché nel codice Gray commuta sempre e solo un bit alla volta, la potenza dissipata è minima e costante nel tempo, rendendolo ideale per contatori a basso consumo o per le macchine a stati finiti.
+\end{itemize}
+
+\begin{minipage}[t]{0.30\linewidth}
+\vspace{0pt}
+\centering
+\begin{tabular}{r c c}
+\toprule
+Dec. & Binario & Gray\\
+\midrule
+$0$  & $0000$ & $0000$ \\
+$1$  & $0001$ & $0001$ \\
+$2$  & $0010$ & $0011$ \\
+$3$  & $0011$ & $0010$ \\
+$4$  & $0100$ & $0110$ \\
+$5$  & $0101$ & $0111$ \\
+$6$  & $0110$ & $0101$ \\
+$7$  & $0111$ & $0100$ \\
+\midrule
+$8$  & $1000$ & $1100$ \\
+$9$  & $1001$ & $1101$ \\
+$10$ & $1010$ & $1111$ \\
+$11$ & $1011$ & $1110$ \\
+$12$ & $1100$ & $1010$ \\
+$13$ & $1101$ & $1011$ \\
+$14$ & $1110$ & $1001$ \\
+$15$ & $1111$ & $1000$ \\
+\bottomrule
 \end{tabular}
 \end{minipage}%
 \hfill
-\begin{minipage}[t]{0.72\linewidth}
-Se ho un numero con $n$ bit:
+\begin{minipage}[t]{0.66\linewidth}
+\vspace{0pt}
+\noindent Dato un numero a $n$ bit (dove l'indice $n-1$ rappresenta il bit più significativo, MSB):
 
 \medskip
-\textbf{Conversione Binario $\to$ Gray}:
+\textbf{Conversione Binario $\to$ Gray}:\\
+Il bit più significativo resta invariato. Ogni altro bit Gray si calcola come XOR tra il bit binario nella stessa posizione e il bit binario precedente (più significativo).
 \[
-G_{n-1} = B_{n-1} \qquad G_k = B_k \oplus B_{k+1} \quad k\in[0,n{-}2]
+G_{n-1} = B_{n-1} \qquad G_k = B_k \oplus B_{k+1} \quad \text{per } k < n-1
 \]
-\textit{($G_i$ = cifra $i$-esima in Gray; $B_i$ = cifra $i$-esima in Binario.)}
 
 \medskip
-\textbf{Conversione Gray $\to$ Binario}:
+\textbf{Conversione Gray $\to$ Binario}:\\
+Il bit più significativo resta invariato. Ogni altro bit binario si ottiene come XOR tra il bit Gray nella stessa posizione e il \emph{bit binario appena calcolato} nella posizione più significativa adiacente.
 \[
-B_{n-1} = G_{n-1} \qquad B_k = G_k \oplus \cdots \oplus G_{n-1}
+B_{n-1} = G_{n-1} \qquad B_k = G_k \oplus B_{k+1} \quad \text{per } k < n-1
 \]
+\textit{(Nota matematica: sviluppando la ricorsione si nota che equivale alla formula $B_k = G_k \oplus G_{k+1} \oplus \dots \oplus G_{n-1}$, spesso implementata in hardware per velocizzare i tempi di calcolo parallelo).}
 \end{minipage}
 
 \subsection{Circuiti di conversione}
 
 \begin{fitcenter}
 \begin{circuitikz}[scale=0.85, every node/.style={scale=0.85}]
-% Conversione B -> G (sinistra)
-\node[xor port] (xg0) at (1.8, 3.0) {};
-\node[xor port] (xg1) at (1.8, 2.0) {};
-\node[xor port] (xg2) at (1.8, 1.0) {};
-\draw (xg0.in 1) -- ++(-0.8,0) node[left]{$B_0$};
-\draw (xg0.in 2) -- ++(-0.5,0) -- ++(0,-0.45) -- (xg1.in 1 -| 1.0,0) -- (xg1.in 1);
-\draw (xg1.in 2) -- ++(-0.5,0) -- ++(0,-0.45) -- (xg2.in 1 -| 1.0,0) -- (xg2.in 1);
-\draw (xg2.in 2) -- ++(-0.8,0) node[left]{$B_3$};
-\draw (xg0.in 1) ++(-0.8,0) -- ++(0,-0.55) coordinate (b1jt); \draw (xg1.in 1) -- (b1jt);
-% B1, B2 labels
-\node[left] at (-0.1+1.8-1.3,2.25) {$B_1$};
-\node[left] at (-0.1+1.8-1.3,1.25) {$B_2$};
-\draw (xg0.out) -- ++(0.6,0) node[right]{$G_0$};
-\draw (xg1.out) -- ++(0.6,0) node[right]{$G_1$};
-\draw (xg2.out) -- ++(0.6,0) node[right]{$G_2$};
-% B3 diretto a G3
-\draw (xg2.in 2) ++(-0.8,0) -- ++(0,-0.7) coordinate (b3mid);
-\draw[-latex] (b3mid) -- ++(2.1,0) node[right]{$G_3$};
 
-\node[below, font=\small, color=teal] at (1.8,-0.1) {Conversione BG};
+% ============================================================
+% CIRCUITO BG  (Binario -> Gray)  —  colonna sinistra
+% ============================================================
+% G_{n-1} = B_{n-1} (passthrough), G_k = B_k XOR B_{k+1}
 
-% Conversione G -> B (destra)
-\node[xor port] (gb0) at (8.5, 3.0) {};
-\node[xor port] (gb1) at (8.5, 2.0) {};
-\node[xor port] (gb2) at (8.5, 1.0) {};
-\draw (gb0.in 1) -- ++(-0.8,0) node[left]{$G_0$};
-\draw (gb0.in 2) -- ++(-0.5,0) coordinate (g1src); \node[left] at (g1src) {$G_1$};
-\draw (gb1.in 1) -- (g1src -| gb1.in 1) -- (g1src);
-\draw (gb1.in 2) -- ++(-0.5,0) coordinate (g2src); \node[left] at (g2src) {$G_2$};
-\draw (gb2.in 1) -- (g2src -| gb2.in 1) -- (g2src);
-\draw (gb2.in 2) -- ++(-0.8,0) node[left]{$G_3$};
-\draw (gb0.out) -- ++(0.6,0) node[right]{$B_0$};
-\draw (gb1.out) -- ++(0.6,0) node[right]{$B_1$};
-\draw (gb2.out) -- ++(0.6,0) node[right]{$B_2$};
-\draw (gb2.in 2) ++(-0.8,0) -- ++(0,-0.7) coordinate (g3mid);
-\draw[-latex] (g3mid) -- ++(2.1,0) node[right]{$B_3$};
+% Porte XOR per G0, G1, G2
+\node[xor port] (BG0) at (2.0, 5.0) {};   % G0 = B0 XOR B1
+\node[xor port] (BG1) at (2.0, 3.5) {};   % G1 = B1 XOR B2
+\node[xor port] (BG2) at (2.0, 2.0) {};   % G2 = B2 XOR B3
 
-\node[below, font=\small, color=teal] at (8.5,-0.1) {Conversione GB};
+% --- Ingresso B0 ---
+\draw (-1.0, 0 |- BG0.in 1) node[left]{$B_0$} -- (BG0.in 1);
+
+% --- Ingresso B1 ---
+\draw (-1.0, 4.25) node[left]{$B_1$} -- (0.0, 4.25);
+\node[circle, fill, inner sep=1.5pt] at (0.0, 4.25) {};
+\draw (0.0, 4.25) |- (BG0.in 2);
+\draw (0.0, 4.25) |- (BG1.in 1);
+
+% --- Ingresso B2 ---
+\draw (-1.0, 2.75) node[left]{$B_2$} -- (0.2, 2.75);
+\node[circle, fill, inner sep=1.5pt] at (0.2, 2.75) {};
+\draw (0.2, 2.75) |- (BG1.in 2);
+\draw (0.2, 2.75) |- (BG2.in 1);
+
+% --- Ingresso B3 ---
+\draw (-1.0, 1.0) node[left]{$B_3$} -- (4.3, 1.0) node[right]{$G_3$};
+\node[circle, fill, inner sep=1.5pt] at (0.4, 1.0) {};
+\draw (0.4, 1.0) |- (BG2.in 2);
+
+% --- Uscite Gray ---
+\draw (BG0.out) -- (4.3, 0 |- BG0.out) node[right]{$G_0$};
+\draw (BG1.out) -- (4.3, 0 |- BG1.out) node[right]{$G_1$};
+\draw (BG2.out) -- (4.3, 0 |- BG2.out) node[right]{$G_2$};
+
+\node[below, font=\small\bfseries, color=teal] at (2.0, 0.4) {Conversione B$\to$G};
+
+% ============================================================
+% CIRCUITO GB  (Gray -> Binario)  —  colonna destra
+% ============================================================
+% B_{n-1} = G_{n-1}, poi B_k = G_k XOR B_{k+1}
+
+% Porte XOR per B0, B1, B2
+\node[xor port] (GB0) at (9.5, 5.0) {};   % B0 = G0 XOR B1
+\node[xor port] (GB1) at (9.5, 3.5) {};   % B1 = G1 XOR B2
+\node[xor port] (GB2) at (9.5, 2.0) {};   % B2 = G2 XOR B3
+
+% --- Ingresso G0 ---
+\draw (6.5, 0 |- GB0.in 1) node[left]{$G_0$} -- (GB0.in 1);
+
+% --- Ingresso G1 ---
+\draw (6.5, 0 |- GB1.in 1) node[left]{$G_1$} -- (GB1.in 1);
+
+% --- Ingresso G2 ---
+\draw (6.5, 0 |- GB2.in 1) node[left]{$G_2$} -- (GB2.in 1);
+
+% --- Ingresso G3 e Uscita B3 (passthrough) ---
+\draw (6.5, 1.0) node[left]{$G_3$} -- (11.8, 1.0) node[right]{$B_3$};
+
+% --- Uscita B0 ---
+\draw (GB0.out) -- (11.8, 0 |- GB0.out) node[right]{$B_0$};
+
+% --- Uscita B1 e feedback ---
+\draw (GB1.out) -- (11.8, 0 |- GB1.out) node[right]{$B_1$};
+\node[circle, fill, inner sep=1.5pt] at (10.5, 0 |- GB1.out) {};
+\draw (10.5, 0 |- GB1.out) -- (10.5, 4.25) -- (7.5, 4.25) |- (GB0.in 2);
+
+% --- Uscita B2 e feedback ---
+\draw (GB2.out) -- (11.8, 0 |- GB2.out) node[right]{$B_2$};
+\node[circle, fill, inner sep=1.5pt] at (10.7, 0 |- GB2.out) {};
+\draw (10.7, 0 |- GB2.out) -- (10.7, 2.75) -- (7.7, 2.75) |- (GB1.in 2);
+
+% --- Feedback da B3 ---
+\node[circle, fill, inner sep=1.5pt] at (10.9, 1.0) {};
+\draw (10.9, 1.0) -- (10.9, 1.35) -- (7.9, 1.35) |- (GB2.in 2);
+
+\node[below, font=\small\bfseries, color=teal] at (9.5, 0.4) {Conversione G$\to$B};
+
 \end{circuitikz}
 \end{fitcenter}
 
+% ======================================================================
+\subsection{Esercizi svolti: conversioni passo-passo}
+
+Applichiamo le formule ai due casi classici usando numeri a \textbf{4 bit}
+($B_3 B_2 B_1 B_0$, con $B_3$ = MSB).
+
+% ------------------------------------------------------------------
+\subsubsection*{Esercizio 1 — Binario $\to$ Gray: \quad $1011_2 \;(=11_{10})$}
+
+La regola è: $G_3 = B_3$, poi $G_k = B_k \oplus B_{k+1}$.
+
+\medskip
+\begin{center}
+\begin{tabular}{c|c|c|l}
+\toprule
+Bit & Formula & Calcolo & Risultato\\
+\midrule
+$G_3$ & $B_3$ & $1$ & $G_3 = \mathbf{1}$ \\
+$G_2$ & $B_2 \oplus B_3$ & $0 \oplus 1$ & $G_2 = \mathbf{1}$ \\
+$G_1$ & $B_1 \oplus B_2$ & $1 \oplus 0$ & $G_1 = \mathbf{1}$ \\
+$G_0$ & $B_0 \oplus B_1$ & $1 \oplus 1$ & $G_0 = \mathbf{0}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent Si parte dal MSB e si scende verso il LSB, applicando uno XOR bit a bit con il vicino più significativo già noto:
+
+\[
+\underbrace{1}_{B_3}\;\underbrace{0}_{B_2}\;\underbrace{1}_{B_1}\;\underbrace{1}_{B_0}
+\;\xrightarrow{\text{B}\to\text{G}}\;
+\underbrace{1}_{G_3}\;\underbrace{1}_{G_2}\;\underbrace{1}_{G_1}\;\underbrace{0}_{G_0}
+\quad\Rightarrow\quad \boxed{1110_G}
+\]
+
+\vspace{1.5em}
+
+% ------------------------------------------------------------------
+\subsubsection*{Esercizio 2 — Gray $\to$ Binario: \quad $1110_G$}
+
+La regola è: $B_3 = G_3$, poi $B_k = G_k \oplus B_{k+1}$ (si usa il binario \emph{già calcolato} al passo precedente, non il Gray).
+
+\medskip
+\begin{center}
+\begin{tabular}{c|c|c|l}
+\toprule
+Bit & Formula & Calcolo & Risultato\\
+\midrule
+$B_3$ & $G_3$ & $1$ & $B_3 = \mathbf{1}$ \\
+$B_2$ & $G_2 \oplus B_3$ & $1 \oplus 1$ & $B_2 = \mathbf{0}$ \\
+$B_1$ & $G_1 \oplus B_2$ & $1 \oplus 0$ & $B_1 = \mathbf{1}$ \\
+$B_0$ & $G_0 \oplus B_1$ & $0 \oplus 1$ & $B_0 = \mathbf{1}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent Anche qui si procede dall'MSB verso l'LSB, ma ogni XOR usa il \emph{bit binario appena ricavato} (non il Gray):
+
+\[
+\underbrace{1}_{G_3}\;\underbrace{1}_{G_2}\;\underbrace{1}_{G_1}\;\underbrace{0}_{G_0}
+\;\xrightarrow{\text{G}\to\text{B}}\;
+\underbrace{1}_{B_3}\;\underbrace{0}_{B_2}\;\underbrace{1}_{B_1}\;\underbrace{1}_{B_0}
+\quad\Rightarrow\quad \boxed{1011_2 = 11_{10}}
+\]
+
+\vspace{0.5em}
+\noindent\textit{I due esercizi si invertono a vicenda: il risultato di Esercizio~2 coincide esattamente con il punto di partenza di Esercizio~1, confermando la correttezza delle due conversioni.}
+
+\vspace{1.5em}
+
+% ------------------------------------------------------------------
+\subsubsection*{Esercizio 3 — Binario $\to$ Gray: \quad $1101_2 \;(=13_{10})$}
+
+\medskip
+\begin{center}
+\begin{tabular}{c|c|c|l}
+\toprule
+Bit & Formula & Calcolo & Risultato\\
+\midrule
+$G_3$ & $B_3$ & $1$ & $G_3 = \mathbf{1}$ \\
+$G_2$ & $B_2 \oplus B_3$ & $1 \oplus 1$ & $G_2 = \mathbf{0}$ \\
+$G_1$ & $B_1 \oplus B_2$ & $0 \oplus 1$ & $G_1 = \mathbf{1}$ \\
+$G_0$ & $B_0 \oplus B_1$ & $1 \oplus 0$ & $G_0 = \mathbf{1}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\[
+1101_2 \;\xrightarrow{\text{B}\to\text{G}}\; \boxed{1011_G}
+\]
+
+\subsubsection*{Esercizio 4 — Gray $\to$ Binario: \quad $1011_G$}
+
+\medskip
+\begin{center}
+\begin{tabular}{c|c|c|l}
+\toprule
+Bit & Formula & Calcolo & Risultato\\
+\midrule
+$B_3$ & $G_3$ & $1$ & $B_3 = \mathbf{1}$ \\
+$B_2$ & $G_2 \oplus B_3$ & $0 \oplus 1$ & $B_2 = \mathbf{1}$ \\
+$B_1$ & $G_1 \oplus B_2$ & $1 \oplus 1$ & $B_1 = \mathbf{0}$ \\
+$B_0$ & $G_0 \oplus B_1$ & $1 \oplus 0$ & $B_0 = \mathbf{1}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\[
+1011_G \;\xrightarrow{\text{G}\to\text{B}}\; \boxed{1101_2 = 13_{10}}
+\]
+
+\vspace{0.5em}
+\noindent\textit{Anche qui la coppia Esercizio~3 e Esercizio~4 è inversa, come atteso.}
+
+
+% ======================================================================
 \section{Codice ASCII}
  
 \defbox{
-\textbf{Codice ASCII} = codice con cui si descrivono in binario, ottale ed esadecimale i simboli (lettere, cifre, caratteri di controllo).
+L'\textbf{ASCII} (\emph{American Standard Code for Information Interchange}) è il sistema di codifica standard utilizzato storicamente per rappresentare caratteri alfanumerici e simboli di controllo nei dispositivi digitali e di telecomunicazione.
 }
  
-La tabella ASCII standard a 7 bit codifica 128 simboli ($2^7$), tra cui lettere maiuscole (65--90), minuscole (97--122), cifre (48--57) e caratteri di controllo (0--31).
+La tabella ASCII standard originale utilizza \textbf{7 bit} per codificare 128 simboli diversi ($2^7 = 128$). I codici sono suddivisi logicamente in:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{0--31 e 127}: \emph{Caratteri di controllo} (non stampabili), usati originariamente per gestire la formattazione hardware delle telescriventi (es. ritorno a capo \texttt{CR}, avanzamento riga \texttt{LF}, tabulazione \texttt{HT}) o il protocollo di comunicazione.
+    \item \textbf{32--47, 58--64, 91--96, 123--126}: \emph{Simboli grafici e punteggiatura} (lo spazio è il primo carattere stampabile, codice decimale 32).
+    \item \textbf{48--57}: \emph{Cifre numeriche} (da '0' a '9').
+    \item \textbf{65--90}: \emph{Lettere maiuscole} (da 'A' a 'Z').
+    \item \textbf{97--122}: \emph{Lettere minuscole} (da 'a' a 'z').
+\end{itemize}
+
+\noindent \textbf{Proprietà notevole}: le lettere maiuscole e le rispettive minuscole differiscono sempre esattamente per \emph{un solo bit} (il sesto bit partendo da zero, che vale $2^5=32$). 
+Ad esempio, la 'A' vale $65_{10}$ ($010\textbf{0}0001_2$) e la 'a' vale $97_{10}$ ($011\textbf{0}0001_2$). Questa ingegnosa scelta progettuale non è casuale: permette ai sistemi digitali e ai microprocessori di convertire istantaneamente e a basso costo computazionale i caratteri dal maiuscolo al minuscolo semplicemente invertendo un bit (ad esempio applicando una maschera logica di tipo XOR o OR).
+
+\medskip
  
 \begin{fitcenter}
 {\footnotesize\setlength{\tabcolsep}{3pt}%
@@ -1515,94 +2182,94 @@ Finora abbiamo visto circuiti in cui l'output dipende esclusivamente dagli input
 
 \section{Bistabilità e oscillazione}
 
-Il \textbf{circuito minimale} che mantiene uno stato stabile è il \textbf{bistabile}: rinforza il suo stato ad ogni loop.
+Il \textbf{circuito bistabile} rappresenta la forma più semplice di \textbf{memoria} in elettronica digitale. Si ottiene collegando in anello chiuso un numero \textbf{pari} di porte logiche invertenti (ad esempio porte NOT). Poiché ogni segnale viene invertito due volte, il valore che ritorna all'ingresso è uguale a quello di partenza. Questo crea un \textbf{feedback positivo} che rinforza e mantiene stabile all'infinito lo stato logico assunto all'accensione, conservando così un bit di informazione ($0$ o $1$).
 
 \defbox{
-Il problema è che non si sa come invertirlo $\Rightarrow$ si interviene con porte \textbf{NAND} o \textbf{NOR}.
+Il problema di un semplice anello di porte NOT è che è un sistema isolato: \textbf{non è possibile modificarne lo stato} dall'esterno. Per potervi "scrivere" un nuovo bit (impostarlo a 1 o azzerarlo a 0), le porte NOT vengono sostituite con porte \textbf{NOR} o \textbf{NAND}, le quali offrono dei terminali di ingresso aggiuntivi per i segnali di controllo.
 }
+
+Se invece colleghiamo in anello chiuso un numero \textbf{dispari} di porte NOT, otteniamo un \textbf{circuito oscillante} (o \emph{ring oscillator}). L'inversione dispari fa sì che il segnale ritorni all'ingresso invertito rispetto alla partenza. Questo genera una perenne instabilità: l'uscita continua a commutare ciclicamente tra $0$ e $1$, con un periodo $T$ proporzionale al numero di porte e al ritardo di propagazione di ciascuna di esse.
 
 \begin{center}
 \begin{circuitikz}[scale=0.9, every node/.style={scale=0.9}]
 % NOT pari -> bistabile
 \node[not port] (n1) at (0,0) {};
-\node[not port] (n2) at (2.2,0) {};
-\draw (n1.out) -- (n2.in 1);
-\draw (n2.out) -- ++(0.8,0) coordinate (outpt) node[right]{out};
-\draw (outpt) |- ++(-0.3,1.0) -| (n1.in 1);
-\node[below=0.4cm] at (1.1,-0.6) {\# porte NOT pari $\to$ circuito stabile (bi-stabile)};
+\node[not port] (n2) at (2.5,0) {};
+\draw (n1.out) -- (n2.in);
+\draw (n2.out) -- ++(0.4,0) coordinate (tapb) -- ++(0.6,0) node[right]{$Q$};
+% Feedback superiore pulito
+\node[circle, fill, inner sep=1.5pt] at (tapb) {};
+\draw (tapb) -- ++(0, 1.2) -| (n1.in);
+\node[below, font=\small, color=teal] at (1.25,-0.8) {Circuito Bi-stabile (\# NOT pari)};
 \end{circuitikz}
-\end{center}
-
-\begin{center}
+\hspace{1cm}
 \begin{circuitikz}[scale=0.9, every node/.style={scale=0.9}]
 % NOT dispari -> oscillante
 \node[not port] (m1) at (0,0) {};
-\node[not port] (m2) at (2.2,0) {};
-\node[not port] (m3) at (4.4,0) {};
-\draw (m1.out) -- (m2.in 1);
-\draw (m2.out) -- (m3.in 1);
-\draw (m3.out) -- ++(0.8,0) coordinate (outpt2);
-\draw (outpt2) |- ++(-0.3,1.0) -| (m1.in 1);
-\node[below=0.4cm] at (2.2,-0.6) {\# porte NOT dispari $\to$ circuito oscillante ($T\propto 2n{+}1$)};
+\node[not port] (m2) at (2.0,0) {};
+\node[not port] (m3) at (4.0,0) {};
+\draw (m1.out) -- (m2.in);
+\draw (m2.out) -- (m3.in);
+\draw (m3.out) -- ++(0.4,0) coordinate (tapo) -- ++(0.6,0) node[right]{$Q$};
+% Feedback superiore pulito
+\node[circle, fill, inner sep=1.5pt] at (tapo) {};
+\draw (tapo) -- ++(0, 1.2) -| (m1.in);
+\node[below, font=\small, color=teal] at (2.0,-0.8) {Circuito Oscillante (\# NOT dispari)};
 \end{circuitikz}
 \end{center}
 
 \section{Latch}
 
-\defbox{\textbf{Latch} = circuito base dell'elettronica digitale sequenziale.}
+\defbox{\textbf{Latch} = Il circuito di memoria fondamentale dell'elettronica digitale sequenziale, capace di conservare un bit e di essere aggiornato tramite appositi segnali di ingresso.}
+
+Il Latch più semplice (Latch SR, \emph{Set-Reset}) nasce dall'evoluzione del circuito bistabile: sostituendo le due porte NOT con due porte \textbf{NOR} (o NAND) e incrociando i collegamenti (\emph{cross-coupling}), otteniamo due ingressi di controllo: \textbf{S} (\emph{Set}) e \textbf{R} (\emph{Reset}).
 
 \begin{center}
-\begin{circuitikz}[scale=0.95, every node/.style={scale=0.95}]
-\node[nor port] (G1) at (0,1.0) {};
-\node[nor port] (G2) at (0,-1.0) {};
+\begin{circuitikz}[scale=1.0, every node/.style={scale=1.0}]
+\node[nor port] (G1) at (0,1.2) {};
+\node[nor port] (G2) at (0,-1.2) {};
 
-\draw (G1.in 1) -- ++(-1.4,0) node[left]{$A$};
-\draw (G2.in 2) -- ++(-1.4,0) node[left]{$B$};
+% Ingressi S e R
+\draw (G1.in 1) -- ++(-1.2,0) node[left]{$R$};
+\draw (G2.in 2) -- ++(-1.2,0) node[left]{$S$};
 
-% feedback cross-coupled
-\draw (G1.out) -- ++(0.8,0) coordinate (o1) node[right]{$O_1$};
-\draw (G2.out) -- ++(0.8,0) coordinate (o2) node[right]{$O_2$};
+% Uscite Q e Q_not
+\draw (G1.out) -- ++(0.4,0) coordinate (tap1) -- ++(1.0,0) node[right]{$Q$};
+\draw (G2.out) -- ++(0.4,0) coordinate (tap2) -- ++(1.0,0) node[right]{$\overline{Q}$};
 
-\draw (o1) |- ($(G2.in 1)+(-0.6,0)$) -| (G2.in 1);
-\draw (o2) |- ($(G1.in 2)+(-0.6,0)$) -| (G1.in 2);
+\node[circle, fill, inner sep=1.2pt] at (tap1) {};
+\node[circle, fill, inner sep=1.2pt] at (tap2) {};
 
-\node[below=1.0cm] at (0.4,-1.0) {LATCH (NOR)};
+% Cross coupling diagonale
+\draw (tap1) -- ($(G2.in 1)+(-0.4,0)$) -- (G2.in 1);
+\draw (tap2) -- ($(G1.in 2)+(-0.4,0)$) -- (G1.in 2);
+
+\node[below=1.0cm, font=\small, color=teal] at (0,-1.2) {Latch SR con porte NOR};
 \end{circuitikz}
 \end{center}
 
-\noindent Tabella di verità del latch NOR (con $O_1,O_2$ a seconda dello stato precedente, indicato come $O_1^{old}/O_2^{old}$):
+\noindent \textbf{Funzionamento e Tabella di verità del Latch NOR}
+
+Chiamiamo le uscite $Q$ e $\overline{Q}$. Lo stato attuale è indicato come $Q_{old}$, mentre il nuovo stato che il circuito assume è $Q_{new}$.
 
 \begin{center}
-\begin{tabular}{cc|cc}
+\begin{tabular}{cc|cc|l}
 \toprule
-$A$ & $B$ & $O_1$ & $O_2$\\
+$R$ & $S$ & $Q_{new}$ & $\overline{Q}_{new}$ & \textbf{Comportamento}\\
 \midrule
-0&0&$O_1^{old}$&$O_2^{old}$\\
-0&1&0&1\\
-1&0&1&0\\
-1&1&0&0\\
+0 & 0 & $Q_{old}$ & $\overline{Q}_{old}$ & \textbf{MEMORIA} (HOLD)\\
+0 & 1 & 1 & 0 & \textbf{SET}\\
+1 & 0 & 0 & 1 & \textbf{RESET}\\
+1 & 1 & 0 & 0 & \textbf{STATO PROIBITO}\\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \begin{itemize}[leftmargin=1.5em]
-    \item Se $A=0,\,B=0$: porta \textbf{HOLD} (mantiene lo stato precedente);
-    \item Se $A=0,\,B=1$: porta \textbf{NOR};
-    \item Se $A=1,\,B=1$: \textbf{stato proibito}.
+    \item \textbf{Stato di Memoria ($R=0, S=0$):} In assenza di segnali di controllo, le porte NOR si comportano come semplici porte NOT, ricreando il circuito bistabile in anello chiuso. Il dato viene mantenuto in loop all'infinito.
+    \item \textbf{Stato di Set / Reset ($R=0, S=1$ oppure $R=1, S=0$):} Un segnale $1$ all'ingresso di una porta NOR forza istantaneamente la sua uscita a $0$. Questo $0$ si propaga all'ingresso dell'altra porta NOR che, avendo ora entrambi gli ingressi a $0$, porterà la sua uscita a $1$. Il circuito "scatta" stabilmente nel nuovo stato.
+    \item \textbf{Stato Proibito ($R=1, S=1$):} Costringe entrambe le porte NOR a dare in uscita $0$. Non solo si perde la coerenza logica (le due uscite non sono più complementari), ma se si riportano simultaneamente gli ingressi a $0$ ($R=0, S=0$), il circuito entra in uno stato transitorio \textbf{metastabile}. Poiché entrambe le porte cercheranno di passare a $1$, il risultato finale dipenderà da minime differenze costruttive e ritardi di propagazione, rendendo l'uscita imprevedibile (o addirittura innescando una temporanea oscillazione).
 \end{itemize}
-
-\noindent\textit{Nota}: c'è dipendenza dalla velocità delle porte.
-
-\medskip
-\noindent Ci sono problemi all'uscita del circuito:
-\begin{enumerate}[leftmargin=1.5em]
-    \item Se le porte hanno ritardi diversi, le uscite sono $1$ e $0$, ma l'output dipende dalle singole componenti.
-    \item Se le porte hanno ritardi uguali, le uscite sono $1,0$ oppure alternanti, quindi è un'oscillazione con $T=$ ritardo.
-\end{enumerate}
-
-\[
-O_1=\overline{B(t)\cdot\overline{O_2(t)}}\cdot\overline{O_2(t+\Delta t)}
-\]
 % ======================================================================
 % Continuazione pagina 6 (10/04/2026)
 % ======================================================================
@@ -1655,14 +2322,15 @@ mostrato di seguito insieme alla variante con porte NAND:
 \draw (NOR2.in 2) -- ++(-1.2,0) node[left]{$R$};
 
 % Uscite con nomi
-\draw (NOR1.out) -- ++(1.0,0) coordinate (Q1out);
-\draw[-latex] (Q1out) -- ++(0.5,0) node[right]{$Q(t+\Delta t)$};
-\draw (NOR2.out) -- ++(1.0,0) coordinate (Q2out);
-\draw[-latex] (Q2out) -- ++(0.5,0) node[right]{$\overline{Q}(t+\Delta t)$};
+\draw (NOR1.out) -- ++(0.4,0) coordinate (tap1) -- ++(1.0,0) node[right]{$Q(t+\Delta t)$};
+\draw (NOR2.out) -- ++(0.4,0) coordinate (tap2) -- ++(1.0,0) node[right]{$\overline{Q}(t+\Delta t)$};
 
-% Feedback incrociato
-\draw (Q1out) -- ++(0,-0.5) -| ($(NOR2.in 1)+(-0.5,0)$) -- (NOR2.in 1);
-\draw (Q2out) -- ++(0, 0.5) -| ($(NOR1.in 2)+(-0.5,0)$) -- (NOR1.in 2);
+\node[circle, fill, inner sep=1.2pt] at (tap1) {};
+\node[circle, fill, inner sep=1.2pt] at (tap2) {};
+
+% Feedback incrociato diagonale
+\draw (tap1) -- ($(NOR2.in 1)+(-0.4,0)$) -- (NOR2.in 1);
+\draw (tap2) -- ($(NOR1.in 2)+(-0.4,0)$) -- (NOR1.in 2);
 
 \node[below, font=\small] at (0.5,-2.2) {Latch SR con porte NOR};
 \end{circuitikz}
@@ -1675,13 +2343,15 @@ mostrato di seguito insieme alla variante con porte NAND:
 \draw (NA1.in 1) -- ++(-1.2,0) node[left]{$\overline{S}$};
 \draw (NA2.in 2) -- ++(-1.2,0) node[left]{$\overline{R}$};
 
-\draw (NA1.out) -- ++(1.0,0) coordinate (QA1out);
-\draw[-latex] (QA1out) -- ++(0.5,0) node[right]{$Q$};
-\draw (NA2.out) -- ++(1.0,0) coordinate (QA2out);
-\draw[-latex] (QA2out) -- ++(0.5,0) node[right]{$\overline{Q}$};
+\draw (NA1.out) -- ++(0.4,0) coordinate (tap1) -- ++(1.0,0) node[right]{$Q$};
+\draw (NA2.out) -- ++(0.4,0) coordinate (tap2) -- ++(1.0,0) node[right]{$\overline{Q}$};
 
-\draw (QA1out) -- ++(0,-0.5) -| ($(NA2.in 1)+(-0.5,0)$) -- (NA2.in 1);
-\draw (QA2out) -- ++(0, 0.5) -| ($(NA1.in 2)+(-0.5,0)$) -- (NA1.in 2);
+\node[circle, fill, inner sep=1.2pt] at (tap1) {};
+\node[circle, fill, inner sep=1.2pt] at (tap2) {};
+
+% Feedback incrociato diagonale
+\draw (tap1) -- ($(NA2.in 1)+(-0.4,0)$) -- (NA2.in 1);
+\draw (tap2) -- ($(NA1.in 2)+(-0.4,0)$) -- (NA1.in 2);
 
 \node[below, font=\small] at (0.5,-2.2) {Latch SR con porte NAND};
 \end{circuitikz}
@@ -1722,12 +2392,15 @@ aggiuntive ($\overline{S_1}$ e $\overline{R_1}$):
 \draw (GR1.out) -- (GQb.in 2) node[midway,below,font=\scriptsize]{$\overline{R_1}$};
 
 % uscite
-\draw (GQ.out)  -- ++(0.9,0) coordinate (Qo)  node[right]{$Q$};
-\draw (GQb.out) -- ++(0.9,0) coordinate (Qbo) node[right]{$\overline{Q}$};
+\draw (GQ.out) -- ++(0.4,0) coordinate (tap1) -- ++(1.0,0) node[right]{$Q$};
+\draw (GQb.out) -- ++(0.4,0) coordinate (tap2) -- ++(1.0,0) node[right]{$\overline{Q}$};
 
-% feedback incrociato
-\draw (Qo)  |- ($(GQb.in 1)+(-0.55,0)$) -- (GQb.in 1);
-\draw (Qbo) |- ($(GQ.in 2)+(-0.55,0)$)  -- (GQ.in 2);
+\node[circle, fill, inner sep=1.2pt] at (tap1) {};
+\node[circle, fill, inner sep=1.2pt] at (tap2) {};
+
+% feedback incrociato diagonale
+\draw (tap1) -- ($(GQb.in 1)+(-0.4,0)$) -- (GQb.in 1);
+\draw (tap2) -- ($(GQ.in 2)+(-0.4,0)$) -- (GQ.in 2);
 
 \node[below=0.8cm, font=\small] at (1.75,-2.3) {Latch di tipo RS (con abilitazione $E$)};
 \end{circuitikz}
@@ -1755,26 +2428,26 @@ $R=\overline{D}$ sia sempre il complemento di $S=D$: nasce il \textbf{latch D} (
 
 \begin{center}
 \begin{circuitikz}[scale=0.88, every node/.style={scale=0.88}]
-% ---- invertitore sul percorso D -> R ----
-\node[not port, scale=0.75] (INV) at (-1.8,-1.5) {};
-
 % ---- stadio di abilitazione ----
 \node[nand port] (GS1) at (0, 1.5)  {};
 \node[nand port] (GR1) at (0,-1.5)  {};
 
+% ---- invertitore sul percorso D -> R ----
+% Posizionato per allineare l'uscita con GR1.in 2 (Y=-1.78)
+\node[not port, scale=0.75] (INV) at (-2.0, -1.78) {};
+
 % D entra direttamente in GS1.in1 e, invertito, in GR1.in2
-\draw (GS1.in 1) -- ++(-0.6,0) coordinate (dLine) node[left]{$D$};
-\draw (INV.in 1) -- ++(-0.4,0) -| ($(dLine)+(0,0)$);
+\draw (GS1.in 1) -- ++(-2.8, 0) node[left]{$D$};
+\node[circle, fill, inner sep=1.2pt] at ($(GS1.in 1)+(-2.5,0)$) {};
+\draw ($(GS1.in 1)+(-2.5,0)$) |- (INV.in 1);
 \draw (INV.out) -- (GR1.in 2);
 
-% E
-\draw (GS1.in 2) -- ++(-0.4,0) coordinate (eTop);
-\draw (GR1.in 1) -- ++(-0.4,0) coordinate (eBot);
-\draw (eTop) -- ++(0,-0.45) coordinate (eMid2);
-\draw (eBot) -- ++(0, 0.45) -- (eMid2) -- ++(-0.35,0) node[left]{$E$};
-
-% etichette S1 R1
-\node[above, font=\scriptsize] at ($(GS1.in 1)!0.5!(GS1.out)+(0,0.1)$) {};
+% E (Enable) entra in GS1.in 2 e GR1.in 1
+\draw (GS1.in 2) -- ++(-0.8,0) coordinate (eTop);
+\draw (GR1.in 1) -- ++(-0.8,0) coordinate (eBot);
+\draw (eTop) -- (eBot);
+\node[circle, fill, inner sep=1.2pt] at ($(eTop)!0.5!(eBot)$) {};
+\draw ($(eTop)!0.5!(eBot)$) -- ++(-1.6, 0) node[left]{$E$};
 
 % ---- stadio di uscita ----
 \node[nand port] (GQ)  at (3.5, 1.0) {};
@@ -1783,11 +2456,15 @@ $R=\overline{D}$ sia sempre il complemento di $S=D$: nasce il \textbf{latch D} (
 \draw (GS1.out) -- (GQ.in 1)  node[midway,above,font=\scriptsize]{$\overline{S_1}$};
 \draw (GR1.out) -- (GQb.in 2) node[midway,below,font=\scriptsize]{$\overline{R_1}$};
 
-\draw (GQ.out)  -- ++(0.9,0) coordinate (Qo2)  node[right]{$Q$};
-\draw (GQb.out) -- ++(0.9,0) coordinate (Qbo2) node[right]{$\overline{Q}$};
+\draw (GQ.out) -- ++(0.4,0) coordinate (tap1) -- ++(1.0,0) node[right]{$Q$};
+\draw (GQb.out) -- ++(0.4,0) coordinate (tap2) -- ++(1.0,0) node[right]{$\overline{Q}$};
 
-\draw (Qo2)  |- ($(GQb.in 1)+(-0.55,0)$) -- (GQb.in 1);
-\draw (Qbo2) |- ($(GQ.in 2)+(-0.55,0)$)  -- (GQ.in 2);
+\node[circle, fill, inner sep=1.2pt] at (tap1) {};
+\node[circle, fill, inner sep=1.2pt] at (tap2) {};
+
+% Feedback incrociato diagonale
+\draw (tap1) -- ($(GQb.in 1)+(-0.4,0)$) -- (GQb.in 1);
+\draw (tap2) -- ($(GQ.in 2)+(-0.4,0)$) -- (GQ.in 2);
 
 \node[below=0.8cm, font=\small] at (1.75,-2.5) {Latch di tipo D};
 \end{circuitikz}
@@ -1836,16 +2513,17 @@ invertitore. Le uscite intermedie del master sono $P$ e $\overline{P}$.
 \draw[-latex] (2.6,0.7) -- (3.8,0.7) node[midway,above,font=\scriptsize]{$\overline{P}$};
 
 %--------- invertitore E -> E' ---------
-\node[not port, scale=0.7] (INVMS) at (-0.6,-0.6) {};
-\draw (-1.2,0.7) -- (-1.0,0.7) |- (INVMS.in 1);
+\node[not port, scale=0.7] (INVMS) at (0.0,-0.6) {};
+\node[circle, fill, inner sep=1.0pt] at (-0.8, 0.7) {};
+\draw (-0.8, 0.7) |- (INVMS.in 1);
 
 %--------- Slave (latch RS) ----------
 \draw (3.8,0.2) rectangle (6.4,2.4);
 \node[font=\small\bfseries] at (5.1,2.1) {slave};
 \node[font=\small]           at (5.1,1.3) {latch RS};
 
-\draw (INVMS.out) -- ++(0.5,0) |- (3.8,0.7)
-      node[near end, above, font=\scriptsize]{$E'$};
+\draw (INVMS.out) -| (3.2, 0.7);
+\draw[-latex] (3.2, 0.7) -- (3.8,0.7) node[midway, above, font=\scriptsize]{$E'$};
 
 \draw[-latex] (6.4,1.9) -- (7.4,1.9) node[midway,above,font=\scriptsize]{$Q$};
 \draw[-latex] (6.4,0.7) -- (7.4,0.7) node[midway,above,font=\scriptsize]{$\overline{Q}$};
@@ -1906,46 +2584,49 @@ solo in corrispondenza di un preciso fronte del clock, grazie ad una rete di cin
 \begin{center}
 \begin{circuitikz}[scale=0.88, every node/.style={scale=0.88}]
 % ---- Schema trigger-edge (5 porte NAND) ----
-% Convenzione: G1..G3 primo stadio (set/reset/clock), G4-G5 stadio di uscita
-\node[nand port] (G1) at (0,  3.2) {};   % ingresso D e CLK -> nodo set
-\node[nand port] (G2) at (0,  1.4) {};   % CLK e uscita G1 -> S1
-\node[nand port] (G3) at (0, -0.4) {};   % CLK e uscita G2 -> R1
-\node[nand port] (G4) at (3.4, 2.2) {};  % Q
-\node[nand port] (G5) at (3.4, 0.4) {};  % Qbar
+\node[nand port] (G1) at (0,  3.2) {};
+\node[nand port] (G2) at (0,  1.4) {};
+\node[nand port] (G3) at (0, -0.4) {};
+\node[nand port] (G4) at (4.0, 2.2) {};
+\node[nand port] (G5) at (4.0, 0.4) {};
 
-% Ingressi
-\draw (G1.in 1) -- ++(-1.4,0) node[left]{$D$};
+% Linea CLK verticale e sue derivazioni
+\draw (-1.5, -0.68) -- (-1.5, 2.92);
+\draw (-2.5, 1.12) node[left]{CLK} -- (-1.5, 1.12);
+\node[circle, fill, inner sep=1.2pt] at (-1.5, 1.12) {};
+\node[circle, fill, inner sep=1.2pt] at (-1.5, 2.92) {};
+\draw (-1.5, 2.92) -- (G1.in 2);
+\node[circle, fill, inner sep=1.2pt] at (-1.5, 1.68) {};
+\draw (-1.5, 1.68) -- (G2.in 1);
+\node[circle, fill, inner sep=1.2pt] at (-1.5, -0.68) {};
+\draw (-1.5, -0.68) -- (G3.in 2);
 
-% CLK condiviso su G1.in2, G2.in1, G3.in2
-\draw (G1.in 2) -- ++(-0.5,0) coordinate (clk1);
-\draw (G2.in 1) -- ++(-0.5,0) coordinate (clk2);
-\draw (G3.in 2) -- ++(-0.5,0) coordinate (clk3);
-\draw (clk1) -- ++(0,-0.7) coordinate (cm1);
-\draw (clk2) -- ++(0, 0.7) -- (cm1);
-\draw (clk2) -- ++(0,-0.7) coordinate (cm2);
-\draw (clk3) -- ++(0, 0.7) -- (cm2) -- ++(-1.0,0) node[left]{CLK};
+% Ingresso D
+\draw (-2.5, 3.48) node[left]{$D$} -- (G1.in 1);
 
 % G1.out -> G2.in2
-\draw (G1.out) -- ++(0.5,0) coordinate (g1o);
-\draw (g1o) |- (G2.in 2);
+\draw (G1.out) -- ++(0.5,0) -- ++(0,-0.8) -| (G2.in 2);
 
-% G2.out -> G4.in1  (S1)
-\draw (G2.out) -- (G4.in 1) node[midway,above,font=\scriptsize]{$S_1$};
+% G2.out -> G3.in1 e verso S1
+\draw (G2.out) -- ++(0.3,0) coordinate (g2o);
+\node[circle, fill, inner sep=1.2pt] at (g2o) {};
+\draw (g2o) -- ++(0,-0.8) -| (G3.in 1);
+\draw (g2o) |- (G4.in 1) node[pos=0.75, above, font=\scriptsize]{$S_1$};
 
-% G2.out -> G3.in1 (feedback)
-\draw (G2.out) -- ++(0.5,0) coordinate (g2o);
-\draw (g2o) |- (G3.in 1);
-
-% G3.out -> G5.in2  (R1)
-\draw (G3.out) -- (G5.in 2) node[midway,below,font=\scriptsize]{$R_1$};
+% G3.out -> R1
+\draw (G3.out) |- (G5.in 2) node[pos=0.75, below, font=\scriptsize]{$R_1$};
 
 % Uscite Q e Qbar con feedback incrociato
-\draw (G4.out) -- ++(0.8,0) coordinate (Qte)  node[right]{$Q$};
-\draw (G5.out) -- ++(0.8,0) coordinate (Qbte) node[right]{$\overline{Q}$};
-\draw (Qte)  |- ($(G5.in 1)+(-0.55,0)$) -- (G5.in 1);
-\draw (Qbte) |- ($(G4.in 2)+(-0.55,0)$) -- (G4.in 2);
+\draw (G4.out) -- ++(0.4,0) coordinate (tap1) -- ++(1.0,0) node[right]{$Q$};
+\draw (G5.out) -- ++(0.4,0) coordinate (tap2) -- ++(1.0,0) node[right]{$\overline{Q}$};
 
-\node[below=0.5cm, font=\small] at (1.7,-1.4)
+\node[circle, fill, inner sep=1.2pt] at (tap1) {};
+\node[circle, fill, inner sep=1.2pt] at (tap2) {};
+
+\draw (tap1) -- ($(G5.in 1)+(-0.4,0)$) -- (G5.in 1);
+\draw (tap2) -- ($(G4.in 2)+(-0.4,0)$) -- (G4.in 2);
+
+\node[below=0.5cm, font=\small] at (2.0,-1.4)
       {Flip-Flop D trigger-edge (5 porte NAND)};
 \end{circuitikz}
 \end{center}
@@ -2015,42 +2696,72 @@ $S = J\overline{Q}_n$ e $R = KQ_n$.
 
 \begin{center}
 \begin{circuitikz}[scale=0.88, every node/.style={scale=0.88}]
-% Porte AND di ingresso
+
+% ---- Porte AND di ingresso ----
 \node[and port] (AJ) at (0, 1.5) {};
 \node[and port] (AK) at (0,-1.5) {};
 
-% Ingressi J e K
-\draw (AJ.in 1) -- ++(-1.2,0) node[left]{$J$};
-\draw (AK.in 2) -- ++(-1.2,0) node[left]{$K$};
+% ---- Ingressi J e K ----
+\draw (AJ.in 1) -- ++(-1.5,0) node[left]{$J$};
+\draw (AK.in 2) -- ++(-1.5,0) node[left]{$K$};
 
-% CLK a entrambe le porte AND
-\draw (AJ.in 2) -- ++(-0.5,0) coordinate (cJ);
-\draw (AK.in 1) -- ++(-0.5,0) coordinate (cK);
-\draw (cJ) -- ++(0,-0.5) coordinate (cm);
-\draw (cK) -- ++(0, 0.5) -- (cm) -- ++(-0.6,0) node[left]{CLK};
+% ---- CLK: bus verticale centrale collegato ai secondi ingressi delle AND ----
+% Punto sul bus CLK all'altezza di AJ.in2 e AK.in1
+\coordinate (clkTop) at (-0.85, 1.22);  % altezza AJ.in 2
+\coordinate (clkBot) at (-0.85,-1.22);  % altezza AK.in 1
+\draw (AJ.in 2) -- (clkTop);
+\draw (AK.in 1) -- (clkBot);
+\draw (clkTop) -- (clkBot);             % bus verticale
+\node[circle, fill, inner sep=1.2pt] at (clkTop) {};
+\node[circle, fill, inner sep=1.2pt] at (clkBot) {};
+\draw (clkTop) -- ++(-1.5,0) coordinate (clkMid);
+\draw (clkBot) -- ++(-1.5,0);
+\draw (clkMid) -- ($(clkBot)+(-1.5,0)$);
+\node[circle, fill, inner sep=1.2pt] at ($(clkTop)+(-1.5,0)$) {};
+\draw ($(clkTop)+(-0.75,0)$) -- ++(-0.75,0) node[left]{CLK};
+\node[circle, fill, inner sep=1.2pt] at ($(clkTop)+(-0.75,0)$) {};
 
-% Porte NOR del latch
-\node[nor port] (NQ)  at (3.2, 1.0) {};
-\node[nor port] (NQb) at (3.2,-1.0) {};
+% ---- Porte NOR del latch SR ----
+\node[nor port] (NQ)  at (3.5, 1.0) {};
+\node[nor port] (NQb) at (3.5,-1.0) {};
 
-% AND -> NOR
-\draw (AJ.out) -- (NQ.in 1)  node[midway,above,font=\scriptsize]{$S=J\overline{Q}_n$};
-\draw (AK.out) -- (NQb.in 2) node[midway,below,font=\scriptsize]{$R=KQ_n$};
+% ---- AND -> NOR (con etichette S e R) ----
+\draw (AJ.out) -- (NQ.in 1)
+      node[midway, above, font=\scriptsize]{$S=J\overline{Q}_n$};
+\draw (AK.out) -- (NQb.in 2)
+      node[midway, below, font=\scriptsize]{$R=KQ_n$};
 
-% Uscite
-\draw (NQ.out)  -- ++(0.9,0) coordinate (Qjk)  node[right]{$Q$};
-\draw (NQb.out) -- ++(0.9,0) coordinate (Qbjk) node[right]{$\overline{Q}$};
+% ---- Uscite Q e Qbar ----
+\draw (NQ.out)  -- ++(1.2,0) coordinate (tapQ);
+\draw (NQb.out) -- ++(1.2,0) coordinate (tapQb);
+\node[right] at (tapQ)  {$Q$};
+\node[right] at (tapQb) {$\overline{Q}$};
+\node[circle, fill, inner sep=1.2pt] at (tapQ)  {};
+\node[circle, fill, inner sep=1.2pt] at (tapQb) {};
 
-% Cross-coupling con feedback a AND
-\draw (Qjk)  |- ($(NQb.in 1)+(-0.5,0)$) -- (NQb.in 1);
-\draw (Qbjk) |- ($(NQ.in 2)+(-0.5,0)$)  -- (NQ.in 2);
+% ---- Cross-coupling NOR->NOR (feedback incrociato interno) ----
+% tapQ --> NQb.in1: scende, poi va a sinistra orizzontalmente
+\coordinate (xFbQa) at ($(NQb.in 1)+(-0.45,0)$);
+\draw (tapQ)  -- ++(0,-0.55) -- ($(xFbQa)+(0,-0.55)$) -- (xFbQa) -- (NQb.in 1);
+% tapQb --> NQ.in2: sale, poi va a sinistra orizzontalmente  
+\coordinate (xFbQba) at ($(NQ.in 2)+(-0.45,0)$);
+\draw (tapQb) -- ++(0, 0.55) -- ($(xFbQba)+(0, 0.55)$) -- (xFbQba) -- (NQ.in 2);
 
-% Feedback Q -> AK.in1 (Qn moltiplicato per K)
-\draw (Qjk)  -- ++(0,-0.4) -| ($(AK.in 1)+(-0.3,0)$) -- (AK.in 1);
-% Feedback Qbar -> AJ.in2 (Qbar_n moltiplicato per J)
-\draw (Qbjk) -- ++(0, 0.4) -| ($(AJ.in 2)+(-0.3,0)$) -- (AJ.in 2);
+% ---- Feedback Q -> AK.in1 (loop esterno verso sinistra) ----
+% Scende sotto tutto il circuito, poi risale all'ingresso AK.in1
+\coordinate (fbQdown)  at ($(tapQ)+(0,-2.4)$);       % sotto a destra
+\coordinate (fbQleft)  at (-1.4,-2.4);               % sotto a sinistra (sotto la porta AK)
+\coordinate (fbQup)    at (-1.4, -1.22);             % colonna sinistra all'altezza AK.in1
+\draw (tapQ) -- (fbQdown) -- (fbQleft) -- (fbQup) -- (AK.in 1);
 
-\node[below=0.6cm, font=\small] at (1.6,-2.4) {JK Flip-Flop};
+% ---- Feedback Qbar -> AJ.in2 (loop esterno verso sinistra) ----
+% Sale sopra tutto il circuito, poi scende all'ingresso AJ.in2
+\coordinate (fbQbup)   at ($(tapQb)+(0, 2.4)$);      % sopra a destra
+\coordinate (fbQbleft) at (-1.4, 2.4);               % sopra a sinistra (sopra la porta AJ)
+\coordinate (fbQbdown) at (-1.4,  1.22);             % colonna sinistra all'altezza AJ.in2
+\draw (tapQb) -- (fbQbup) -- (fbQbleft) -- (fbQbdown) -- (AJ.in 2);
+
+\node[below=0.6cm, font=\small] at (1.75,-2.8) {JK Flip-Flop};
 \end{circuitikz}
 \end{center}
 
