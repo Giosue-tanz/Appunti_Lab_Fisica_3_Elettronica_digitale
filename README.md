@@ -11,7 +11,6 @@ La repository è composta dai seguenti elementi principali:
 - **`Elettronica digitale .tex`**: Il codice sorgente principale in formato LaTeX contenente l'intero testo degli appunti, la struttura dei capitoli e la sintassi per la generazione degli schemi circuitali (utilizzando i pacchetti `tikz` e `circuitikz`).
 - **`Elettronica digitale .pdf`**: La versione compilata del documento, pronta per la lettura, lo studio o la stampa.
 - **Immagini (`*.png`)**: Vari grafici, figure, schermate e diagrammi che vengono importati direttamente all'interno del sorgente LaTeX.
-- **`Elettronica Digitale CR-1-17.pdf`**: Eventuali dispense o scansioni originali tenute come riferimento o allegato aggiuntivo.
 
 ## 🚀 Compilazione del Documento
 
@@ -36,4 +35,4 @@ pdflatex "Elettronica digitale .tex"
 Se noti errori di battitura, concetti spiegati in modo poco chiaro, o se vuoi espandere una sezione, i contributi sono ben accetti.
 
 ---
-*Appunti curati per il corso di Elettronica Digitale.*
+*Appunti di Elettronica Digitale.*
