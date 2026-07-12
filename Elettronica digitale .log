@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.6.22)  12 JUL 2026 15:39
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.6.22)  12 JUL 2026 15:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1016,7 +1016,7 @@ Capitolo 6.
 <1.png, id=821, 911.65594pt x 298.11375pt>
 File: 1.png Graphic file (type png)
 <use 1.png>
-Package pdftex.def Info: 1.png  used on input line 2831.
+Package pdftex.def Info: 1.png  used on input line 2852.
 (pdftex.def)             Requested size: 455.24411pt x 148.87pt.
  [33 <./1.png>]
 Capitolo 7.
@@ -1027,20 +1027,20 @@ Capitolo 8.
 <img_cascata.png, id=840, 358.33875pt x 225.09094pt>
 File: img_cascata.png Graphic file (type png)
 <use img_cascata.png>
-Package pdftex.def Info: img_cascata.png  used on input line 3169.
+Package pdftex.def Info: img_cascata.png  used on input line 3190.
 (pdftex.def)             Requested size: 386.96027pt x 243.08427pt.
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 3180.
+(hyperref)                removing `math shift' on input line 3201.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 3180.
+(hyperref)                removing `math shift' on input line 3201.
 
 <img_clear.png, id=841, 424.58624pt x 266.49562pt>
 File: img_clear.png Graphic file (type png)
 <use img_clear.png>
-Package pdftex.def Info: img_clear.png  used on input line 3200.
+Package pdftex.def Info: img_clear.png  used on input line 3221.
 (pdftex.def)             Requested size: 236.72888pt x 148.5859pt.
 [37
 
@@ -1048,7 +1048,7 @@ Package pdftex.def Info: img_clear.png  used on input line 3200.
 <img_set.png, id=847, 334.24875pt x 282.30469pt>
 File: img_set.png Graphic file (type png)
 <use img_set.png>
-Package pdftex.def Info: img_set.png  used on input line 3221.
+Package pdftex.def Info: img_set.png  used on input line 3242.
 (pdftex.def)             Requested size: 236.72888pt x 199.94666pt.
  [38 <./img_clear.png> <./img_set.png>] [39] [40]
 Capitolo 9.
@@ -1057,44 +1057,44 @@ Capitolo 9.
 ]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 3545.
+(hyperref)                removing `math shift' on input line 3566.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 3545.
+(hyperref)                removing `subscript' on input line 3566.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 3545.
+(hyperref)                removing `subscript' on input line 3566.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 3545.
+(hyperref)                removing `math shift' on input line 3566.
 
 [42] [43]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 3826.
+(hyperref)                removing `math shift' on input line 3847.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 3826.
+(hyperref)                removing `subscript' on input line 3847.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 3826.
+(hyperref)                removing `math shift' on input line 3847.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 3826.
+(hyperref)                removing `math shift' on input line 3847.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 3826.
+(hyperref)                removing `subscript' on input line 3847.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 3826.
+(hyperref)                removing `math shift' on input line 3847.
 
 [44] [45]
 Capitolo 10.
@@ -1104,47 +1104,47 @@ Capitolo 10.
 <bf.png, id=900, 666.23906pt x 248.42813pt>
 File: bf.png Graphic file (type png)
 <use bf.png>
-Package pdftex.def Info: bf.png  used on input line 4210.
+Package pdftex.def Info: bf.png  used on input line 4231.
 (pdftex.def)             Requested size: 391.51021pt x 145.98755pt.
  [47 <./bf.png>] [48]
 <crl.png, id=912, 429.10312pt x 359.09157pt>
 File: crl.png Graphic file (type png)
 <use crl.png>
-Package pdftex.def Info: crl.png  used on input line 4512.
+Package pdftex.def Info: crl.png  used on input line 4533.
 (pdftex.def)             Requested size: 355.08984pt x 297.15828pt.
  [49 <./crl.png>] [50]
 Capitolo 11.
 
-Overfull \hbox (0.12856pt too wide) in paragraph at lines 4569--4569
+Overfull \hbox (0.12856pt too wide) in paragraph at lines 4590--4590
 |[]\T1/cmr/bx/n/14.4 Conversione Digitale--Analogica e Analogica--Digitale| 
  []
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 4573.
+(hyperref)                removing `math shift' on input line 4594.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\leftrightarrow' on input line 4573.
+(hyperref)                removing `\leftrightarrow' on input line 4594.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 4573.
+(hyperref)                removing `math shift' on input line 4594.
 
 <err_g.png, id=924, 796.47563pt x 453.94594pt>
 File: err_g.png Graphic file (type png)
 <use err_g.png>
-Package pdftex.def Info: err_g.png  used on input line 4649.
+Package pdftex.def Info: err_g.png  used on input line 4670.
 (pdftex.def)             Requested size: 145.68144pt x 83.02972pt.
 <n_lin.png, id=925, 294.34969pt x 243.15843pt>
 File: n_lin.png Graphic file (type png)
 <use n_lin.png>
-Package pdftex.def Info: n_lin.png  used on input line 4650.
+Package pdftex.def Info: n_lin.png  used on input line 4671.
 (pdftex.def)             Requested size: 145.68144pt x 120.34709pt.
 <er_nlin.png, id=926, 363.60844pt x 510.40688pt>
 File: er_nlin.png Graphic file (type png)
 <use er_nlin.png>
-Package pdftex.def Info: er_nlin.png  used on input line 4651.
+Package pdftex.def Info: er_nlin.png  used on input line 4672.
 (pdftex.def)             Requested size: 145.68144pt x 204.5018pt.
 [51
 
@@ -1152,34 +1152,34 @@ Package pdftex.def Info: er_nlin.png  used on input line 4651.
 <err_g2.png, id=940, 424.58624pt x 268.00125pt>
 File: err_g2.png Graphic file (type png)
 <use err_g2.png>
-Package pdftex.def Info: err_g2.png  used on input line 4796.
+Package pdftex.def Info: err_g2.png  used on input line 4817.
 (pdftex.def)             Requested size: 145.68144pt x 91.95345pt.
 <n_lin2.png, id=941, 365.11406pt x 280.79906pt>
 File: n_lin2.png Graphic file (type png)
 <use n_lin2.png>
-Package pdftex.def Info: n_lin2.png  used on input line 4797.
+Package pdftex.def Info: n_lin2.png  used on input line 4818.
 (pdftex.def)             Requested size: 145.68144pt x 112.03912pt.
 <er_nlin2.png, id=942, 737.75626pt x 475.7775pt>
 File: er_nlin2.png Graphic file (type png)
 <use er_nlin2.png>
-Package pdftex.def Info: er_nlin2.png  used on input line 4798.
+Package pdftex.def Info: er_nlin2.png  used on input line 4819.
 (pdftex.def)             Requested size: 145.68144pt x 93.94868pt.
  [53 <./err_g2.png> <./n_lin2.png> <./er_nlin2.png>]
 Capitolo 12.
 <11.png, id=950, 397.485pt x 307.1475pt>
 File: 11.png Graphic file (type png)
 <use 11.png>
-Package pdftex.def Info: 11.png  used on input line 4811.
+Package pdftex.def Info: 11.png  used on input line 4832.
 (pdftex.def)             Requested size: 191.20169pt x 147.74782pt.
 <22.png, id=951, 475.7775pt x 268.75406pt>
 File: 22.png Graphic file (type png)
 <use 22.png>
-Package pdftex.def Info: 22.png  used on input line 4835.
+Package pdftex.def Info: 22.png  used on input line 4856.
 (pdftex.def)             Requested size: 191.20169pt x 108.00412pt.
 <33.png, id=952, 432.11438pt x 270.25969pt>
 File: 33.png Graphic file (type png)
 <use 33.png>
-Package pdftex.def Info: 33.png  used on input line 4861.
+Package pdftex.def Info: 33.png  used on input line 4882.
 (pdftex.def)             Requested size: 191.20169pt x 119.58269pt.
 [54
 
@@ -1194,10 +1194,10 @@ Package rerunfilecheck Info: File `"Elettronica digitale ".out' has not changed
 (rerunfilecheck)             Checksum: A7983256FFBD12E63E77543DC6C13A6A;26782.
  ) 
 Here is how much of TeX's memory you used:
- 50185 strings out of 469515
- 1184518 string characters out of 5470807
- 1874454 words of memory out of 5000000
- 78086 multiletter control sequences out of 15000+600000
+ 50197 strings out of 469515
+ 1184741 string characters out of 5470807
+ 1874686 words of memory out of 5000000
+ 78098 multiletter control sequences out of 15000+600000
  664838 words of font info for 132 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  117i,12n,121p,609b,1267s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1237,7 +1237,7 @@ dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf-dist/fonts/type
 1/public/cm-super/sfss0900.pfb></usr/share/texmf-dist/fonts/type1/public/cm-sup
 er/sfti0900.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb
 ></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb>
-Output written on "Elettronica digitale .pdf" (59 pages, 2285754 bytes).
+Output written on "Elettronica digitale .pdf" (59 pages, 2286473 bytes).
 PDF statistics:
  1240 PDF objects out of 1440 (max. 8388607)
  1045 compressed objects within 11 object streams

@@ -38,7 +38,7 @@
 \renewcommand{\headrulewidth}{0.4pt}
 
 \titleformat{\chapter}[hang]{\Large\bfseries\color{notered}}{Capitolo \thechapter.}{0.5em}{}
-\titleformat{\section}{\large\bfseries\color{notedarkred}}{\thesection}{0.5em}{}
+\titleformat{\section}{\large\bfseries\color{black}}{\thesection}{0.5em}{}
 
 % ---------- COMANDI UTILI ----------
 \newcommand{\defbox}[1]{%
@@ -2200,7 +2200,18 @@ Se invece colleghiamo in anello chiuso un numero \textbf{dispari} di porte NOT, 
 % Feedback superiore pulito
 \node[circle, fill, inner sep=1.5pt] at (tapb) {};
 \draw (tapb) -- ++(0, 1.2) -| (n1.in);
-\node[below, font=\small, color=teal] at (1.25,-0.8) {Circuito Bi-stabile (\# NOT pari)};
+
+% Waveform output
+\begin{scope}[yshift=-2.2cm, xshift=-0.25cm]
+  \draw[->, >=stealth, gray] (0,0) -- (3.2,0) node[right, black, font=\scriptsize] {$t$};
+  \draw[->, >=stealth, gray] (0,0) -- (0,1.2) node[above, black, font=\scriptsize] {$Q(t)$};
+  \draw[thick, red] (0,0.8) -- (3.0,0.8) node[right, font=\scriptsize, color=red] {costante (1)};
+  \draw[thick, red, dashed, opacity=0.4] (0,0.2) -- (3.0,0.2) node[right, font=\scriptsize, opacity=0.6, color=red] {costante (0)};
+  \node[left, font=\tiny] at (0,0.8) {H};
+  \node[left, font=\tiny] at (0,0.2) {L};
+\end{scope}
+
+\node[below, font=\small, color=teal] at (1.25,-2.8) {Circuito Bi-stabile (\# NOT pari)};
 \end{circuitikz}
 \hspace{1cm}
 \begin{circuitikz}[scale=0.9, every node/.style={scale=0.9}]
@@ -2214,7 +2225,17 @@ Se invece colleghiamo in anello chiuso un numero \textbf{dispari} di porte NOT, 
 % Feedback superiore pulito
 \node[circle, fill, inner sep=1.5pt] at (tapo) {};
 \draw (tapo) -- ++(0, 1.2) -| (m1.in);
-\node[below, font=\small, color=teal] at (2.0,-0.8) {Circuito Oscillante (\# NOT dispari)};
+
+% Waveform output
+\begin{scope}[yshift=-2.2cm, xshift=0.3cm]
+  \draw[->, >=stealth, gray] (0,0) -- (4.2,0) node[right, black, font=\scriptsize] {$t$};
+  \draw[->, >=stealth, gray] (0,0) -- (0,1.2) node[above, black, font=\scriptsize] {$Q(t)$};
+  \draw[thick, red] (0,0.8) -- (0.6,0.8) -- (0.6,0.2) -- (1.2,0.2) -- (1.2,0.8) -- (1.8,0.8) -- (1.8,0.2) -- (2.4,0.2) -- (2.4,0.8) -- (3.0,0.8) -- (3.0,0.2) -- (3.6,0.2) -- (3.6,0.8) -- (4.0,0.8) node[right, font=\scriptsize, color=red] {quadra};
+  \node[left, font=\tiny] at (0,0.8) {H};
+  \node[left, font=\tiny] at (0,0.2) {L};
+\end{scope}
+
+\node[below, font=\small, color=teal] at (2.2,-2.8) {Circuito Oscillante (\# NOT dispari)};
 \end{circuitikz}
 \end{center}
 
