@@ -5,13 +5,14 @@
 \usepackage[T1]{fontenc}
 \usepackage[italian]{babel}
 \usepackage{amsmath,amssymb}
+\usepackage{cancel}
 \usepackage{circuitikz}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,calc,positioning}
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{geometry}
-\usepackage{xcolor}
+\usepackage[table]{xcolor}
 \usepackage{textcomp}
 \usepackage{enumitem}
 \usepackage{adjustbox}
@@ -2269,27 +2270,61 @@ Il Latch più semplice (Latch SR, \emph{Set-Reset}) nasce dall'evoluzione del ci
 \end{circuitikz}
 \end{center}
 
-\noindent \textbf{Funzionamento e Tabella di verità del Latch NOR}
+\noindent \textbf{Funzionamento e Tabella di verità del Latch SR con porte NOR}
 
-Chiamiamo le uscite $Q$ e $\overline{Q}$. Lo stato attuale è indicato come $Q_{old}$, mentre il nuovo stato che il circuito assume è $Q_{new}$.
+\smallskip
+\noindent Le uscite sono $Q$ e $\overline{Q}$. Il pedice $n$ indica lo stato \emph{attuale} del latch (prima che gli ingressi cambino), mentre $n{+}1$ indica il nuovo stato che il circuito assumerà.
 
 \begin{center}
-\begin{tabular}{cc|cc|l}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{>{{\centering}}m{0.8cm}>{{\centering}}m{0.8cm}|>{{\centering}}m{1.5cm}>{{\centering}}m{1.5cm}|l}
 \toprule
-$R$ & $S$ & $Q_{new}$ & $\overline{Q}_{new}$ & \textbf{Comportamento}\\
+$R$ & $S$ & $Q_{n+1}$ & $\overline{Q}_{n+1}$ & \textbf{Comportamento}\\
 \midrule
-0 & 0 & $Q_{old}$ & $\overline{Q}_{old}$ & \textbf{MEMORIA} (HOLD)\\
-0 & 1 & 1 & 0 & \textbf{SET}\\
-1 & 0 & 0 & 1 & \textbf{RESET}\\
-1 & 1 & 0 & 0 & \textbf{STATO PROIBITO}\\
+$0$ & $0$ & $Q_n$ & $\overline{Q}_n$ & \textcolor{teal}{\textbf{MEMORIA}} (stato mantenuto)\\
+$0$ & $1$ & $1$ & $0$ & \textcolor{teal}{\textbf{SET}} — forza $Q=1$\\
+$1$ & $0$ & $0$ & $1$ & \textcolor{teal}{\textbf{RESET}} — forza $Q=0$\\
+\rowcolor{red!8} $1$ & $1$ & $0$ & $0$ & \textcolor{red!70!black}{\textbf{PROIBITO} — $Q=\overline{Q}=0$, uscita incoerente}\\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Stato di Memoria ($R=0, S=0$):} In assenza di segnali di controllo, le porte NOR si comportano come semplici porte NOT, ricreando il circuito bistabile in anello chiuso. Il dato viene mantenuto in loop all'infinito.
-    \item \textbf{Stato di Set / Reset ($R=0, S=1$ oppure $R=1, S=0$):} Un segnale $1$ all'ingresso di una porta NOR forza istantaneamente la sua uscita a $0$. Questo $0$ si propaga all'ingresso dell'altra porta NOR che, avendo ora entrambi gli ingressi a $0$, porterà la sua uscita a $1$. Il circuito "scatta" stabilmente nel nuovo stato.
-    \item \textbf{Stato Proibito ($R=1, S=1$):} Costringe entrambe le porte NOR a dare in uscita $0$. Non solo si perde la coerenza logica (le due uscite non sono più complementari), ma se si riportano simultaneamente gli ingressi a $0$ ($R=0, S=0$), il circuito entra in uno stato transitorio \textbf{metastabile}. Poiché entrambe le porte cercheranno di passare a $1$, il risultato finale dipenderà da minime differenze costruttive e ritardi di propagazione, rendendo l'uscita imprevedibile (o addirittura innescando una temporanea oscillazione).
+\noindent Di seguito viene spiegato il meccanismo fisico di ogni stato, seguendo il percorso del segnale attraverso le due porte NOR incrociate.
+
+\begin{itemize}[leftmargin=1.5em, itemsep=4pt]
+
+    \item \textcolor{teal}{\textbf{Memoria ($R=0,\;S=0$)}}\quad
+    Con entrambi gli ingressi a $0$, ogni porta NOR ha un solo ingresso attivo: quello proveniente
+    dall'uscita dell'altra porta (\emph{cross-coupling}). Il circuito si comporta esattamente come
+    un anello di due invertitori: qualunque stato ($Q=0$ o $Q=1$) è auto-consistente e viene
+    mantenuto indefinitamente. \textbf{Non avviene nessun cambiamento}: il bit memorizzato rimane
+    intatto.
+
+    \item \textcolor{teal}{\textbf{Set ($R=0,\;S=1$)}}\quad
+    L'ingresso $S=1$ forza l'uscita della porta NOR inferiore a $0$
+    ($\overline{Q}\to 0$), indipendentemente dal suo secondo ingresso di feedback.
+    Questo $0$ si propaga alla porta NOR superiore, la quale ha ora \emph{entrambi} gli ingressi
+    a $0$ ($R=0$ e il feedback $\overline{Q}=0$), quindi porta la sua uscita a
+    $Q\to 1$. Il latch si \textbf{stabilizza} nello stato $Q=1$, $\overline{Q}=0$.
+
+    \item \textcolor{teal}{\textbf{Reset ($R=1,\;S=0$)}}\quad
+    Simmetrico al caso precedente: $R=1$ forza l'uscita della porta NOR superiore a $0$
+    ($Q\to 0$). Questo $0$ raggiunge la porta NOR inferiore che, con entrambi gli ingressi
+    a $0$ ($S=0$ e il feedback $Q=0$), porta $\overline{Q}\to 1$.
+    Il latch si \textbf{stabilizza} nello stato $Q=0$, $\overline{Q}=1$.
+
+    \item \textcolor{red!70!black}{\textbf{Stato proibito ($R=1,\;S=1$)}}\quad
+    Con entrambi gli ingressi a $1$, \emph{entrambe} le porte NOR vengono forzate
+    a $0$: $Q=0$ e $\overline{Q}=0$. Questo viola il requisito fondamentale del latch,
+    ovvero che le uscite siano sempre complementari. Ancora più grave è ciò che accade
+    se si riportano poi $R$ e $S$ a $0$ simultaneamente: entrambe le porte
+    tenteranno di portare la propria uscita a $1$ nello stesso istante.
+    Il risultato finale dipenderà da infinitesime differenze nei ritardi di propagazione
+    e nelle caratteristiche costruttive dei transistor, rendendo l'uscita
+    \textbf{imprevedibile} e potenzialmente causando una \emph{metastabilità} o
+    un'oscillazione transitoria. Per questo motivo la combinazione $R=S=1$ è da
+    evitare sempre.
+
 \end{itemize}
 % ======================================================================
 % Continuazione pagina 6 (10/04/2026)
@@ -2297,38 +2332,96 @@ $R$ & $S$ & $Q_{new}$ & $\overline{Q}_{new}$ & \textbf{Comportamento}\\
 
 \subsection{Latch RS con NOR: funzione caratteristica}
 
-Analizziamo la \textbf{funzione di trasferimento} del latch RS realizzato con porte NOR.
-Partendo dall'uscita della prima porta:
+\noindent In questa sezione ricaviamo \emph{algebricamente} l'equazione che governa il latch con porte NOR.
+Il procedimento si basa sull'analisi del \textbf{circuito equivalente}, in cui l'anello di retroazione viene idealmente interrotto per studiare la propagazione dei segnali da un istante $t$ all'istante successivo $t+\Delta t$.
 
+\medskip
+\noindent\textbf{1. Costruzione dell'equazione dal circuito equivalente.}
+Seguendo il percorso dei segnali nel circuito equivalente:
+\begin{itemize}[leftmargin=1.5em]
+    \item La prima porta NOR riceve come ingressi il segnale $S$ e lo stato attuale $Q(t)$ proveniente dalla retroazione. Il suo risultato è l'uscita complementata al tempo $t$, ovvero $\overline{Q}(t)$:
+    \[ \overline{Q}(t) = \overline{S + Q(t)} \]
+    \item La seconda porta NOR riceve l'ingresso $R$ e il segnale appena calcolato $\overline{Q}(t)$. Il suo risultato è il nuovo stato del latch, $Q(t+\Delta t)$:
+    \[ Q(t+\Delta t) = \overline{ R + \overline{Q}(t) } \]
+\end{itemize}
+Sostituendo la prima espressione nella seconda, si ottiene l'equazione di partenza completa:
 \[
-Q(t+\Delta t)
-  = \overline{R + \overline{\bigl(S + Q(t)\bigr)}}
-  = \overline{R}\,S + \overline{R}\,Q(t) + \overline{R\!S}
+Q(t+\Delta t) = \overline{ R + (\overline{S + Q(t)}) }
 \]
 
-\noindent Il termine $\overline{RS}$ rappresenta lo \emph{stato proibito} (circolo evidenziato negli
-appunti). Poiché $RS=1$ non può mai verificarsi in condizioni normali, si può scrivere la
-\textbf{funzione caratteristica del latch RS con NOR}:
+\medskip
+\noindent\textbf{2. Semplificazione con la variabile ausiliaria $A$.}
+Per semplificare la derivazione, introduciamo una sostituzione di variabile. Chiamiamo $A$ l'espressione all'interno della negazione più interna:
+\[
+A = S + Q(t) \quad \implies \quad \overline{A} = \overline{S + Q(t)}
+\]
+Riscrivendo l'equazione principale con questa sostituzione otteniamo:
+\[
+Q(t+\Delta t) = \overline{ R + \overline{A} }
+\]
+Ora applichiamo il teorema di De Morgan ($\overline{X + Y} = \overline{X} \cdot \overline{Y}$), trasformando la negazione di una somma logica in un prodotto logico di negazioni:
+\[
+Q(t+\Delta t) = \overline{R} \cdot \overline{\overline{A}} = \overline{R} \cdot A
+\]
 
+\medskip
+\noindent\textbf{3. Espansione e utilizzo dello stato inutilizzato.}
+Tornando all'espressione estesa (sostituendo nuovamente $A = S + Q(t)$), ricaviamo:
+\[
+Q(t+\Delta t) = \overline{R} \cdot (S + Q(t)) = \overline{R}S + \overline{R}Q(t)
+\]
+Introduciamo un termine aggiuntivo sfruttando il fatto che la combinazione d'ingresso $R=1$ e $S=1$ rappresenta uno stato non utilizzato (stato proibito).
+Dalla tabella di verità sappiamo infatti che tale condizione non deve mai verificarsi durante il normale funzionamento, il che implica che il prodotto logico dei due ingressi sia nullo:
+\[
+RS = 0
+\]
+Per le leggi dell'algebra booleana, sommare $0$ a un'espressione non ne altera il valore ($X+0=X$). Possiamo quindi aggiungere il termine $RS$ all'equazione per facilitare il successivo raccoglimento:
+\[
+Q(t+\Delta t) = \overline{R}S + \overline{R}Q(t) + RS
+\]
+
+\medskip
+\noindent\textbf{4. Raccoglimento e formula finale.}
+Riordinando i termini e raccogliendo a fattor comune la variabile $S$ tra il primo e il terzo addendo:
+\[
+Q(t+\Delta t) = S(\overline{R} + R) + \overline{R}Q(t)
+\]
+Poiché la somma logica di una variabile col suo complemento vale sempre $1$ ($\overline{R} + R = 1$), l'espressione si riduce a:
+\[
+Q(t+\Delta t) = S \cdot (1) + \overline{R}Q(t)
+\]
+Si ricava in questo modo la \textbf{funzione caratteristica del latch RS}:
 \[
 \boxed{Q(t+\Delta t) = S + \overline{R}\,Q(t)}
 \]
 
+\noindent\textit{Lettura intuitiva della formula}: il nuovo stato $Q(t+\Delta t)$ si porta a $1$ se viene richiesto un Set ($S=1$), oppure se non viene richiesto un Reset ($\overline{R}=1$) \emph{e} il circuito si trovava già nello stato $1$ ($Q(t)=1$, mantenimento in memoria).
+
+\medskip
+\noindent\textbf{Verifica della formula sulle quattro combinazioni:}
+
 \begin{center}
-\begin{tabular}{cc|cc|l}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{>{\centering}m{0.8cm}>{\centering}m{0.8cm}|>{\centering}m{2.2cm}|>{\centering}m{1.5cm}>{\centering}m{1.8cm}|l}
 \toprule
-$R$ & $S$ & $Q(t+\Delta t)$ & $\overline{Q}(t+\Delta t)$ & \\
+$R$ & $S$ & Formula $S+\overline{R}\,Q(t)$ & $Q(t{+}\Delta t)$ & $\overline{Q}(t{+}\Delta t)$ & \textbf{Stato}\\
 \midrule
-0 & 0 & $Q(t)$   & $\overline{Q}(t)$   & HOLD    \\
-0 & 1 & 1        & 0                   & SET     \\
-1 & 0 & 0        & 1                   & RESET   \\
-1 & 1 & 0        & 0                   & (PROIBITO) \\
+$0$ & $0$ & $0 + 1\cdot Q(t) = Q(t)$         & $Q(t)$  & $\overline{Q}(t)$ & \textcolor{teal}{\textbf{HOLD}}\\
+$0$ & $1$ & $1 + 1\cdot Q(t) = 1$             & $1$     & $0$               & \textcolor{teal}{\textbf{SET}}\\
+$1$ & $0$ & $0 + 0\cdot Q(t) = 0$             & $0$     & $1$               & \textcolor{teal}{\textbf{RESET}}\\
+\rowcolor{red!8}$1$ & $1$ & $1 + 0\cdot Q(t) = 1$\;$^*$    & $0$\;$^*$ & $0$\;$^*$     & \textcolor{red!70!black}{\textbf{PROIBITO}}\\
 \bottomrule
 \end{tabular}
 \end{center}
 
-Il circuito corrispondente (due NAND con feedback incrociato, ingressi $Q(t)$, $S$ e $R$) è
-mostrato di seguito insieme alla variante con porte NAND:
+{\small $^*$ Con $R=S=1$ la formula darebbe $Q=1$, ma fisicamente il circuito forza
+\emph{entrambe} le uscite a $0$ (la condizione $R=1$ prevale sulla porta NOR superiore):
+è un'incoerenza che conferma il divieto d'uso di questa combinazione.}
+
+\bigskip
+\noindent\textbf{Schema circuitale e variante NAND.}
+I due schemi seguenti mostrano il latch con porte NOR (a sinistra) e la sua
+variante con porte NAND (a destra).
 
 \begin{center}
 \begin{circuitikz}[scale=0.88, every node/.style={scale=0.88}]
@@ -2378,16 +2471,24 @@ mostrato di seguito insieme alla variante con porte NAND:
 \end{circuitikz}
 \end{center}
 
-\noindent Nel latch con porte \textbf{NAND}, la stessa tabella vale scegliendo $\overline{R}$ e
-$\overline{S}$ come ingressi al posto di $R$ e $S$.
+\noindent\textbf{Differenza tra versione NOR e versione NAND.}
+Nel latch con porte \textbf{NAND} gli ingressi attivi sono \emph{bassi} anziché alti:
+$\overline{S}=0$ attiva il Set e $\overline{R}=0$ attiva il Reset (logica \emph{active-low}).
+La funzione caratteristica ha la stessa forma, ma riscritta con gli ingressi complementati:
+\[
+Q(t+\Delta t) = \overline{S} + R\,Q(t)
+\quad\Longleftrightarrow\quad
+\text{(in termini di }S\text{ e }R\text{):}\;
+Q(t+\Delta t) = S + \overline{R}\,Q(t)
+\]
+Lo \textbf{stato proibito} per la versione NAND è $\overline{R}=\overline{S}=0$
+(cioè $R=S=1$ in logica active-high), per gli stessi motivi visti sopra.
 
 % ======================================================================
 \subsection{Latch RS con abilitazione (Enable)}
 % ======================================================================
 
-I circuiti visti finora non hanno un'\textbf{abilitazione}: non c'è modo di rendere il circuito
-insensibile agli ingressi. Si introduce il segnale $E$ (Enable) mediante due porte NAND
-aggiuntive ($\overline{S_1}$ e $\overline{R_1}$):
+I circuiti visti finora sono sempre attivi: ogni variazione degli ingressi si ripercuote immediatamente sulle uscite. Per poter controllare \emph{quando} il circuito deve accettare nuovi dati, si introduce un segnale di abilitazione $E$ (Enable) aggiungendo due porte NAND in ingresso:
 
 \begin{center}
 \begin{circuitikz}[scale=0.88, every node/.style={scale=0.88}]
@@ -2427,12 +2528,10 @@ aggiuntive ($\overline{S_1}$ e $\overline{R_1}$):
 \end{circuitikz}
 \end{center}
 
-\begin{itemize}[leftmargin=1.5em]
-  \item Se $E=0$: $SE = RE = 0 \;\Rightarrow\; \overline{S_1}=\overline{R_1}=1 \;\Rightarrow\;$
-        \textbf{HOLD} (circuito insensibile agli ingressi).
-  \item Se $E=1$: $\overline{S_1}=\overline{S}$ e $\overline{R_1}=\overline{R}$
-        $\Rightarrow$ circuito \textbf{abilitato}. Rimane però il problema dello
-        \textbf{stato proibito} ($R=S=1$).
+Il comportamento del circuito dipende dal livello del segnale di abilitazione:
+\begin{itemize}[leftmargin=1.5em,itemsep=4pt]
+  \item \textcolor{teal}{\textbf{Se $E=0$ (HOLD):}} Le due porte NAND di ingresso sono forzate a dare $1$ in uscita, quindi $\overline{S_1}=\overline{R_1}=1$. Per il Latch NAND a valle, ricevere un doppio $1$ in ingresso significa "mantieni lo stato". Qualsiasi cambiamento sui pin $R$ o $S$ viene bloccato e ignorato: il circuito è \textbf{isolato} e conserva la memoria.
+  \item \textcolor{teal}{\textbf{Se $E=1$ (TRASPARENTE):}} Le porte NAND di ingresso si comportano come semplici invertitori per i segnali $S$ e $R$. Il circuito funziona esattamente come il normale Latch SR visto in precedenza. Purtroppo, essendo attivo, rimane il difetto dello \textbf{stato proibito} se $R=S=1$.
 \end{itemize}
 
 \noindent\textbf{Funzione caratteristica del latch RS con abilitazione}:
@@ -2444,38 +2543,36 @@ aggiuntive ($\overline{S_1}$ e $\overline{R_1}$):
 \subsection{Latch di tipo D}
 % ======================================================================
 
-Per eliminare lo stato proibito si inserisce un \textbf{invertitore} tra $S$ e $R$, in modo che
-$R=\overline{D}$ sia sempre il complemento di $S=D$: nasce il \textbf{latch D} (Data).
+Per evitare definitivamente il rischio di finire nello stato proibito ($R=1, S=1$), si vincolano i due ingressi in modo che siano sempre l'uno il complemento dell'altro. Inserendo un \textbf{invertitore} tra il ramo superiore e quello inferiore, si ottiene un unico ingresso chiamato $D$ (Data). Così facendo, la combinazione proibita è fisicamente impossibile.
 
 \begin{center}
-\begin{circuitikz}[scale=0.88, every node/.style={scale=0.88}]
+\begin{circuitikz}[scale=0.9, every node/.style={scale=0.9}]
 % ---- stadio di abilitazione ----
 \node[nand port] (GS1) at (0, 1.5)  {};
 \node[nand port] (GR1) at (0,-1.5)  {};
 
-% ---- invertitore sul percorso D -> R ----
-% Posizionato per allineare l'uscita con GR1.in 2 (Y=-1.78)
-\node[not port, scale=0.75] (INV) at (-2.0, -1.78) {};
+% Nodo per D e invertitore
+\coordinate (D_branch) at ($(GS1.in 1) + (-1.2, 0)$);
+\draw (D_branch) ++(-0.8, 0) node[left] {$D$} -- (GS1.in 1);
+\node[circle, fill, inner sep=1.2pt] at (D_branch) {};
 
-% D entra direttamente in GS1.in1 e, invertito, in GR1.in2
-\draw (GS1.in 1) -- ++(-2.8, 0) node[left]{$D$};
-\node[circle, fill, inner sep=1.2pt] at ($(GS1.in 1)+(-2.5,0)$) {};
-\draw ($(GS1.in 1)+(-2.5,0)$) |- (INV.in 1);
-\draw (INV.out) -- (GR1.in 2);
+\node[not port, rotate=-90, scale=0.8] (INV) at ($(D_branch) + (0, -1.5)$) {};
+\draw (D_branch) -- (INV.in);
+\draw (INV.out) |- (GR1.in 2);
 
-% E (Enable) entra in GS1.in 2 e GR1.in 1
-\draw (GS1.in 2) -- ++(-0.8,0) coordinate (eTop);
-\draw (GR1.in 1) -- ++(-0.8,0) coordinate (eBot);
-\draw (eTop) -- (eBot);
-\node[circle, fill, inner sep=1.2pt] at ($(eTop)!0.5!(eBot)$) {};
-\draw ($(eTop)!0.5!(eBot)$) -- ++(-1.6, 0) node[left]{$E$};
+% Nodo per E riposizionato sulla destra del filo verticale
+\coordinate (E_vert) at ($(GS1.in 2) + (-0.7, 0)$);
+\coordinate (E_split) at (E_vert |- 0,0);
+\draw (E_split) -- ++(0.5, 0) node[right] {$E$};
+\draw (E_split) -- (E_vert) -- (GS1.in 2);
+\draw (E_split) -- (E_vert |- GR1.in 1) -- (GR1.in 1);
 
 % ---- stadio di uscita ----
 \node[nand port] (GQ)  at (3.5, 1.0) {};
 \node[nand port] (GQb) at (3.5,-1.0) {};
 
-\draw (GS1.out) -- (GQ.in 1)  node[midway,above,font=\scriptsize]{$\overline{S_1}$};
-\draw (GR1.out) -- (GQb.in 2) node[midway,below,font=\scriptsize]{$\overline{R_1}$};
+\draw (GS1.out) -- (GQ.in 1)  node[midway,above,font=\small]{$\overline{S_1}$};
+\draw (GR1.out) -- (GQb.in 2) node[midway,below,font=\small]{$\overline{R_1}$};
 
 \draw (GQ.out) -- ++(0.4,0) coordinate (tap1) -- ++(1.0,0) node[right]{$Q$};
 \draw (GQb.out) -- ++(0.4,0) coordinate (tap2) -- ++(1.0,0) node[right]{$\overline{Q}$};
@@ -2487,38 +2584,43 @@ $R=\overline{D}$ sia sempre il complemento di $S=D$: nasce il \textbf{latch D} (
 \draw (tap1) -- ($(GQb.in 1)+(-0.4,0)$) -- (GQb.in 1);
 \draw (tap2) -- ($(GQ.in 2)+(-0.4,0)$) -- (GQ.in 2);
 
-\node[below=0.8cm, font=\small] at (1.75,-2.5) {Latch di tipo D};
 \end{circuitikz}
 \end{center}
 
+Il funzionamento è estremamente semplice ed efficace:
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item Se $E=1$: l'uscita $Q$ \textbf{copia esattamente} l'ingresso $D$ (il circuito è detto "trasparente").
+  \item Se $E=0$: il circuito si isola e \textbf{mantiene in memoria} l'ultimo valore che $D$ possedeva un attimo prima che $E$ andasse a zero.
+\end{itemize}
+
 \noindent\textbf{Funzione di trasferimento del latch D}:
 \[
-\boxed{Q(t+\Delta t) = DE + D\,Q(t) + \overline{E}\,Q(t)}
+\boxed{Q(t+\Delta t) = DE + \overline{E}\,Q(t)}
 \]
+\emph{(Nota: avendo vincolato $R=\overline{D}$ e $S=D$, l'equazione si è semplificata. La lettura è letterale: se $E$ è attivo prelievo il Dato $D$, altrimenti mantengo in memoria $Q(t)$).}
 
 % ======================================================================
 \subsection{Latch e Flip-Flop: differenza fondamentale}
 % ======================================================================
 
+Per progettare sistemi digitali sequenziali in modo robusto, è cruciale non confondere mai questi due dispositivi:
+
 \defbox{
-\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
-  \item \textbf{Latch} = sensibile a un \emph{livello} del segnale;
-        segnale di controllo: $E$ (Enable).
-  \item \textbf{Flip-Flop} = sensibile a un \emph{fronte} del segnale;
-        segnale di controllo: $C$ (Clock).
+\begin{itemize}[leftmargin=1.5em,itemsep=4pt]
+  \item \textbf{LATCH (sensibile a \emph{livello}):} Si comporta come una \textbf{porta}. Finché il segnale di abilitazione è alto (es. $E=1$), la porta è "aperta" e i cambiamenti dell'ingresso attraversano liberamente il circuito fino in uscita (comportamento trasparente). Quando l'Enable si abbassa ($E=0$), la porta si chiude isolando l'uscita, che memorizza così l'ultimo dato transitato.
+  \item \textbf{FLIP-FLOP (sensibile a \emph{fronte}):} Si comporta come una \textbf{macchina fotografica}. L'ingresso viene campionato e trasferito in uscita \emph{esclusivamente} in quell'istante infinitesimo in cui il segnale di controllo (Clock) effettua la transizione, ad esempio da $0$ a $1$ (fronte di salita). Per tutto il resto del tempo, sia se il clock è stabilmente alto che basso, l'uscita rimane "congelata" sul fotogramma memorizzato e ignora l'ingresso.
 \end{itemize}
 }
 
-\noindent\textit{Convenzione simbolica}: se non si mette il simbolo $\triangleright$, ci si
-riferisce al livello; se lo si mette, ci si riferisce al fronte.
+\noindent\textit{Convenzione simbolica}: Negli schemi circuitali, se l'ingresso di controllo non riporta segni particolari, si tratta di un Latch (sensibile al livello). Se invece l'ingresso riporta un triangolino ($\triangleright$), si tratta di un Flip-Flop (sensibile al fronte).
 
 % ======================================================================
 \subsection{Tecnica master-slave}
 % ======================================================================
 
-Per realizzare un flip-flop sensibile al fronte si cascadano due latch: il \textbf{master}
-(latch D) riceve $E$, lo \textbf{slave} (latch RS) riceve $E'=\overline{E}$ attraverso un
-invertitore. Le uscite intermedie del master sono $P$ e $\overline{P}$.
+Per convertire un circuito sensibile al livello (Latch) in uno sensibile al fronte (Flip-Flop), un approccio classico è la struttura \textbf{Master-Slave}. Essa consiste nel mettere in cascata due Latch comandati da segnali di clock opposti tra loro.
+
+Il primo Latch (il \textbf{master}) è pilotato dal segnale di clock originario $E$, mentre il secondo (lo \textbf{slave}) riceve la sua versione negata $E'=\overline{E}$ tramite un invertitore. Le variabili intermedie di collegamento prendono il nome di $P$ e $\overline{P}$.
 
 \begin{center}
 \begin{circuitikz}[scale=0.85, every node/.style={scale=0.85}]
@@ -2551,7 +2653,18 @@ invertitore. Le uscite intermedie del master sono $P$ e $\overline{P}$.
 \end{circuitikz}
 \end{center}
 
-\noindent I due simboli equivalenti del flip-flop master-slave (a seconda del fronte attivo):
+\noindent\textbf{Dinamica di funzionamento del sistema master-slave:}
+Il segreto di questo sistema risiede nel non far mai incontrare ingresso ed uscita in modo diretto. I due latch lavorano a fasi alternate:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=4pt]
+  \item \textbf{Fase di Caricamento (E=1):} Il master è trasparente e aggiorna continuamente il proprio stato $P$ copiando l'ingresso $D$. Lo slave, invece, avendo $E'=0$, è rigorosamente disabilitato e \textbf{congela l'uscita} globale $Q$ allo stato precedente.
+  \item \textbf{Transizione e Memorizzazione ($E$ scende a $0$):} Nell'istante esatto del fronte di discesa, il master si disabilita catturando definitivamente l'ultimo valore di $D$ sul nodo $P$. Immediatamente dopo, lo slave si risveglia ($E'$ sale a $1$) copiando il valore appena congelato da $P$ sull'uscita finale $Q$.
+  \item \textbf{Fase di Isolamento (E=0):} Il master è ormai opaco alle variazioni di $D$. Lo slave, pur essendo trasparente rispetto a $P$, non fa altro che riconfermare il dato $Q$, dato che $P$ non può più cambiare.
+\end{itemize}
+
+Come risultato macroscopico, il passaggio da $D$ a $Q$ si realizza \textbf{esclusivamente nel brevissimo istante in cui $E$ si spegne}. Abbiamo ottenuto a tutti gli effetti un Flip-Flop sensibile al fronte di discesa (falling-edge).
+
+\noindent I due simboli equivalenti del flip-flop master-slave, differenziati per il fronte su cui lavorano attivamente:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.88, every node/.style={scale=0.88}]
@@ -2583,15 +2696,14 @@ invertitore. Le uscite intermedie del master sono $P$ e $\overline{P}$.
 \end{tikzpicture}
 \end{center}
 
-\noindent Comportamento del sistema master-slave:
+\medskip
+\noindent\textcolor{teal}{\textbf{Cosa succede se togliamo l'invertitore (NOT)?}}\\
+Senza l'inverter, sia il master che lo slave riceverebbero lo stesso segnale $E$ contemporaneamente, vanificando tutto:
 \begin{itemize}[leftmargin=1.5em,itemsep=2pt]
-  \item $E=1 \;\Rightarrow\; E'=0 \;\Rightarrow\; Q=\text{cte}$
-        (slave bloccato; master segue $D$).
-  \item $E=0 \;\Rightarrow\; E'=1,\; S=\overline{R}=P \;\Rightarrow\; Q=\text{cte}$
-        (master bloccato; slave propaga $P$).
-  \item $E\!\uparrow \;\Rightarrow\; E'\!\downarrow \;\Rightarrow\; Q=\text{cte}$.
-  \item $E\!\downarrow \;\Rightarrow\; E'\!\uparrow \;\Rightarrow\; Q$ cambia e diventa $D$.
+  \item Quando $E=1$, entrambi i Latch diventerebbero trasparenti nello stesso istante. Il segnale $D$ fluirebbe senza ostacoli attraverso il master, passerebbe per $P$ e attraverserebbe immediatamente lo slave arrivando a $Q$. L'intero circuito agirebbe come un banale Latch D trasparente, perdendo del tutto la preziosa sensibilità al fronte.
+  \item Quando $E=0$, entrambi i Latch si chiuderebbero e isolerebbero simultaneamente.
 \end{itemize}
+L'inverter è quindi il vero \emph{segreto} del sistema: garantendo che i due Latch non siano \textbf{mai trasparenti contemporaneamente}, li forza a passarsi il dato come in una staffetta, permettendo al segnale di raggiungere l'uscita solo nell'esatto istante della commutazione.
 
 % ======================================================================
 % Pagina 7 (13/04/2026)
@@ -2599,8 +2711,7 @@ invertitore. Le uscite intermedie del master sono $P$ e $\overline{P}$.
 
 \section{Tecnica trigger-edge}
 
-La \textbf{tecnica trigger-edge} è un'alternativa al master-slave: il flip-flop cambia stato
-solo in corrispondenza di un preciso fronte del clock, grazie ad una rete di cinque porte NAND.
+La \textbf{tecnica trigger-edge} (sensibile al fronte) rappresenta l'architettura standard per i moderni Flip-Flop integrati. Al posto dell'approccio master-slave (che usa due stadi in cascata), questa tecnica impiega una singola rete fortemente interconnessa, tipicamente formata da cinque porte NAND (o NOR).
 
 \begin{center}
 \begin{circuitikz}[scale=0.88, every node/.style={scale=0.88}]
@@ -2652,10 +2763,10 @@ solo in corrispondenza di un preciso fronte del clock, grazie ad una rete di cin
 \end{circuitikz}
 \end{center}
 
+Il segreto di questo circuito sta nell'autobloccaggio delle porte:
 \begin{itemize}[leftmargin=1.5em,itemsep=2pt]
-  \item Sul \textbf{fronte di discesa} del CLK ($1\to 0$): $Q$ acquisisce il valore di $D$ e
-        $\overline{Q}$ quello di $\overline{D}$.
-  \item Se $D$ cambia mentre CLK è a regime (livello stabile), l'uscita \textbf{resta costante}.
+  \item Solo durante la brevissima transizione del \textbf{fronte attivo} (in questo schema, il fronte di discesa $1\to 0$ del CLK) il percorso dati si apre, permettendo a $D$ di pilotare il latch di uscita ($Q$ e $\overline{Q}$).
+  \item Per tutto il resto del tempo, sia quando il CLK è stabilmente a $0$ sia quando è stabilmente a $1$, la complessa rete di feedback interni forza gli ingressi del latch finale ($S_1, R_1$) allo stato di riposo, mantenendo l'uscita in memoria e ignorando totalmente le variazioni di $D$.
 \end{itemize}
 
 \noindent\textit{Riferimento laboratorio}: pag.\ 9–10–11–12 di
@@ -2667,16 +2778,16 @@ solo in corrispondenza di un preciso fronte del clock, grazie ad una rete di cin
 
 \textit{(13/04/2026)}
 
-\defbox{
-  \textbf{Funzionamento sincrono} $=$ i cambi di stato delle uscite avvengono sul
-  \emph{fronte} del clock.
-}
+In un sistema sequenziale pratico, è quasi sempre necessario poter forzare un dispositivo in uno stato noto (es. azzerarlo all'accensione del sistema) senza dover aspettare il battito del clock. Per questo motivo, molti Flip-Flop integrano due tipologie di ingressi contemporaneamente:
 
 \defbox{
-  \textbf{Funzionamento asincrono} $=$ le uscite \emph{non} dipendono dal valore del clock.
+\begin{itemize}[leftmargin=1.5em,itemsep=4pt]
+  \item \textbf{Ingressi SINCRONI (es. Data $D$, Clock $C$):} obbediscono rigidamente alla tempistica del circuito. Un ingresso sincrono ($D$) viene letto ed applicato alle uscite \emph{esclusivamente} durante il fronte attivo del clock.
+  \item \textbf{Ingressi ASINCRONI (es. Preset/Set, Clear/Reset):} agiscono come \textbf{comandi di emergenza} o priorità assoluta. Appena vengono attivati, scavalcano totalmente la logica sincrona forzando le uscite istantaneamente, a prescindere da cosa stiano facendo il clock e l'ingresso $D$.
+\end{itemize}
 }
 
-\noindent Nel flip-flop D con ingressi misti (tipico delle logiche TTL):
+\noindent Esempio di un Flip-Flop D commerciale con ingressi misti (tipico delle logiche TTL):
 
 \begin{center}
 \begin{circuitikz}[scale=0.88, every node/.style={scale=0.88}]
@@ -2701,161 +2812,144 @@ solo in corrispondenza di un preciso fronte del clock, grazie ad una rete di cin
 \end{circuitikz}
 \end{center}
 
-\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
-  \item $D$ è \textbf{sincrono} al clock.
-  \item $R$ e $S$ sono \textbf{asincroni} in logica TTL (agiscono indipendentemente dal clock).
-\end{itemize}
+In questo simbolo, $D$ viene campionato solo sul fronte di $C$, mentre l'attivazione di $S$ (Set) o $R$ (Reset) forzerà immediatamente l'uscita indipendentemente dal clock.
 
 % ======================================================================
 \section{JK Flip-Flop}
 \label{sec:jk_ff}
 % ======================================================================
 
-Il \textbf{JK flip-flop} è ottenuto da un latch RS aggiungendo due porte AND che moltiplicano
-gli ingressi $J$ e $K$ per i feedback di $\overline{Q}$ e $Q$ rispettivamente:
-$S = J\overline{Q}_n$ e $R = KQ_n$.
+Il Flip-Flop (o Latch) RS originale ha un grave difetto: lo stato $R=1, S=1$ è proibito, poiché forza le uscite in uno stato incoerente. Il Flip-Flop di tipo D risolve il problema unendo gli ingressi tramite un invertitore, ma così facendo sacrifica la flessibilità di poter comandare il Set e il Reset in modo indipendente.
+
+Il \textbf{Flip-Flop JK} risolve il problema alla radice, mantenendo due ingressi separati ($J$ per il Set e $K$ per il Reset) e introducendo un \textbf{incrocio (feedback) dalle uscite verso gli ingressi}. Questo si ottiene anteponendo due porte AND al nucleo RS centrale.
+
+\medskip
+\noindent\textbf{Il principio dell'auto-disabilitazione.}
+Il trucco logico del Flip-Flop JK sta nell'usare le uscite stesse per "spegnere" i comandi ridondanti:
+\begin{itemize}[leftmargin=1.5em]
+    \item Se il circuito si trova nello stato $Q=1$ (e quindi $\overline{Q}=0$), il segnale $\overline{Q}$ viene retroazionato sulla porta AND dell'ingresso $J$ (Set). Essendo a $0$, disabilita completamente l'ingresso $J$. Il circuito sa di essere già a $1$, quindi ignora ulteriori richieste di Set. Allo stesso tempo, l'uscita $Q=1$ abilita la porta AND dell'ingresso $K$ (Reset).
+    \item Se il circuito è nello stato $Q=0$ (e $\overline{Q}=1$), accade l'opposto: viene abilitato l'ingresso $J$ (Set) e viene disabilitato l'ingresso $K$ (Reset).
+\end{itemize}
+Grazie a questa intelligenza intrinseca, se applichiamo la combinazione massima $J=1, K=1$, il sistema lascerà passare \emph{solo} il comando opposto allo stato in cui si trova, trasformando la vecchia condizione "proibita" in una utilissima funzione di commutazione (Toggle).
 
 \begin{center}
-\begin{circuitikz}[scale=0.88, every node/.style={scale=0.88}]
+\begin{circuitikz}[scale=0.9, every node/.style={scale=0.9}]
+% Central SR Flip-Flop block
+\draw (0, -1.2) rectangle (2.4, 1.2);
+\node[font=\large] at (0.4, 0.7) {$S$};
+\node[font=\large] at (0.4, -0.7) {$R$};
+\node[font=\large] at (2.0, 0.7) {$Q$};
+\node[font=\large] at (2.0, -0.7) {$\overline{Q}$};
 
-% ---- Porte AND di ingresso ----
-\node[and port] (AJ) at (0, 1.5) {};
-\node[and port] (AK) at (0,-1.5) {};
+% Clock triangle on the SR block
+\draw (0, -0.2) -- (0.3, 0) -- (0, 0.2);
 
-% ---- Ingressi J e K ----
-\draw (AJ.in 1) -- ++(-1.5,0) node[left]{$J$};
-\draw (AK.in 2) -- ++(-1.5,0) node[left]{$K$};
+% AND gates
+\node[and port] (AJ) at (-1.5, 0.7) {};
+\node[and port] (AK) at (-1.5, -0.7) {};
 
-% ---- CLK: bus verticale centrale collegato ai secondi ingressi delle AND ----
-% Punto sul bus CLK all'altezza di AJ.in2 e AK.in1
-\coordinate (clkTop) at (-0.85, 1.22);  % altezza AJ.in 2
-\coordinate (clkBot) at (-0.85,-1.22);  % altezza AK.in 1
-\draw (AJ.in 2) -- (clkTop);
-\draw (AK.in 1) -- (clkBot);
-\draw (clkTop) -- (clkBot);             % bus verticale
-\node[circle, fill, inner sep=1.2pt] at (clkTop) {};
-\node[circle, fill, inner sep=1.2pt] at (clkBot) {};
-\draw (clkTop) -- ++(-1.5,0) coordinate (clkMid);
-\draw (clkBot) -- ++(-1.5,0);
-\draw (clkMid) -- ($(clkBot)+(-1.5,0)$);
-\node[circle, fill, inner sep=1.2pt] at ($(clkTop)+(-1.5,0)$) {};
-\draw ($(clkTop)+(-0.75,0)$) -- ++(-0.75,0) node[left]{CLK};
-\node[circle, fill, inner sep=1.2pt] at ($(clkTop)+(-0.75,0)$) {};
+% Connections AND -> SR
+\draw (AJ.out) -- (0, 0.7);
+\draw (AK.out) -- (0, -0.7);
 
-% ---- Porte NOR del latch SR ----
-\node[nor port] (NQ)  at (3.5, 1.0) {};
-\node[nor port] (NQb) at (3.5,-1.0) {};
+% CLK input (center)
+\draw (-2.8, 0) node[left, font=\large] {CLK} -- (0, 0);
 
-% ---- AND -> NOR (con etichette S e R) ----
-\draw (AJ.out) -- (NQ.in 1)
-      node[midway, above, font=\scriptsize]{$S=J\overline{Q}_n$};
-\draw (AK.out) -- (NQb.in 2)
-      node[midway, below, font=\scriptsize]{$R=KQ_n$};
+% Inputs J and K (aligned with CLK)
+\draw (AJ.in 2) -- (AJ.in 2 -| -2.8, 0) node[left, font=\large] {$J$};
+\draw (AK.in 1) -- (AK.in 1 -| -2.8, 0) node[left, font=\large] {$K$};
 
-% ---- Uscite Q e Qbar ----
-\draw (NQ.out)  -- ++(1.2,0) coordinate (tapQ);
-\draw (NQb.out) -- ++(1.2,0) coordinate (tapQb);
-\node[right] at (tapQ)  {$Q$};
-\node[right] at (tapQb) {$\overline{Q}$};
-\node[circle, fill, inner sep=1.2pt] at (tapQ)  {};
-\node[circle, fill, inner sep=1.2pt] at (tapQb) {};
+% Outputs and feedbacks
+\draw (2.4, 0.7) -- (4.2, 0.7); % Q output line
+\node[circle, fill, inner sep=1.2pt] at (3.8, 0.7) {};
+% Feedback from Q to AK.in 2 (bottom loop, routed outside J/K/CLK)
+\draw (3.8, 0.7) -- (3.8, -2.2) -- (-3.8, -2.2) |- (AK.in 2);
 
-% ---- Cross-coupling NOR->NOR (feedback incrociato interno) ----
-% tapQ --> NQb.in1: scende, poi va a sinistra orizzontalmente
-\coordinate (xFbQa) at ($(NQb.in 1)+(-0.45,0)$);
-\draw (tapQ)  -- ++(0,-0.55) -- ($(xFbQa)+(0,-0.55)$) -- (xFbQa) -- (NQb.in 1);
-% tapQb --> NQ.in2: sale, poi va a sinistra orizzontalmente  
-\coordinate (xFbQba) at ($(NQ.in 2)+(-0.45,0)$);
-\draw (tapQb) -- ++(0, 0.55) -- ($(xFbQba)+(0, 0.55)$) -- (xFbQba) -- (NQ.in 2);
+\draw (2.4, -0.7) -- (4.2, -0.7); % Qbar output line
+\node[circle, fill, inner sep=1.2pt] at (3.2, -0.7) {};
+% Feedback from Qbar to AJ.in 1 (top loop, routed outside J/K/CLK)
+\draw (3.2, -0.7) -- (3.2, 2.2) -- (-3.8, 2.2) |- (AJ.in 1);
 
-% ---- Feedback Q -> AK.in1 (loop esterno verso sinistra) ----
-% Scende sotto tutto il circuito, poi risale all'ingresso AK.in1
-\coordinate (fbQdown)  at ($(tapQ)+(0,-2.4)$);       % sotto a destra
-\coordinate (fbQleft)  at (-1.4,-2.4);               % sotto a sinistra (sotto la porta AK)
-\coordinate (fbQup)    at (-1.4, -1.22);             % colonna sinistra all'altezza AK.in1
-\draw (tapQ) -- (fbQdown) -- (fbQleft) -- (fbQup) -- (AK.in 1);
-
-% ---- Feedback Qbar -> AJ.in2 (loop esterno verso sinistra) ----
-% Sale sopra tutto il circuito, poi scende all'ingresso AJ.in2
-\coordinate (fbQbup)   at ($(tapQb)+(0, 2.4)$);      % sopra a destra
-\coordinate (fbQbleft) at (-1.4, 2.4);               % sopra a sinistra (sopra la porta AJ)
-\coordinate (fbQbdown) at (-1.4,  1.22);             % colonna sinistra all'altezza AJ.in2
-\draw (tapQb) -- (fbQbup) -- (fbQbleft) -- (fbQbdown) -- (AJ.in 2);
-
-\node[below=0.6cm, font=\small] at (1.75,-2.8) {JK Flip-Flop};
+\node[below=0.6cm, font=\small] at (1.2,-2.8) {JK Flip-Flop};
 \end{circuitikz}
 \end{center}
 
-\noindent\textbf{Funzione caratteristica}:
+\medskip
+\noindent\textbf{Ricavo della Funzione Caratteristica.}
+Dal circuito logico osserviamo che gli ingressi interni del nucleo RS diventano:
+\[ S = J \cdot \overline{Q}_n \qquad \text{e} \qquad R = K \cdot Q_n \]
+Partendo dall'equazione caratteristica del Flip-Flop RS, ovvero $Q_{n+1} = S + \overline{R}Q_n$, possiamo sostituire queste due espressioni:
+\begin{align*}
+Q_{n+1} &= (J \overline{Q}_n) + \overline{(K Q_n)} Q_n \\
+        &= J \overline{Q}_n + (\overline{K} + \overline{Q}_n) Q_n \quad \text{[applicando il Teorema di De Morgan]}\\
+        &= J \overline{Q}_n + \overline{K} Q_n + \underbrace{\overline{Q}_n Q_n}_{=0} \quad \text{[espandendo e applicando l'annullamento]}
+\end{align*}
+\noindent Otteniamo così la \textbf{Funzione caratteristica del Flip-Flop JK}:
 \[
-Q_{n+1} = J\overline{Q}_n + \overline{K}Q_n
+\boxed{Q_{n+1} = J\overline{Q}_n + \overline{K}Q_n}
 \]
 
-\noindent Dalla funzione di trasferimento del latch SR con NOR ($Q_{n+1}=S+\overline{R}\,Q_n$),
-ponendo $S=J\overline{Q}_n$ e $R=KQ_n$:
-\[
-Q(t+\Delta t)=S+R\overline{Q}(t) \;\Rightarrow\; Q_{n+1}=J\overline{Q}_n+\overline{K}Q_n
-\]
+\medskip
+\noindent\textcolor{teal}{\textbf{Tabella di verità e sintesi del comportamento:}}
+\begin{itemize}[leftmargin=1.5em,itemsep=4pt]
+  \item \textbf{$J = 0, K = 0$ (HOLD / MEMORIA):} Entrambe le porte AND d'ingresso sono bloccate (zero in uscita). Il nucleo centrale riceve la combinazione $S=0, R=0$ e quindi \textbf{mantiene in memoria} lo stato precedente ($Q_{n+1}=Q_n$).
+  \item \textbf{$J = 1, K = 0$ (SET):} L'ingresso $J$ è attivo. Se il flip-flop era a $0$, viene portato a $1$. Se era già a $1$, vi rimane ($Q_{n+1}=1$).
+  \item \textbf{$J = 0, K = 1$ (RESET):} L'ingresso $K$ è attivo. L'uscita viene forzatamente portata a $0$, o vi rimane se lo era già ($Q_{n+1}=0$).
+  \item \textbf{$J = 1, K = 1$ (TOGGLE / COMMUTAZIONE):} Il vero punto di forza del JK. Essendo la combinazione proibita ormai innocua, l'applicazione simultanea di due '1' logici forza il sistema a \textbf{invertire il proprio stato} ad ogni fronte di clock ($Q_{n+1}=\overline{Q}_n$).
+\end{itemize}
+\newpage
+% ======================================================================
+\subsection{Esempio pratico: il Registro come "filtro anti-glitch"}
+% ======================================================================
 
-\noindent Casi notevoli:
+Per capire l'utilità pratica dei Flip-Flop, consideriamo un classico problema dei circuiti combinatori. Immaginiamo di avere un \textbf{convertitore da codice Gray a codice Binario} collegato direttamente a un \textbf{display a 7 segmenti}.
+
+Analizziamo cosa succede durante una transizione estrema, ad esempio il passaggio dal numero 15 al numero 0:
 \begin{itemize}[leftmargin=1.5em,itemsep=2pt]
-  \item $J \neq K$: \textbf{SET} ($J=1,\,K=0$) e \textbf{RESET} ($J=0,\,K=1$).
-  \item $J = K = 0$: \textbf{HOLD} ($Q_{n+1}=Q_n$).
-  \item $J = K = 1$: \textbf{TOGGLE} ($Q_{n+1}=\overline{Q}_n$).
+    \item L'ingresso in codice Gray passa da \texttt{1000} (15) a \texttt{0000} (0). Come vuole la regola del codice Gray, cambia un solo bit alla volta.
+    \item L'uscita in codice Binario, invece, deve passare da \texttt{1111} a \texttt{0000}: ben 4 bit devono commutare simultaneamente.
 \end{itemize}
 
-% ======================================================================
-\subsection{Esempio: registro tra convertitore Gray-Binario e display 7 segmenti}
-% ======================================================================
-
-Si consideri un sistema composto da un \textbf{convertitore Gray--Binario} e un
-\textbf{display a 7 segmenti}. Durante la transizione da 15 a 0 (passaggio
-$\texttt{b1000}\to\texttt{b0000}$ in ingresso Gray), le uscite binarie percorrono stati
-intermedi che causano glitch visibili sul display (le uscite passano per
-$\texttt{b1111}\to\texttt{b0011}\to\texttt{b0000}$ con transizioni disallineate nei singoli bit).
+\textbf{Il problema: i ritardi di propagazione (Glitch)}\\
+Il convertitore è costruito con porte logiche (spesso porte XOR in cascata). Poiché ogni porta ha un suo tempo fisico di attraversamento, i 4 bit di uscita non commuteranno mai nell'esatto medesimo istante, ma il cambiamento si propagherà con leggeri sfasamenti. 
+Di conseguenza, invece di un salto netto $\texttt{1111} \to \texttt{0000}$, le uscite attraversano caotici stati spuri intermedi (es. $\texttt{1111} \to \texttt{0111} \to \texttt{0011} \to \texttt{0000}$). 
+Se il display fosse collegato direttamente a queste uscite, potrebbe sfarfallare mostrando per frazioni di secondo numeri errati (un difetto noto come \emph{glitch}).
 
 \begin{center}
 \begin{tikzpicture}[
     scale=0.88, every node/.style={scale=0.88},
-    box/.style={draw, minimum width=1.8cm, minimum height=1.0cm}
+    box/.style={draw, minimum width=1.8cm, minimum height=1.0cm, align=center}
 ]
-\node[box] (conv) {CONV G$\to$B};
-\node[box, right=2.0cm of conv] (reg) {REGISTRO};
-\node[box, right=2.0cm of reg]  (disp) {DISPLAY};
+\node[box] (conv) {CONV.\\G$\to$B};
+\node[box, right=2.0cm of conv, fill=gray!10, rounded corners] (reg) {REGISTRO\\(D Flip-Flop)};
+\node[box, right=2.0cm of reg]  (disp) {DISPLAY\\7 seg.};
 
-\draw[-latex] (conv) -- (reg)  node[midway,above,font=\scriptsize]{4 bit};
-\draw[-latex] (reg)  -- (disp) node[midway,above,font=\scriptsize]{sinc.};
+\draw[-latex] (conv) -- (reg)  node[midway,above,font=\scriptsize]{4 bit (sporchi)};
+\draw[-latex] (reg)  -- (disp) node[midway,above,font=\scriptsize]{4 bit (puliti)};
 % clock al registro
-\draw[-latex] ($(reg.south)+(0,-0.6)$) -- (reg.south)
-              node[below=0.6cm,font=\scriptsize]{CLK};
+\draw[-latex, thick, teal] ($(reg.south)+(0,-0.6)$) -- (reg.south)
+              node[below=0.1cm,font=\scriptsize, text=teal]{Segnale di CLOCK};
 
 \node[above=0.2cm, font=\scriptsize, color=teal] at (conv) {Gray in};
-\node[above=0.2cm, font=\scriptsize, color=teal] at (disp) {7 seg.};
+\node[above=0.2cm, font=\scriptsize, color=teal] at (disp) {Out visivo};
 \end{tikzpicture}
 \end{center}
 
-\noindent Inserendo un \textbf{registro} (banco di flip-flop sincronizzati dallo stesso clock)
-tra il convertitore e il display, le uscite vengono bloccate e aggiornano il display
-\emph{solo} sul fronte del clock, eliminando i glitch. Come mostra la misura all'analizzatore
-logico (Digilent Discovery 2NI, 100 MHz, 30 ns/div):
+\textbf{La soluzione: inserire un Registro}\\
+Per risolvere il problema, si inserisce un \textbf{Registro} (ossia un banco di Flip-Flop di tipo D messi in parallelo) tra il convertitore combinatorio e il display. Il registro funziona come una "barriera" temporale controllata da un segnale di Clock:
+\begin{enumerate}[leftmargin=1.5em,itemsep=2pt]
+    \item Mentre il convertitore sta ricalcolando il dato e generando i glitch, i Flip-Flop sono "ciechi" (non c'è alcun fronte di clock). Il display continua a mostrare indisturbato il vecchio numero (15).
+    \item Si attende una frazione di tempo sufficiente affinché tutte le porte logiche del convertitore si assestino. Ora il dato in uscita dal convertitore è un \texttt{0000} stabile e pulito.
+    \item Proprio in questo momento di "acque calme", si fa scattare il \textbf{fronte di salita del Clock}. I Flip-Flop catturano istantaneamente il dato pulito e lo trasferiscono in modo perfettamente simultaneo al display.
+\end{enumerate}
 
-\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
-  \item \textbf{Ingressi} (Gray): transizione netta da \texttt{b1000} a \texttt{b0000}
-        (cambio di un solo bit alla volta).
-  \item \textbf{Uscite senza registro}: la transizione da \texttt{b1111} a \texttt{b0000}
-        passa per stati intermedi (\texttt{b0011} ecc.) con i singoli bit che commutano
-        in tempi diversi (glitch).
-  \item \textbf{Uscite con registro}: il display vede le uscite sincronizzarsi
-        al fronte del clock, eliminando le transizioni spurie.
-\end{itemize}
+\noindent L'immagine seguente mostra proprio l'analisi logica di questo fenomeno (acquisita con l'analizzatore Digilent Discovery 2NI):
 \begin{center}
   \includegraphics[width=1\linewidth]{1.png}
 \end{center}
 
-\noindent Le uscite (gruppo \emph{Uscite}) mostrano le transizioni disallineate dei singoli
-bit: da \texttt{b1111} passando per \texttt{b0011} fino a \texttt{b0000}, con i quattro bit
-che commutano in istanti diversi (glitch visibile nella zona a cavallo di $t=14{,}000015\,\text{ms}$).
-Il registro sincronizzato elimina questi glitch, aggiornando il display solo sul fronte del clock.
+\noindent Osservando la zona centrale del grafico (a cavallo di $t=14{,}000015\,\text{ms}$), si nota chiaramente come le singole uscite del blocco combinatorio scendano a zero in istanti leggermente sfalsati, generando temporaneamente la lettura errata \texttt{b0011}. 
+Grazie al registro, però, i glitch non raggiungono mai la destinazione finale: il circuito a valle viene aggiornato con precisione chirurgica solo ad ogni tick del clock, garantendo un segnale netto e sincrono.
 
 % ======================================================================
 \chapter{Registri a scorrimento e contatori}
@@ -2864,48 +2958,53 @@ Il registro sincronizzato elimina questi glitch, aggiornando il display solo sul
 % ======================================================================
 \section{Registri a scorrimento}
 
-I \textbf{registri a scorrimento} agiscono come \textbf{passatori} fra due stati del circuito:
-\[
-Q_0 = X \to Q_1 = X,\quad Q_0 = Y \to Q_2 = X,\quad Q_1 = Y,\quad Q_0 = Z \to \cdots
-\]
+Un \textbf{registro a scorrimento} (shift register) è una catena di Flip-Flop di tipo D collegati in serie: l'uscita $Q$ di ciascuno è collegata all'ingresso $D$ del successivo. Ad ogni fronte di clock, ogni Flip-Flop «passa» il proprio valore al vicino di destra, come in un nastro trasportatore. In questo modo il dato si \emph{sposta} di una posizione ad ogni colpo di clock.
+
+\vspace{2mm}
+\noindent Per chiarire con un esempio: se il registro contiene i bit $[X, Y, Z]$ e arriva un nuovo dato $W$ dall'ingresso, dopo un tick di clock il contenuto diventa $[W, X, Y]$: il vecchio $Z$ è uscito, $X$ e $Y$ sono slittati di una posizione, e il nuovo $W$ è entrato in testa.
 
 \subsection{Modalità di trasmissione dati}
 
-I registri a scorrimento hanno molteplici utilizzi nella trasmissione dati. \textit{(Nota: non è a scorrimento.)}
+A seconda di come si alimentano i dati in ingresso e di come si leggono in uscita, lo stesso registro fisico può funzionare in quattro modalità distinte:
 
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Seriale $\to$ seriale} = \textbf{SISO}: $\text{in} \to [D_2 \to D_1 \to D_0] \to \text{out}$ \hfill \textit{usato per il delaying}
-    \item \textbf{Seriale $\to$ parallelo} = \textbf{SIPO}: $\text{in} \to [D_2 \to D_1 \to D_0] \to \text{out}$ \hfill \textit{usato per il filling}
-    \item \textbf{Parallelo $\to$ seriale} = \textbf{PISO}: $\text{in} \to [D_2, D_1, D_0] \to \text{out}$ \hfill \textit{usato per il drawing}
-    \item \textbf{Parallelo $\to$ parallelo} = \textbf{PIPO}: $\text{in} \to [D_2, D_1, D_0] \to \text{out}$ \hfill \textit{usato per lo storing}
+    \item \textbf{SISO} (Serial In -- Serial Out): il dato entra un bit alla volta dall'ingresso seriale ed esce un bit alla volta dall'ultimo FF. Utilizzo principale: \textbf{ritardare} un segnale digitale di esattamente $n$ cicli di clock.
+    \item \textbf{SIPO} (Serial In -- Parallel Out): il dato entra un bit alla volta, ma si leggono in uscita \emph{contemporaneamente} tutti i bit memorizzati. Utilizzo tipico: convertire una trasmissione seriale (es. linea RS-232) in un dato parallelo leggibile dalla CPU.
+    \item \textbf{PISO} (Parallel In -- Serial Out): si caricano tutti i bit in un solo colpo (caricamento parallelo), poi li si trasmette uno alla volta. Utilizzo: serializzare un dato parallelo per inviarlo su un bus seriale.
+    \item \textbf{PIPO} (Parallel In -- Parallel Out): caricamento parallelo e lettura parallela. Funziona come un \textbf{registro di memoria}: cattura uno snapshot di un dato a $n$ bit e lo mantiene in uscita fino al prossimo aggiornamento.
 \end{itemize}
 
-I tempi di flip-flop sono sufficientemente brevi, rispettati anche dalla frequenza del clock.
-
 \subsection{Temporizzazione e vincoli}
+
+Affinché il registro funzioni correttamente, il clock deve rispettare due vincoli temporali critici propri di ogni Flip-Flop:
 
 \defbox{
 $T_P > T_H$, \quad $T_S + T_P < T_{CLK}$
 
 \begin{itemize}[leftmargin=1.3em]
-  \item $T_{setup}$ e $T_{hold}$: tempi caratteristici del flip-flop rispetto al fronte di clock.
-  \item $I_N = D_{SR}$: dato seriale in ingresso.
-  \item $Q_0 = D_1$: il primo flip-flop segue l'ingresso.
+  \item $T_{setup}$ ($T_S$): il dato deve essere stabile sull'ingresso $D$ per almeno questo tempo \emph{prima} del fronte di clock, altrimenti non viene catturato correttamente.
+  \item $T_{hold}$ ($T_H$): il dato deve rimanere stabile per almeno questo tempo \emph{dopo} il fronte di clock.
+  \item $T_P$: tempo di propagazione attraverso il FF (quanto ci vuole affinché, dopo il fronte, l'uscita $Q$ si aggiorni e il nuovo valore sia pronto per il FF successivo).
+  \item $I_N = D_{SR}$: dato seriale in ingresso al registro.
 \end{itemize}
 }
 
-\noindent Nei registri sono presenti alcuni controlli:
+\noindent In parole semplici: il periodo del clock deve essere abbastanza lungo da permettere al segnale di attraversare il FF e di stabilizzarsi sul $D$ del successivo \emph{prima} che arrivi il fronte successivo. Se il clock è troppo veloce si leggono valori errati.
+
+\medskip
+\noindent Nei registri a scorrimento sono presenti i seguenti segnali di controllo:
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{clock} = sincronizza lo shift;
-    \item \textbf{reset/clear} = azzera tutto;
-    \item \textbf{set} = una segnale;
-    \item \textbf{enable} = abilita lo shift.
+    \item \textbf{CLK}: sincronizza ogni scorrimento.
+    \item \textbf{RESET/CLEAR}: azzera immediatamente l'intero registro.
+    \item \textbf{SET}: forza l'uscita a $1$ (preset).
+    \item \textbf{ENABLE}: quando basso, congela il registro bloccando gli scorrimenti.
 \end{itemize}
 
-\noindent Si distinguono due tipi di registro:
+\medskip
+\noindent\textcolor{teal}{\textbf{Riassunto -- Differenza tra registro normale e registro a scorrimento:}}
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Registri normali (PIPO)}: conservano i dati;
-    \item \textbf{Registri a scorrimento}: conservano e spostano i dati.
+    \item \textbf{Registro normale (PIPO)}: cattura e conserva un dato multi-bit aggiornandolo in blocco. Non c'è scorrimento interno.
+    \item \textbf{Registro a scorrimento}: conserva il dato \emph{e lo fa scorrere} di una posizione ad ogni clock, abilitando la conversione seriale$\leftrightarrow$parallelo e il ritardo digitale.
 \end{itemize}
 
 \subsection{Schemi dei registri a scorrimento (SISO, SIPO, PISO)}
@@ -3008,14 +3107,16 @@ comuni (ogni blocco è un FF-D con uscite $Q_0$, $\overline{Q_0}$, ingresso $D$ 
 \textit{(17 aprile 2026)}
 
 \defbox{
-\textbf{Contatore} = circuito che esegue le transizioni da uno stato al successivo, rappresentando in binario numeri contigui.
+\textbf{Contatore} = circuito sequenziale che avanza automaticamente di stato ad ogni fronte di clock, rappresentando in uscita la sequenza binaria $0, 1, 2, 3, \ldots$ (o la sua inversa, nei contatori \emph{down}).
 }
 
+\noindent L'idea alla base è semplice: ogni bit dell'uscita binaria cambia a frequenza dimezzata rispetto al bit precedente.
 \begin{itemize}[leftmargin=1.5em]
-    \item $Q_0$ cambia ogni periodo (del clock).
-    \item $Q_1$ cambia ogni 2 periodi (quando $Q_0$ ha fronte di discesa).
-    \item $Q_{i+1}$ cambia ogni $2^{i+1}$ periodi (quando $Q_i$ ha fronte di discesa).
+    \item $Q_0$ (bit meno significativo) commuta ad \textbf{ogni} periodo di clock: è il più veloce.
+    \item $Q_1$ commuta ogni \textbf{2} periodi: lo fa quando $Q_0$ scende da $1$ a $0$ (fronte di discesa).
+    \item $Q_{i+1}$ commuta ogni $2^{i+1}$ periodi: in generale ogni bit commuta quando il bit precedente ha un fronte di discesa.
 \end{itemize}
+\noindent Questo comportamento rende i contatori anche utili come \textbf{divisori di frequenza}: il clock ha frequenza $f$; $Q_0$ oscilla a $f/2$; $Q_1$ a $f/4$; e così via.
 
 \begin{center}
 \begin{tikzpicture}[scale=0.85, every node/.style={scale=0.85}]
@@ -3034,11 +3135,18 @@ comuni (ogni blocco è un FF-D con uscite $Q_0$, $\overline{Q_0}$, ingresso $D$ 
 
 \subsection{Contatore asincrono (ripple counter)}
 
-Non tutte le parti del circuito sono guidate dallo stesso clock: \textbf{il contatore è asincrono}. Il clock di ciascun blocco è legato all'uscita del precedente.
+Nel contatore asincrono, il clock \textbf{non arriva a tutti i Flip-Flop contemporaneamente}. Solo il primo FF riceve il clock esterno; ogni FF successivo usa come proprio clock l'uscita $\overline{Q}$ del FF precedente. In questo modo, ogni FF scatta automaticamente quando il precedente ha un fronte di discesa.
 
-Il tempo di propagazione del bit più significativo è $T_n = n\,T_P$.
-
-Deve valere $T_{CLK} > T_n$ per avere un tempo in cui il segnale è stabile.
+\medskip
+\noindent\textcolor{teal}{\textbf{Il problema: la propagazione a catena (ripple).}} Poiché ogni FF deve aspettare che quello precedente abbia commutato, il segnale si propaga a cascata (da qui il nome \emph{ripple}). Il bit più significativo $Q_{n-1}$ non è aggiornato finché il segnale non ha attraversato tutti gli $n$ FF. Il ritardo totale vale:
+\[
+T_n = n \cdot T_P
+\]
+Questo impone che il periodo del clock sia sufficientemente lungo da permettere a tutta la catena di assestarsi prima del fronte successivo:
+\[
+T_{CLK} > n \cdot T_P
+\]
+Nei circuiti ad alta velocità questo è un limite importante: aggiungere Flip-Flop obbliga a rallentare il clock.
 
 \begin{center}
 \begin{circuitikz}[scale=0.82, every node/.style={scale=0.82}]
@@ -3070,7 +3178,10 @@ Deve valere $T_{CLK} > T_n$ per avere un tempo in cui il segnale è stabile.
 
 \subsection{Contatore sincrono}
 
-Tutte le parti sono guidate dallo stesso clock: ogni uscita dei blocchi è collegata all'uscita del blocco precedente con una porta AND, che fa cambiare stato al successivo \emph{solo se tutte le uscite prima sono sature} (cioè tutte a $1$).
+Nel contatore sincrono, il clock \textbf{arriva contemporaneamente a tutti i Flip-Flop}, eliminando il ritardo a cascata e rendendo il contatore molto più veloce.
+
+\medskip
+\noindent\textbf{Come si implementa la logica di conteggio?} Non tutti i FF devono commutare ad ogni tick: $Q_1$ deve commutare solo quando $Q_0=1$; $Q_2$ solo quando $Q_0=Q_1=1$; e così via. Questa condizione viene realizzata con \textbf{porte AND in cascata}: l'ingresso $J,K$ del FF $i$-esimo è connesso all'uscita di una porta AND che combina tutti i bit $Q_0, \ldots, Q_{i-1}$. Il FF $i$ riceve il permesso di commutare solo quando tutti i bit meno significativi valgono $1$.
 
 \begin{center}
 \begin{circuitikz}[scale=0.82, every node/.style={scale=0.82}]
@@ -3105,14 +3216,23 @@ Tutte le parti sono guidate dallo stesso clock: ogni uscita dei blocchi è colle
 \end{circuitikz}
 \end{center}
 
-\subsection{Azzeramento dopo un certo conteggio}
+\subsection{Azzeramento dopo un certo conteggio (contatore modulo-M)}
 
-Si vuole che a un certo conteggio il contatore ritorni tutto al livello basso (\textbf{azzeramento}): si implementa usando una porta AND; l'ultimo conto dura $T(\text{JK-FF}) + T_P(\text{AND})$.
+Spesso non si vuole un contatore che vada da $0$ a $2^n-1$, ma che si fermi ad un numero specifico $M$ e poi riparta da zero.
 
 \medskip
-\noindent\textbf{Esempio}: azzeramento dopo il numero 5 (3 bit).
+\noindent\textbf{Implementazione:} si aggiunge una porta AND ai cui ingressi arrivano le uscite $Q_i$ che sono a $1$ nella rappresentazione binaria di $M$. Non appena il contatore raggiunge $M$, l'uscita della porta AND va a $1$ e genera un segnale di \textbf{RESET asincrono} che azzera immediatamente tutti i FF riportandoli a $Q=0000$.
 
-Quando $Q_3 Q_2 Q_1 Q_0 = 0101$ si attiva il clear $\to Q = 0000$ e si ritorna a contare da capo. In questo modo l'ultimo numero ($5$, $= 0101$) dura un tempo pari a $T_f(\text{JK-FF}) + T_P(\text{AND})$.
+\medskip
+\noindent\textbf{Attenzione al glitch sull'ultimo conteggio:} il valore $M$ compare realmente in uscita per un brevissimo istante (il tempo necessario affinché la porta AND lo riconosca e il reset arrivi) prima che tutto sia azzerato. L'ultimo stato ha quindi una durata anomala:
+\[
+T_{\text{stato }M} = T_f(\text{JK-FF}) + T_P(\text{AND})
+\]
+
+\medskip
+\noindent\textbf{Esempio}: contatore modulo-6 (conta $0,1,2,3,4,5$ e poi riparte da $0$).
+
+Quando $Q_3 Q_2 Q_1 Q_0 = 0101$ (decimale 5), la porta AND rileva questo stato e genera il RESET, riportando tutto a $0000$.
 
 \begin{center}
 \begin{circuitikz}[scale=0.82, every node/.style={scale=0.82}]
@@ -3139,16 +3259,19 @@ Quando $Q_3 Q_2 Q_1 Q_0 = 0101$ si attiva il clear $\to Q = 0000$ e si ritorna a
 \end{circuitikz}
 \end{center}
 
-\subsection{Ripple Carry Output}
+\subsection{Ripple Carry Output (RCO)}
 
-Il contatore binario sincrono oltre ai 4 bit di uscita ha anche un \textbf{Ripple Carry Output} (RCO): uscita di una porta NOR con 5 ingressi (i 4 $\overline{Q_i}$ e l'\emph{enable}).
+I contatori binari integrati (come il classico \textbf{SN74LS163A}) includono un'uscita speciale chiamata \textbf{RCO} (Ripple Carry Output).
 
+\medskip
+\noindent\textbf{A cosa serve?} Quando si collegano più chip in cascata per formare un contatore a più bit (es. 8, 12, 16 bit), ogni chip deve segnalare al successivo quando ha terminato il proprio ciclo di conteggio. Il chip delle unità segnala al chip delle decine; il chip delle decine segnala a quello delle centinaia; e così via.
+
+L'RCO è l'uscita di una porta NOR con 5 ingressi (i 4 $\overline{Q_i}$ e il segnale di \emph{enable}): va a $1$ per esattamente \textbf{un periodo di clock} quando il contatore ha raggiunto il valore massimo (tipicamente $Q=1111=15$). Solo in quel preciso istante tutti i $\overline{Q_i}$ sono a $0$, e la NOR dà $1$:
 \[
-\text{RCO} = 1 \quad \text{(per un periodo } T_{CLK}\text{) quando il conteggio è terminato.}
+\text{RCO} = 1 \quad \text{per un periodo } T_{CLK} \text{ quando il conteggio è al massimo.}
 \]
 
-Segnala, cioè, che il contatore ha raggiunto il valore massimo ed è pronto per ricominciare
-(utilizzabile per pilotare il contatore del \emph{digit} successivo in una catena).
+\noindent Il chip successivo nella catena usa questo impulso RCO come \emph{enable} (o come clock) per incrementare il proprio conteggio: in questo modo si realizzano contatori a 8, 12, 16 bit collegando semplicemente chip da 4 bit in cascata tramite RCO.
 
 \begin{center}
 \begin{tikzpicture}[scale=0.85, every node/.style={scale=0.85}]

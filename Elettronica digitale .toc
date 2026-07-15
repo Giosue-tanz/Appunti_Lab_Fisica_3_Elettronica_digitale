@@ -58,79 +58,79 @@
 \contentsline {section}{\numberline {6.2}Bistabilità e oscillazione}{28}{section.6.2}%
 \contentsline {section}{\numberline {6.3}Latch}{28}{section.6.3}%
 \contentsline {subsection}{\numberline {6.3.1}Latch RS con NOR: funzione caratteristica}{29}{subsection.6.3.1}%
-\contentsline {subsection}{\numberline {6.3.2}Latch RS con abilitazione (Enable)}{30}{subsection.6.3.2}%
-\contentsline {subsection}{\numberline {6.3.3}Latch di tipo D}{30}{subsection.6.3.3}%
-\contentsline {subsection}{\numberline {6.3.4}Latch e Flip-Flop: differenza fondamentale}{31}{subsection.6.3.4}%
-\contentsline {subsection}{\numberline {6.3.5}Tecnica master-slave}{31}{subsection.6.3.5}%
-\contentsline {section}{\numberline {6.4}Tecnica trigger-edge}{31}{section.6.4}%
-\contentsline {section}{\numberline {6.5}Ingressi sincroni e asincroni}{32}{section.6.5}%
-\contentsline {section}{\numberline {6.6}JK Flip-Flop}{32}{section.6.6}%
-\contentsline {subsection}{\numberline {6.6.1}Esempio: registro tra convertitore Gray-Binario e display 7 segmenti}{33}{subsection.6.6.1}%
-\contentsline {chapter}{\numberline {7}Registri a scorrimento e contatori}{34}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Registri a scorrimento}{34}{section.7.1}%
-\contentsline {subsection}{\numberline {7.1.1}Modalità di trasmissione dati}{34}{subsection.7.1.1}%
-\contentsline {subsection}{\numberline {7.1.2}Temporizzazione e vincoli}{34}{subsection.7.1.2}%
-\contentsline {subsection}{\numberline {7.1.3}Schemi dei registri a scorrimento (SISO, SIPO, PISO)}{34}{subsection.7.1.3}%
-\contentsline {section}{\numberline {7.2}Contatori}{35}{section.7.2}%
-\contentsline {subsection}{\numberline {7.2.1}Contatore asincrono (ripple counter)}{35}{subsection.7.2.1}%
-\contentsline {subsection}{\numberline {7.2.2}Contatore sincrono}{35}{subsection.7.2.2}%
-\contentsline {subsection}{\numberline {7.2.3}Azzeramento dopo un certo conteggio}{35}{subsection.7.2.3}%
-\contentsline {subsection}{\numberline {7.2.4}Ripple Carry Output}{36}{subsection.7.2.4}%
-\contentsline {chapter}{\numberline {8}Conteggio, divisori di frequenza e PRFG}{37}{chapter.8}%
-\contentsline {section}{\numberline {8.1}Contatori a 8 bit: cascata di due SN74LS163}{37}{section.8.1}%
-\contentsline {section}{\numberline {8.2}Divisori di frequenza per un numero $n$}{37}{section.8.2}%
-\contentsline {subsection}{\numberline {8.2.1}Divisore con CLEAR sincrono}{37}{subsection.8.2.1}%
-\contentsline {subsection}{\numberline {8.2.2}Divisore con SET sincrono (LOAD)}{38}{subsection.8.2.2}%
-\contentsline {section}{\numberline {8.3}Contatore ad anello}{38}{section.8.3}%
-\contentsline {section}{\numberline {8.4}Contatore ad anello \emph {twisted} (Johnson counter)}{39}{section.8.4}%
-\contentsline {section}{\numberline {8.5}Generatori di frequenza pseudo casuali (PRFG)}{39}{section.8.5}%
-\contentsline {chapter}{\numberline {9}Macchine a stati finiti (FSM)}{41}{chapter.9}%
-\contentsline {section}{\numberline {9.1}Tipi di architettura FSM: Moore e Mealy}{41}{section.9.1}%
-\contentsline {subsection}{\numberline {9.1.1}Architettura di Moore}{41}{subsection.9.1.1}%
-\contentsline {section}{\numberline {9.2}Dal diagramma di stato al circuito}{41}{section.9.2}%
-\contentsline {subsection}{\numberline {9.2.1}Ricavare le funzioni dei segnali di uscita: $O_i = f(Q_i)$}{42}{subsection.9.2.1}%
-\contentsline {subsection}{\numberline {9.2.2}Stato bloccante e segnale di Enable}{42}{subsection.9.2.2}%
-\contentsline {subsection}{\numberline {9.2.3}Esempio: insegna luminosa (continuazione)}{43}{subsection.9.2.3}%
-\contentsline {section}{\numberline {9.3}Architettura di Mealy}{43}{section.9.3}%
-\contentsline {subsection}{\numberline {9.3.1}Tabella di verità dell'insegna luminosa (Mealy)}{44}{subsection.9.3.1}%
-\contentsline {subsection}{\numberline {9.3.2}Tabella JK per l'implementazione}{44}{subsection.9.3.2}%
-\contentsline {subsection}{\numberline {9.3.3}Mappe di Karnaugh per $JK_0$ e $JK_1$}{44}{subsection.9.3.3}%
-\contentsline {section}{\numberline {9.4}Esempio: riconoscitore di sequenze}{44}{section.9.4}%
-\contentsline {section}{\numberline {9.5}Esempio: macchina distributrice del caffè}{45}{section.9.5}%
-\contentsline {subsection}{\numberline {9.5.1}Diagramma di stato della macchina del caffè (Moore)}{45}{subsection.9.5.1}%
-\contentsline {chapter}{\numberline {10}Elettronica combinatoria complessa}{46}{chapter.10}%
-\contentsline {section}{\numberline {10.1}ROM -- Read Only Memory}{46}{section.10.1}%
-\contentsline {subsection}{\numberline {10.1.1}Come è fatta?}{46}{subsection.10.1.1}%
-\contentsline {subsection}{\numberline {10.1.2}Esempio: la tastiera}{47}{subsection.10.1.2}%
-\contentsline {subsection}{\numberline {10.1.3}Esempio: la ROM del semaforo}{47}{subsection.10.1.3}%
-\contentsline {subsection}{\numberline {10.1.4}Struttura della PLA: prima e dopo la programmazione}{47}{subsection.10.1.4}%
-\contentsline {section}{\numberline {10.2}Multiplexer e demultiplexer}{47}{section.10.2}%
-\contentsline {section}{\numberline {10.3}Universal Shift Register (USR)}{48}{section.10.3}%
-\contentsline {subsection}{\numberline {10.3.1}Implementazione a 4 bit per trasmissione PISO}{49}{subsection.10.3.1}%
-\contentsline {subsection}{\numberline {10.3.2}Applicazione: trasmissione seriale Sender--Receiver}{49}{subsection.10.3.2}%
-\contentsline {section}{\numberline {10.4}Vincoli temporali dell'USR e Jitter}{50}{section.10.4}%
-\contentsline {chapter}{\numberline {11}Conversione Digitale--Analogica e Analogica--Digitale}{51}{chapter.11}%
-\contentsline {section}{\numberline {11.1}Conversione digitale $\leftrightarrow $ analogica}{51}{section.11.1}%
-\contentsline {section}{\numberline {11.2}Caratteristiche del DAC}{51}{section.11.2}%
-\contentsline {section}{\numberline {11.3}DAC a sommatore}{52}{section.11.3}%
-\contentsline {section}{\numberline {11.4}DAC R-2R Ladder}{52}{section.11.4}%
-\contentsline {section}{\numberline {11.5}Caratteristiche dell'ADC}{53}{section.11.5}%
-\contentsline {chapter}{\numberline {12}Convertitori Analogico-Digitali (ADC)}{54}{chapter.12}%
-\contentsline {section}{\numberline {12.1}ADC a gradinata}{54}{section.12.1}%
-\contentsline {section}{\numberline {12.2}ADC ad approssimazioni successive (SAR)}{54}{section.12.2}%
-\contentsline {section}{\numberline {12.3}Flash ADC}{55}{section.12.3}%
-\contentsline {section}{\numberline {12.4}Osservazioni generali}{55}{section.12.4}%
-\contentsline {section}{\numberline {12.5}ADC dell'AD2}{55}{section.12.5}%
-\contentsline {subsection}{\numberline {12.5.1}ADC ad approssimazioni successive (SAR): analisi del circuito a 3 bit}{55}{subsection.12.5.1}%
-\contentsline {subsubsection}{Fase 1 -- Inizializzazione (prima del primo fronte di clock)}{55}{subsubsection*.2}%
-\contentsline {subsubsection}{Fase 2 -- Subito dopo il primo fronte di clock}{56}{subsubsection*.3}%
-\contentsline {subsubsection}{Esempio numerico}{56}{subsubsection*.4}%
-\contentsline {subsubsection}{Fase 4 -- Subito dopo il secondo fronte di clock}{56}{subsubsection*.5}%
-\contentsline {subsubsection}{Algoritmo generale (n bit)}{57}{subsubsection*.6}%
-\contentsline {subsubsection}{Tabella riassuntiva dell'esempio ($V_a = 5.5$~V)}{57}{subsubsection*.7}%
-\contentsline {subsubsection}{Fase 5 -- Valutazione del confronto (subito dopo il secondo fronte)}{57}{subsubsection*.8}%
-\contentsline {subsubsection}{Fase 6 -- Subito dopo il terzo fronte di clock}{57}{subsubsection*.9}%
-\contentsline {subsubsection}{Fase 7 -- Confronto sull'ultimo bit (LSB)}{58}{subsubsection*.10}%
-\contentsline {subsubsection}{Fase 8 -- Subito dopo il quarto fronte di clock: fine conversione}{58}{subsubsection*.11}%
-\contentsline {subsubsection}{Fase 9 -- Avvio di una nuova conversione}{58}{subsubsection*.12}%
-\contentsline {subsubsection}{Tabella riassuntiva completa (aggiornata)}{58}{subsubsection*.13}%
+\contentsline {subsection}{\numberline {6.3.2}Latch RS con abilitazione (Enable)}{31}{subsection.6.3.2}%
+\contentsline {subsection}{\numberline {6.3.3}Latch di tipo D}{31}{subsection.6.3.3}%
+\contentsline {subsection}{\numberline {6.3.4}Latch e Flip-Flop: differenza fondamentale}{32}{subsection.6.3.4}%
+\contentsline {subsection}{\numberline {6.3.5}Tecnica master-slave}{32}{subsection.6.3.5}%
+\contentsline {section}{\numberline {6.4}Tecnica trigger-edge}{33}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Ingressi sincroni e asincroni}{34}{section.6.5}%
+\contentsline {section}{\numberline {6.6}JK Flip-Flop}{34}{section.6.6}%
+\contentsline {subsection}{\numberline {6.6.1}Esempio pratico: il Registro come "filtro anti-glitch"}{36}{subsection.6.6.1}%
+\contentsline {chapter}{\numberline {7}Registri a scorrimento e contatori}{37}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Registri a scorrimento}{37}{section.7.1}%
+\contentsline {subsection}{\numberline {7.1.1}Modalità di trasmissione dati}{37}{subsection.7.1.1}%
+\contentsline {subsection}{\numberline {7.1.2}Temporizzazione e vincoli}{37}{subsection.7.1.2}%
+\contentsline {subsection}{\numberline {7.1.3}Schemi dei registri a scorrimento (SISO, SIPO, PISO)}{38}{subsection.7.1.3}%
+\contentsline {section}{\numberline {7.2}Contatori}{38}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Contatore asincrono (ripple counter)}{38}{subsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2.2}Contatore sincrono}{39}{subsection.7.2.2}%
+\contentsline {subsection}{\numberline {7.2.3}Azzeramento dopo un certo conteggio (contatore modulo-M)}{39}{subsection.7.2.3}%
+\contentsline {subsection}{\numberline {7.2.4}Ripple Carry Output (RCO)}{39}{subsection.7.2.4}%
+\contentsline {chapter}{\numberline {8}Conteggio, divisori di frequenza e PRFG}{41}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Contatori a 8 bit: cascata di due SN74LS163}{41}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Divisori di frequenza per un numero $n$}{41}{section.8.2}%
+\contentsline {subsection}{\numberline {8.2.1}Divisore con CLEAR sincrono}{41}{subsection.8.2.1}%
+\contentsline {subsection}{\numberline {8.2.2}Divisore con SET sincrono (LOAD)}{42}{subsection.8.2.2}%
+\contentsline {section}{\numberline {8.3}Contatore ad anello}{42}{section.8.3}%
+\contentsline {section}{\numberline {8.4}Contatore ad anello \emph {twisted} (Johnson counter)}{43}{section.8.4}%
+\contentsline {section}{\numberline {8.5}Generatori di frequenza pseudo casuali (PRFG)}{43}{section.8.5}%
+\contentsline {chapter}{\numberline {9}Macchine a stati finiti (FSM)}{45}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Tipi di architettura FSM: Moore e Mealy}{45}{section.9.1}%
+\contentsline {subsection}{\numberline {9.1.1}Architettura di Moore}{45}{subsection.9.1.1}%
+\contentsline {section}{\numberline {9.2}Dal diagramma di stato al circuito}{45}{section.9.2}%
+\contentsline {subsection}{\numberline {9.2.1}Ricavare le funzioni dei segnali di uscita: $O_i = f(Q_i)$}{46}{subsection.9.2.1}%
+\contentsline {subsection}{\numberline {9.2.2}Stato bloccante e segnale di Enable}{46}{subsection.9.2.2}%
+\contentsline {subsection}{\numberline {9.2.3}Esempio: insegna luminosa (continuazione)}{47}{subsection.9.2.3}%
+\contentsline {section}{\numberline {9.3}Architettura di Mealy}{47}{section.9.3}%
+\contentsline {subsection}{\numberline {9.3.1}Tabella di verità dell'insegna luminosa (Mealy)}{48}{subsection.9.3.1}%
+\contentsline {subsection}{\numberline {9.3.2}Tabella JK per l'implementazione}{48}{subsection.9.3.2}%
+\contentsline {subsection}{\numberline {9.3.3}Mappe di Karnaugh per $JK_0$ e $JK_1$}{48}{subsection.9.3.3}%
+\contentsline {section}{\numberline {9.4}Esempio: riconoscitore di sequenze}{48}{section.9.4}%
+\contentsline {section}{\numberline {9.5}Esempio: macchina distributrice del caffè}{49}{section.9.5}%
+\contentsline {subsection}{\numberline {9.5.1}Diagramma di stato della macchina del caffè (Moore)}{49}{subsection.9.5.1}%
+\contentsline {chapter}{\numberline {10}Elettronica combinatoria complessa}{50}{chapter.10}%
+\contentsline {section}{\numberline {10.1}ROM -- Read Only Memory}{50}{section.10.1}%
+\contentsline {subsection}{\numberline {10.1.1}Come è fatta?}{50}{subsection.10.1.1}%
+\contentsline {subsection}{\numberline {10.1.2}Esempio: la tastiera}{51}{subsection.10.1.2}%
+\contentsline {subsection}{\numberline {10.1.3}Esempio: la ROM del semaforo}{51}{subsection.10.1.3}%
+\contentsline {subsection}{\numberline {10.1.4}Struttura della PLA: prima e dopo la programmazione}{51}{subsection.10.1.4}%
+\contentsline {section}{\numberline {10.2}Multiplexer e demultiplexer}{51}{section.10.2}%
+\contentsline {section}{\numberline {10.3}Universal Shift Register (USR)}{52}{section.10.3}%
+\contentsline {subsection}{\numberline {10.3.1}Implementazione a 4 bit per trasmissione PISO}{53}{subsection.10.3.1}%
+\contentsline {subsection}{\numberline {10.3.2}Applicazione: trasmissione seriale Sender--Receiver}{53}{subsection.10.3.2}%
+\contentsline {section}{\numberline {10.4}Vincoli temporali dell'USR e Jitter}{54}{section.10.4}%
+\contentsline {chapter}{\numberline {11}Conversione Digitale--Analogica e Analogica--Digitale}{55}{chapter.11}%
+\contentsline {section}{\numberline {11.1}Conversione digitale $\leftrightarrow $ analogica}{55}{section.11.1}%
+\contentsline {section}{\numberline {11.2}Caratteristiche del DAC}{55}{section.11.2}%
+\contentsline {section}{\numberline {11.3}DAC a sommatore}{56}{section.11.3}%
+\contentsline {section}{\numberline {11.4}DAC R-2R Ladder}{56}{section.11.4}%
+\contentsline {section}{\numberline {11.5}Caratteristiche dell'ADC}{57}{section.11.5}%
+\contentsline {chapter}{\numberline {12}Convertitori Analogico-Digitali (ADC)}{58}{chapter.12}%
+\contentsline {section}{\numberline {12.1}ADC a gradinata}{58}{section.12.1}%
+\contentsline {section}{\numberline {12.2}ADC ad approssimazioni successive (SAR)}{58}{section.12.2}%
+\contentsline {section}{\numberline {12.3}Flash ADC}{59}{section.12.3}%
+\contentsline {section}{\numberline {12.4}Osservazioni generali}{59}{section.12.4}%
+\contentsline {section}{\numberline {12.5}ADC dell'AD2}{59}{section.12.5}%
+\contentsline {subsection}{\numberline {12.5.1}ADC ad approssimazioni successive (SAR): analisi del circuito a 3 bit}{59}{subsection.12.5.1}%
+\contentsline {subsubsection}{Fase 1 -- Inizializzazione (prima del primo fronte di clock)}{59}{subsubsection*.2}%
+\contentsline {subsubsection}{Fase 2 -- Subito dopo il primo fronte di clock}{60}{subsubsection*.3}%
+\contentsline {subsubsection}{Esempio numerico}{60}{subsubsection*.4}%
+\contentsline {subsubsection}{Fase 4 -- Subito dopo il secondo fronte di clock}{60}{subsubsection*.5}%
+\contentsline {subsubsection}{Algoritmo generale (n bit)}{61}{subsubsection*.6}%
+\contentsline {subsubsection}{Tabella riassuntiva dell'esempio ($V_a = 5.5$~V)}{61}{subsubsection*.7}%
+\contentsline {subsubsection}{Fase 5 -- Valutazione del confronto (subito dopo il secondo fronte)}{61}{subsubsection*.8}%
+\contentsline {subsubsection}{Fase 6 -- Subito dopo il terzo fronte di clock}{61}{subsubsection*.9}%
+\contentsline {subsubsection}{Fase 7 -- Confronto sull'ultimo bit (LSB)}{62}{subsubsection*.10}%
+\contentsline {subsubsection}{Fase 8 -- Subito dopo il quarto fronte di clock: fine conversione}{62}{subsubsection*.11}%
+\contentsline {subsubsection}{Fase 9 -- Avvio di una nuova conversione}{62}{subsubsection*.12}%
+\contentsline {subsubsection}{Tabella riassuntiva completa (aggiornata)}{62}{subsubsection*.13}%
