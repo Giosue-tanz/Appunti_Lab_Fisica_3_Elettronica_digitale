@@ -1,22 +1,38 @@
-# Elettronica Digitale
+# Appunti di Elettronica Digitale
 
-Questi sono gli appunti ufficiali del corso di Elettronica Digitale.
+Benvenuti nella repository degli **Appunti di Elettronica Digitale**. Questo progetto raccoglie in maniera organica e strutturata la documentazione, gli schemi e le spiegazioni relative ai concetti fondamentali dell'elettronica digitale, trascritti in un formato tipografico professionale tramite LaTeX.
 
-## **Stato del Progetto**
-Il documento è attualmente in fase di stesura (work in progress) e potrebbe contenere refusi o sezioni incomplete.
+Questi appunti coprono diversi temi fondamentali come l'algebra di Boole, le reti logiche combinatorie e sequenziali, le conversioni analogico-digitale, le architetture dei calcolatori e molto altro.
 
-## Autore
-Giosuè Aiello è l'unico autore degli appunti, della riformulazione formale e della stesura tipografica in LaTeX.
+## 📂 Struttura della Repository
 
-## Compilazione
-Per clonare il repository e compilare il PDF, esegui i seguenti comandi da terminale:
+La repository è composta dai seguenti elementi principali:
+
+- **`Elettronica digitale .tex`**: Il codice sorgente principale in formato LaTeX contenente l'intero testo degli appunti, la struttura dei capitoli e la sintassi per la generazione degli schemi circuitali (utilizzando i pacchetti `tikz` e `circuitikz`).
+- **`Elettronica digitale .pdf`**: La versione compilata del documento, pronta per la lettura, lo studio o la stampa.
+- **Immagini (`*.png`)**: Vari grafici, figure, schermate e diagrammi che vengono importati direttamente all'interno del sorgente LaTeX.
+
+## 🚀 Compilazione del Documento
+
+Se desideri modificare o estendere gli appunti, puoi compilare autonomamente il file LaTeX.
+Assicurati di avere una distribuzione TeX completa installata sul tuo sistema (come *TeX Live* su Linux/macOS o *MiKTeX* su Windows).
+
+Per generare il PDF, apri il terminale nella directory del progetto ed esegui:
 
 ```bash
-git clone https://github.com/Giosue-tanz/Introduzione_all_Elettronica_Analogica_Digitale.git
-cd Introduzione_all_Elettronica_Analogica_Digitale
-pdflatex "Elettronica digitale .tex"
 pdflatex "Elettronica digitale .tex"
 ```
 
-## Licenza
-Questo progetto è distribuito sotto licenza Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0). L'uso commerciale è vietato. Per maggiori dettagli, consulta il file LICENSE allegato o visita https://creativecommons.org/licenses/by-nc/4.0/.
+*Nota: per aggiornare correttamente l'indice e i riferimenti incrociati, potrebbe essere necessario eseguire il comando di compilazione due volte consecutive.*
+
+## 🛠 Tecnologie Utilizzate
+
+- **LaTeX**: Per la stesura del testo e l'impaginazione strutturata.
+- **Circuitikz / TikZ**: Per la realizzazione vettoriale di precisione dei circuiti logici e dei diagrammi temporali/delle forme d'onda.
+
+## 🤝 Contributi
+
+Se noti errori di battitura, concetti spiegati in modo poco chiaro, o se vuoi espandere una sezione, i contributi sono ben accetti.
+
+---
+*Appunti di Elettronica Digitale.*
