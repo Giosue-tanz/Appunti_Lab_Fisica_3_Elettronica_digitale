@@ -1,9 +1,9 @@
-# Elettronica Digitale
+# Elettronica Analogica e Digitale
 
-Sorgenti LaTeX e documentazione del libro *Elettronica Digitale*, trattato completo sull'analisi dei segnali, l'algebra di Boole, la sintesi delle reti logiche e la realizzazione fisica dei componenti digitali.
+Sorgenti LaTeX e documentazione del libro sull'Elettronica Analogica e Digitale.
 
 ## **Stato del Progetto**
-Il documento è attualmente in fase di stesura (work in progress) e potrebbe contenere refusi o sezioni incomplete.
+Il documento è in fase di stesura (work in progress). Allo stato attuale è presente e in via di completamento **solo la parte dedicata all'Elettronica Digitale** (analisi dei segnali, algebra di Boole, reti logiche e componenti fisici). La stesura della parte di elettronica analogica verrà affrontata successivamente.
 
 ## Compilazione
 Per clonare il repository e compilare il PDF, esegui i seguenti comandi da terminale:
