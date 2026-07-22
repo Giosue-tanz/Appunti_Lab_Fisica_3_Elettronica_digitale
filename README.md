@@ -1,12 +1,12 @@
 # Elettronica Digitale
 
-Questo repository contiene i sorgenti LaTeX del libro *Elettronica Digitale*. Il testo affronta in modo rigoroso e strutturato i fondamenti dell'elettronica digitale: dall'algebra di Boole all'analisi dei segnali, fino alla sintesi delle reti logiche e all'architettura dei componenti fisici.
+Questi sono gli appunti ufficiali del corso di Elettronica Digitale.
 
 ## **Stato del Progetto**
 Il documento è attualmente in fase di stesura (work in progress) e potrebbe contenere refusi o sezioni incomplete.
 
 ## Autore
-Giosuè Aiello è l'unico autore del libro, della sua riformulazione formale e della stesura tipografica in LaTeX.
+Giosuè Aiello è l'unico autore degli appunti, della riformulazione formale e della stesura tipografica in LaTeX.
 
 ## Compilazione
 Per clonare il repository e compilare il PDF, esegui i seguenti comandi da terminale:
