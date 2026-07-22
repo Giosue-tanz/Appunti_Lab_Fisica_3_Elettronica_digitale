@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.6.22)  22 JUL 2026 18:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.6.22)  22 JUL 2026 18:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -841,6 +841,9 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 \Hy@SectionHShift=\skip74
 )
+(/usr/share/texmf-dist/tex/latex/ccicons/ccicons.sty
+Package: ccicons 2017/10/30 v1.6 LaTeX support for Creative Commons icons
+)
 (/usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count366
@@ -848,26 +851,26 @@ File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 (./Elettronica digitale .aux)
 \openout1 = `"Elettronica digitale .aux"'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 68.
-LaTeX Font Info:    ... okay on input line 68.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 68.
-LaTeX Font Info:    ... okay on input line 68.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 68.
-LaTeX Font Info:    ... okay on input line 68.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 68.
-LaTeX Font Info:    ... okay on input line 68.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 68.
-LaTeX Font Info:    ... okay on input line 68.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 68.
-LaTeX Font Info:    ... okay on input line 68.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 68.
-LaTeX Font Info:    ... okay on input line 68.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 68.
-LaTeX Font Info:    ... okay on input line 68.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 68.
-LaTeX Font Info:    ... okay on input line 68.
-LaTeX Info: Redefining \it@ocap on input line 68.
-LaTeX Info: Redefining \it@ccap on input line 68.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Info: Redefining \it@ocap on input line 69.
+LaTeX Info: Redefining \it@ccap on input line 69.
 
 (/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -926,8 +929,8 @@ e
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 Package translations Info: no dictionary file `translations-basic-dictionary-it
-alian.trsl' found. on input line 68.
-Package hyperref Info: Link coloring ON on input line 68.
+alian.trsl' found. on input line 69.
+Package hyperref Info: Link coloring ON on input line 69.
 (./Elettronica digitale .out) (./Elettronica digitale .out)
 \@outlinefile=\write4
 \openout4 = `"Elettronica digitale .out"'.
@@ -935,13 +938,16 @@ Package hyperref Info: Link coloring ON on input line 68.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/fonts
-/enc/dvips/cm-super/cm-super-t1.enc}] (./Elettronica digitale .toc
-LaTeX Font Info:    Trying to load font information for U+msa on input line 4.
+/enc/dvips/cm-super/cm-super-t1.enc}]
+LaTeX Font Info:    Font shape `U/ccicons/m/n' will be
+(Font)              scaled to size 14.4pt on input line 96.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 96.
 
-(/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
+ (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 4.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 96.
+
 
 (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -950,58 +956,58 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.44 ...matore (half adder)}{19}{subsection.3.8.1}
-                                                  % [1
+l.97 \newpage
+              [1] (./Elettronica digitale .toc [2
 
-] [2])
+] [3])
 \tf@toc=\write5
 \openout5 = `"Elettronica digitale .toc"'.
 
- [3]
+ [4]
 Capitolo 1.
-[4
+[5
 
 {/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
-Overfull \hbox (7.21135pt too wide) in paragraph at lines 165--166
+Overfull \hbox (7.21135pt too wide) in paragraph at lines 170--171
 []\T1/cmr/bx/n/10.95 Huntington \T1/cmr/m/n/10.95 (1904) for-mulò i famosi pos-
 tu-lati che definis-cono rig-orosa-mente l'al-ge-bra booleana
  []
 
-[5]
+[6]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 286.
+(hyperref)                removing `math shift' on input line 291.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 286.
+(hyperref)                removing `math shift' on input line 291.
 
-[6] [7]
+[7] [8]
 Capitolo 2.
-[8
+[9
 
-] [9]
-Underfull \hbox (badness 1052) in paragraph at lines 662--662
+] [10]
+Underfull \hbox (badness 1052) in paragraph at lines 667--667
 []$\OML/cmm/m/it/9 V[]$\T1/cmr/m/n/9 : $\OML/cmm/m/it/9 V[]$ \T1/cmr/m/n/9 mas-
 si-ma garan-ti-ta per l'us-ci-ta
  []
 
-[10] [11] [12]
+[11] [12] [13]
 Capitolo 3.
-[13
+[14
 
-] [14] [15] [16] [17]
-<7seg.png, id=748, 834.86906pt x 344.03531pt>
+] [15] [16] [17] [18]
+<7seg.png, id=756, 834.86906pt x 344.03531pt>
 File: 7seg.png Graphic file (type png)
 <use 7seg.png>
-Package pdftex.def Info: 7seg.png  used on input line 1361.
+Package pdftex.def Info: 7seg.png  used on input line 1366.
 (pdftex.def)             Requested size: 182.09486pt x 75.03705pt.
- [18 <./7seg.png>] [19] [20]
+ [19 <./7seg.png>] [20] [21]
 Capitolo 4.
-[21
+[22
 
 ]
-Overfull \hbox (3.93019pt too wide) in paragraph at lines 1671--1672
+Overfull \hbox (3.93019pt too wide) in paragraph at lines 1676--1677
 \T1/cmr/m/it/9 Proprietà fon-da-men-tale: \T1/cmr/m/n/9 Ap-pli-care due volte i
 l com-ple-men-to a 2 resti-tu-isce il nu-mero orig-i-nale, ovvero $\OML/cmm/m/i
 t/9 C[]\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 C[]\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 N\OT1
@@ -1009,254 +1015,259 @@ t/9 C[]\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 C[]\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 N\OT1
  []
 
 
-Overfull \hbox (63.46733pt too wide) in paragraph at lines 1749--1750
+Overfull \hbox (63.46733pt too wide) in paragraph at lines 1754--1755
  [] 
  []
 
-[22] [23]
+[23] [24]
 Capitolo 5.
-[24
+[25
 
-] [25] [26] [27]
+] [26] [27] [28]
 Capitolo 6.
-[28
+[29
 
-] [29] [30] [31] [32] [33] [34] [35]
-Overfull \hbox (60.56305pt too wide) in paragraph at lines 2954--2955
+] [30] [31] [32] [33] [34] [35] [36]
+Overfull \hbox (60.56305pt too wide) in paragraph at lines 2959--2960
  [] 
  []
 
-<1.png, id=836, 911.65594pt x 298.11375pt>
+<1.png, id=844, 911.65594pt x 298.11375pt>
 File: 1.png Graphic file (type png)
 <use 1.png>
-Package pdftex.def Info: 1.png  used on input line 2968.
+Package pdftex.def Info: 1.png  used on input line 2973.
 (pdftex.def)             Requested size: 455.24411pt x 148.87pt.
-[36 <./1.png>]
+[37 <./1.png>]
 Capitolo 7.
-[37
+[38
 
-] [38] [39] [40]
+] [39] [40] [41]
 Capitolo 8.
-<img_cascata.png, id=863, 358.33875pt x 225.09094pt>
+<img_cascata.png, id=870, 358.33875pt x 225.09094pt>
 File: img_cascata.png Graphic file (type png)
 <use img_cascata.png>
-Package pdftex.def Info: img_cascata.png  used on input line 3333.
+Package pdftex.def Info: img_cascata.png  used on input line 3338.
 (pdftex.def)             Requested size: 386.96027pt x 243.08427pt.
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 3344.
+(hyperref)                removing `math shift' on input line 3349.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 3344.
+(hyperref)                removing `math shift' on input line 3349.
 
-<img_clear.png, id=864, 424.58624pt x 266.49562pt>
+<img_clear.png, id=871, 424.58624pt x 266.49562pt>
 File: img_clear.png Graphic file (type png)
 <use img_clear.png>
-Package pdftex.def Info: img_clear.png  used on input line 3364.
+Package pdftex.def Info: img_clear.png  used on input line 3369.
 (pdftex.def)             Requested size: 236.72888pt x 148.5859pt.
-[41
+[42
 
  <./img_cascata.png>]
-<img_set.png, id=870, 334.24875pt x 282.30469pt>
+<img_set.png, id=878, 334.24875pt x 282.30469pt>
 File: img_set.png Graphic file (type png)
 <use img_set.png>
-Package pdftex.def Info: img_set.png  used on input line 3385.
+Package pdftex.def Info: img_set.png  used on input line 3390.
 (pdftex.def)             Requested size: 236.72888pt x 199.94666pt.
- [42 <./img_clear.png> <./img_set.png>] [43] [44]
+ [43 <./img_clear.png> <./img_set.png>] [44] [45]
 Capitolo 9.
-[45
+[46
 
 ]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 3709.
+(hyperref)                removing `math shift' on input line 3714.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 3709.
+(hyperref)                removing `subscript' on input line 3714.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 3709.
+(hyperref)                removing `subscript' on input line 3714.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 3709.
+(hyperref)                removing `math shift' on input line 3714.
 
-[46] [47]
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 3990.
-
+[47] [48]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 3990.
+(hyperref)                removing `math shift' on input line 3995.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 3990.
+(hyperref)                removing `subscript' on input line 3995.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 3990.
+(hyperref)                removing `math shift' on input line 3995.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 3990.
+(hyperref)                removing `math shift' on input line 3995.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 3990.
+(hyperref)                removing `subscript' on input line 3995.
 
-[48] [49]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 3995.
+
+[49] [50]
 Capitolo 10.
-[50
+[51
 
 ]
-<bf.png, id=923, 666.23906pt x 248.42813pt>
+<bf.png, id=930, 666.23906pt x 248.42813pt>
 File: bf.png Graphic file (type png)
 <use bf.png>
-Package pdftex.def Info: bf.png  used on input line 4374.
+Package pdftex.def Info: bf.png  used on input line 4379.
 (pdftex.def)             Requested size: 391.51021pt x 145.98755pt.
- [51 <./bf.png>] [52]
-<crl.png, id=934, 429.10312pt x 359.09157pt>
+ [52 <./bf.png>] [53]
+<crl.png, id=941, 429.10312pt x 359.09157pt>
 File: crl.png Graphic file (type png)
 <use crl.png>
-Package pdftex.def Info: crl.png  used on input line 4676.
+Package pdftex.def Info: crl.png  used on input line 4681.
 (pdftex.def)             Requested size: 355.08984pt x 297.15828pt.
- [53 <./crl.png>] [54]
+ [54 <./crl.png>] [55]
 Capitolo 11.
 
-Overfull \hbox (0.12856pt too wide) in paragraph at lines 4733--4733
+Overfull \hbox (0.12856pt too wide) in paragraph at lines 4738--4738
 |[]\T1/cmr/bx/n/14.4 Conversione Digitale--Analogica e Analogica--Digitale| 
  []
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 4737.
+(hyperref)                removing `math shift' on input line 4742.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\leftrightarrow' on input line 4737.
+(hyperref)                removing `\leftrightarrow' on input line 4742.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 4737.
+(hyperref)                removing `math shift' on input line 4742.
 
-<err_g.png, id=947, 796.47563pt x 453.94594pt>
+<err_g.png, id=954, 796.47563pt x 453.94594pt>
 File: err_g.png Graphic file (type png)
 <use err_g.png>
-Package pdftex.def Info: err_g.png  used on input line 4813.
+Package pdftex.def Info: err_g.png  used on input line 4818.
 (pdftex.def)             Requested size: 145.68144pt x 83.02972pt.
-<n_lin.png, id=948, 294.34969pt x 243.15843pt>
+<n_lin.png, id=955, 294.34969pt x 243.15843pt>
 File: n_lin.png Graphic file (type png)
 <use n_lin.png>
-Package pdftex.def Info: n_lin.png  used on input line 4814.
+Package pdftex.def Info: n_lin.png  used on input line 4819.
 (pdftex.def)             Requested size: 145.68144pt x 120.34709pt.
-<er_nlin.png, id=949, 363.60844pt x 510.40688pt>
+<er_nlin.png, id=956, 363.60844pt x 510.40688pt>
 File: er_nlin.png Graphic file (type png)
 <use er_nlin.png>
-Package pdftex.def Info: er_nlin.png  used on input line 4815.
+Package pdftex.def Info: er_nlin.png  used on input line 4820.
 (pdftex.def)             Requested size: 145.68144pt x 204.5018pt.
-[55
+[56
 
-] [56 <./err_g.png> <./n_lin.png> <./er_nlin.png>]
-<err_g2.png, id=963, 424.58624pt x 268.00125pt>
+] [57 <./err_g.png> <./n_lin.png> <./er_nlin.png>]
+<err_g2.png, id=970, 424.58624pt x 268.00125pt>
 File: err_g2.png Graphic file (type png)
 <use err_g2.png>
-Package pdftex.def Info: err_g2.png  used on input line 4960.
+Package pdftex.def Info: err_g2.png  used on input line 4965.
 (pdftex.def)             Requested size: 145.68144pt x 91.95345pt.
-<n_lin2.png, id=964, 365.11406pt x 280.79906pt>
+<n_lin2.png, id=971, 365.11406pt x 280.79906pt>
 File: n_lin2.png Graphic file (type png)
 <use n_lin2.png>
-Package pdftex.def Info: n_lin2.png  used on input line 4961.
+Package pdftex.def Info: n_lin2.png  used on input line 4966.
 (pdftex.def)             Requested size: 145.68144pt x 112.03912pt.
-<er_nlin2.png, id=965, 737.75626pt x 475.7775pt>
+<er_nlin2.png, id=972, 737.75626pt x 475.7775pt>
 File: er_nlin2.png Graphic file (type png)
 <use er_nlin2.png>
-Package pdftex.def Info: er_nlin2.png  used on input line 4962.
+Package pdftex.def Info: er_nlin2.png  used on input line 4967.
 (pdftex.def)             Requested size: 145.68144pt x 93.94868pt.
- [57 <./err_g2.png> <./n_lin2.png> <./er_nlin2.png>]
+ [58 <./err_g2.png> <./n_lin2.png> <./er_nlin2.png>]
 Capitolo 12.
-<11.png, id=973, 397.485pt x 307.1475pt>
+<11.png, id=980, 397.485pt x 307.1475pt>
 File: 11.png Graphic file (type png)
 <use 11.png>
-Package pdftex.def Info: 11.png  used on input line 4975.
+Package pdftex.def Info: 11.png  used on input line 4980.
 (pdftex.def)             Requested size: 191.20169pt x 147.74782pt.
-<22.png, id=974, 475.7775pt x 268.75406pt>
+<22.png, id=981, 475.7775pt x 268.75406pt>
 File: 22.png Graphic file (type png)
 <use 22.png>
-Package pdftex.def Info: 22.png  used on input line 4999.
+Package pdftex.def Info: 22.png  used on input line 5004.
 (pdftex.def)             Requested size: 191.20169pt x 108.00412pt.
-<33.png, id=975, 432.11438pt x 270.25969pt>
+<33.png, id=982, 432.11438pt x 270.25969pt>
 File: 33.png Graphic file (type png)
 <use 33.png>
-Package pdftex.def Info: 33.png  used on input line 5025.
+Package pdftex.def Info: 33.png  used on input line 5030.
 (pdftex.def)             Requested size: 191.20169pt x 119.58269pt.
-[58
+[59
 
- <./11.png> <./22.png>] [59 <./33.png>] [60] [61] [62]
+ <./11.png> <./22.png>] [60 <./33.png>] [61] [62] [63]
 (./Elettronica digitale .aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package rerunfilecheck Info: File `"Elettronica digitale ".out' has not changed
 .
 (rerunfilecheck)             Checksum: 463935C28C85069F04A050231ECD7F7D;26862.
  ) 
 Here is how much of TeX's memory you used:
- 50263 strings out of 469515
- 1185686 string characters out of 5470807
- 1901065 words of memory out of 5000000
- 78148 multiletter control sequences out of 15000+600000
- 665524 words of font info for 133 fonts, out of 8000000 for 9000
+ 50339 strings out of 469515
+ 1186893 string characters out of 5470807
+ 1901746 words of memory out of 5000000
+ 78218 multiletter control sequences out of 15000+600000
+ 665869 words of font info for 135 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  117i,15n,121p,579b,1267s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/share
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texmf-dist/fonts/type1/publi
-c/amsfonts/cmextra/cmex9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb
-></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9
-.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/shar
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
-7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/shar
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmsy5.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/c
-msy6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/
-share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texmf-dist/fonts/type1/p
-ublic/amsfonts/symbols/msam10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-
-super/sfbi0900.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbi1200.
-pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx0700.pfb></usr/share
-/texmf-dist/fonts/type1/public/cm-super/sfbx0800.pfb></usr/share/texmf-dist/fon
-ts/type1/public/cm-super/sfbx0900.pfb></usr/share/texmf-dist/fonts/type1/public
-/cm-super/sfbx1000.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1
-095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/s
-hare/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf-dist
-/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf-dist/fonts/type1/pu
-blic/cm-super/sfcc1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/s
-frm0600.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></u
-sr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texmf-
-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf-dist/fonts/type
-1/public/cm-super/sfrm1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-sup
-er/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfss0900.pfb
-></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti0900.pfb></usr/share/te
-xmf-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/share/texmf-dist/fonts/
-type1/public/cm-super/sfti1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm
--super/sftt0900.pfb>
-Output written on "Elettronica digitale .pdf" (63 pages, 2337191 bytes).
+</usr/share/texmf-dist/fonts/type1/public/ccicons/ccicons.pfb></usr/share/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/share/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmbx9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cmextr
+a/cmex9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></
+usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmmi7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.p
+fb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/font
+s/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmr5.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6
+.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/font
+s/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cms
+y5.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/sh
+are/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmsy9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/sy
+mbols/msam10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbi0900.pf
+b></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbi1200.pfb></usr/share/t
+exmf-dist/fonts/type1/public/cm-super/sfbx0700.pfb></usr/share/texmf-dist/fonts
+/type1/public/cm-super/sfbx0800.pfb></usr/share/texmf-dist/fonts/type1/public/c
+m-super/sfbx0900.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx100
+0.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/sha
+re/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/f
+onts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/publ
+ic/cm-super/sfbx2488.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfc
+c1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb></usr
+/share/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf-di
+st/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texmf-dist/fonts/type1/
+public/cm-super/sfrm1000.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super
+/sfrm1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><
+/usr/share/texmf-dist/fonts/type1/public/cm-super/sfss0900.pfb></usr/share/texm
+f-dist/fonts/type1/public/cm-super/sfti0900.pfb></usr/share/texmf-dist/fonts/ty
+pe1/public/cm-super/sfti1000.pfb></usr/share/texmf-dist/fonts/type1/public/cm-s
+uper/sfti1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt0900.p
+fb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb>
+Output written on "Elettronica digitale .pdf" (64 pages, 2374658 bytes).
 PDF statistics:
- 1276 PDF objects out of 1440 (max. 8388607)
- 1071 compressed objects within 11 object streams
- 234 named destinations out of 1000 (max. 500000)
+ 1292 PDF objects out of 1440 (max. 8388607)
+ 1082 compressed objects within 11 object streams
+ 235 named destinations out of 1000 (max. 500000)
  1077 words of extra memory for PDF output out of 10000 (max. 10000000)
 
