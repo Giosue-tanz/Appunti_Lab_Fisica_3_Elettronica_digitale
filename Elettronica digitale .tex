@@ -2902,54 +2902,74 @@ Q_{n+1} &= (J \overline{Q}_n) + \overline{(K Q_n)} Q_n \\
 \subsection{Esempio pratico: il Registro come "filtro anti-glitch"}
 % ======================================================================
 
-Per capire l'utilità pratica dei Flip-Flop, consideriamo un classico problema dei circuiti combinatori. Immaginiamo di avere un \textbf{convertitore da codice Gray a codice Binario} collegato direttamente a un \textbf{display a 7 segmenti}.
+Per comprendere l'utilità pratica dei circuiti sequenziali, analizziamo un classico problema dei \textbf{circuiti combinatori}: la generazione di \emph{glitch} (stati transitori spuri). Immaginiamo di voler pilotare un \textbf{display a 7 segmenti} partendo da un dato in codice Gray, utilizzando un \textbf{convertitore Gray-Binario}.
 
-Analizziamo cosa succede durante una transizione estrema, ad esempio il passaggio dal numero 15 al numero 0:
+Consideriamo una transizione critica, come il passaggio dal valore 15 al valore 0:
 \begin{itemize}[leftmargin=1.5em,itemsep=2pt]
-    \item L'ingresso in codice Gray passa da \texttt{1000} (15) a \texttt{0000} (0). Come vuole la regola del codice Gray, cambia un solo bit alla volta.
-    \item L'uscita in codice Binario, invece, deve passare da \texttt{1111} a \texttt{0000}: ben 4 bit devono commutare simultaneamente.
+    \item L'ingresso in codice Gray passa da \texttt{1000} (15) a \texttt{0000} (0). Come previsto dalla codifica Gray, commuta \textbf{un solo bit}.
+    \item L'uscita in codice Binario, invece, deve passare da \texttt{1111} a \texttt{0000}: ben \textbf{4 bit devono commutare simultaneamente}.
 \end{itemize}
 
 \textbf{Il problema: i ritardi di propagazione (Glitch)}\\
-Il convertitore è costruito con porte logiche (spesso porte XOR in cascata). Poiché ogni porta ha un suo tempo fisico di attraversamento, i 4 bit di uscita non commuteranno mai nell'esatto medesimo istante, ma il cambiamento si propagherà con leggeri sfasamenti. 
-Di conseguenza, invece di un salto netto $\texttt{1111} \to \texttt{0000}$, le uscite attraversano caotici stati spuri intermedi (es. $\texttt{1111} \to \texttt{0111} \to \texttt{0011} \to \texttt{0000}$). 
-Se il display fosse collegato direttamente a queste uscite, potrebbe sfarfallare mostrando per frazioni di secondo numeri errati (un difetto noto come \emph{glitch}).
+Il convertitore è realizzato tramite porte logiche in cascata (tipicamente porte XOR). Poiché ogni porta possiede un proprio \textbf{ritardo fisico di propagazione}, i 4 bit in uscita non commuteranno mai nell'esatto medesimo istante. I segnali attraversano percorsi logici di lunghezza diversa, accumulando ritardi differenti.
+
+Di conseguenza, anziché avere un salto netto $\texttt{1111} \to \texttt{0000}$, le uscite attraversano una serie caotica di stati intermedi (ad esempio, $\texttt{1111} \to \texttt{0111} \to \texttt{0011} \to \texttt{0000}$). Se il display fosse collegato direttamente all'uscita del convertitore, l'osservatore vedrebbe una rapida e fastidiosa sequenza di numeri errati (sfarfallio) prima della stabilizzazione sul valore corretto. Questi stati transitori indesiderati prendono il nome di \emph{glitch}.
 
 \begin{center}
 \begin{tikzpicture}[
-    scale=0.88, every node/.style={scale=0.88},
-    box/.style={draw, minimum width=1.8cm, minimum height=1.0cm, align=center}
+    >=latex,
+    font=\small,
+    box/.style={
+        draw=black!70, 
+        thick, 
+        minimum width=2.6cm, 
+        minimum height=1.4cm, 
+        align=center, 
+        rounded corners=2pt
+    },
+    highlight_box/.style={
+        box, 
+        fill=teal!10, 
+        draw=teal!80
+    }
 ]
-\node[box] (conv) {CONV.\\G$\to$B};
-\node[box, right=2.0cm of conv, fill=gray!10, rounded corners] (reg) {REGISTRO\\(D Flip-Flop)};
-\node[box, right=2.0cm of reg]  (disp) {DISPLAY\\7 seg.};
 
-\draw[-latex] (conv) -- (reg)  node[midway,above,font=\scriptsize]{4 bit (sporchi)};
-\draw[-latex] (reg)  -- (disp) node[midway,above,font=\scriptsize]{4 bit (puliti)};
-% clock al registro
-\draw[-latex, thick, teal] ($(reg.south)+(0,-0.6)$) -- (reg.south)
-              node[below=0.1cm,font=\scriptsize, text=teal]{Segnale di CLOCK};
+% Blocchi
+\node[box] (conv) {CONVERTITORE\\[0.5ex] \scriptsize Gray $\to$ Binario};
+\node[highlight_box, right=2.5cm of conv] (reg) {\textbf{REGISTRO}\\[0.5ex] \scriptsize (Banco D Flip-Flop)};
+\node[box, right=2.5cm of reg] (disp) {DISPLAY\\[0.5ex] \scriptsize 7 segmenti};
 
-\node[above=0.2cm, font=\scriptsize, color=teal] at (conv) {Gray in};
-\node[above=0.2cm, font=\scriptsize, color=teal] at (disp) {Out visivo};
+% Collegamenti dati
+\draw[->, thick] (conv) -- (reg) node[midway, above] {\scriptsize Dati "sporchi"};
+\draw[->, thick] (reg) -- (disp) node[midway, above] {\scriptsize Dati "puliti"};
+
+% Input / Output (frecce esterne per far capire il flusso)
+\draw[<-, thick] (conv.west) -- ++(-1.8,0) node[midway, above, font=\scriptsize, color=gray!80!black] {Codice Gray (In)};
+\draw[->, thick] (disp.east) -- ++(1.8,0) node[midway, above, font=\scriptsize, color=gray!80!black] {Valore visivo (Out)};
+
+% Segnale di CLOCK (freccia che entra dal basso nel registro)
+\draw[->, thick, teal] (reg.south) ++(0,-1.2) -- (reg.south) 
+    node[at start, below] {\textbf{Segnale di CLOCK}};
+
 \end{tikzpicture}
 \end{center}
 
-\textbf{La soluzione: inserire un Registro}\\
-Per risolvere il problema, si inserisce un \textbf{Registro} (ossia un banco di Flip-Flop di tipo D messi in parallelo) tra il convertitore combinatorio e il display. Il registro funziona come una "barriera" temporale controllata da un segnale di Clock:
+\textbf{La soluzione: il Registro come barriera di temporizzazione}\\
+Per risolvere il problema alla radice, si interpone un \textbf{Registro} (un banco di Flip-Flop di tipo D in parallelo, comandati da un unico clock) tra il circuito combinatorio e il display. Il registro agisce come una "fotocamera" sincronizzata, mascherando i transienti:
+
 \begin{enumerate}[leftmargin=1.5em,itemsep=2pt]
-    \item Mentre il convertitore sta ricalcolando il dato e generando i glitch, i Flip-Flop sono "ciechi" (non c'è alcun fronte di clock). Il display continua a mostrare indisturbato il vecchio numero (15).
-    \item Si attende una frazione di tempo sufficiente affinché tutte le porte logiche del convertitore si assestino. Ora il dato in uscita dal convertitore è un \texttt{0000} stabile e pulito.
-    \item Proprio in questo momento di "acque calme", si fa scattare il \textbf{fronte di salita del Clock}. I Flip-Flop catturano istantaneamente il dato pulito e lo trasferiscono in modo perfettamente simultaneo al display.
+    \item \textbf{Fase di assestamento (Glitch):} Mentre il convertitore ricalcola il dato, generando gli stati spuri, il segnale di Clock è mantenuto a riposo. I Flip-Flop ignorano i cambiamenti in ingresso, e il display continua a mostrare stabilmente il numero precedente (15).
+    \item \textbf{Stato stazionario:} Si attende un tempo sufficiente affinché tutte le porte del convertitore abbiano finito di commutare. Ora l'uscita è un \texttt{0000} stabile e definitivo.
+    \item \textbf{Campionamento (Fronte attivo):} Proprio in questo istante di stabilità ("acque calme"), si invia un fronte di salita al Clock del registro. I Flip-Flop catturano simultaneamente il nuovo dato pulito e lo trasferiscono al display in blocco.
 \end{enumerate}
 
-\noindent L'immagine seguente mostra proprio l'analisi logica di questo fenomeno (acquisita con l'analizzatore Digilent Discovery 2NI):
+\noindent La traccia seguente, acquisita con un analizzatore logico (Digilent Analog Discovery 2), mostra l'efficacia di questa tecnica:
 \begin{center}
   \includegraphics[width=1\linewidth]{1.png}
 \end{center}
 
-\noindent Osservando la zona centrale del grafico (a cavallo di $t=14{,}000015\,\text{ms}$), si nota chiaramente come le singole uscite del blocco combinatorio scendano a zero in istanti leggermente sfalsati, generando temporaneamente la lettura errata \texttt{b0011}. 
-Grazie al registro, però, i glitch non raggiungono mai la destinazione finale: il circuito a valle viene aggiornato con precisione chirurgica solo ad ogni tick del clock, garantendo un segnale netto e sincrono.
+\noindent Osservando il transitorio (a cavallo di $t=14{,}000015\,\text{ms}$), è evidente come le singole linee in uscita dal blocco combinatorio scendano a zero in istanti sfalsati, generando temporaneamente un dato spuro (es. \texttt{b0011}). 
+Grazie all'azione di campionamento del registro, tali irregolarità vengono confinate a monte: il circuito a valle viene aggiornato con precisione chirurgica e perfetta sincronia solo in corrispondenza del fronte di clock, garantendo un'uscita netta e priva di sfarfallii.
 
 % ======================================================================
 \chapter{Registri a scorrimento e contatori}
