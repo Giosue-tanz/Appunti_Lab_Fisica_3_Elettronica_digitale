@@ -12,8 +12,8 @@ Giosuè Aiello è l'unico autore degli appunti, della riformulazione formale e d
 Per clonare il repository e compilare il PDF, esegui i seguenti comandi da terminale:
 
 ```bash
-git clone https://github.com/Giosue-tanz/Appunti_Lab_Fisica_3_Elettronica_digitale.git
-cd Appunti_Lab_Fisica_3_Elettronica_digitale
+git clone https://github.com/Giosue-tanz/Introduzione_all_Elettronica_Analogica_Digitale.git
+cd Introduzione_all_Elettronica_Analogica_Digitale
 pdflatex "Elettronica digitale .tex"
 pdflatex "Elettronica digitale .tex"
 ```
